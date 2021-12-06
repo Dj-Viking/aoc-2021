@@ -7,7 +7,8 @@
     "tsw": "tsc -w",
     "tsc": "tsc",
     "start": "sh dev.sh",
-    "concurrent": "concurrently \"tsc -w\" \"cd dist; nodemon -L index.js\""
+    "concurrent": "concurrently \"tsc -w\" \"cd dist; nodemon -L $1.js\"",
+    "solve": "sh solve.sh"
   },
   "keywords": [],
   "author": "DJ Viking <anders.swedishviking@gmail.com>",
