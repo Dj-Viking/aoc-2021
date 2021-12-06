@@ -1,3 +1,9 @@
+if [ -z "$1" ]
+  then
+    echo "Please provide a solution file name to compile and watch \nfor example (npm start day1)\n"
+    exit
+fi
+
 echo "first arg after npm start"
 echo $1
 
