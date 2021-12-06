@@ -17,12 +17,8 @@ let increaseAmount = 0;
 (function () {
     return __awaiter(this, void 0, void 0, function* () {
         return new Promise((resolve, reject) => {
-            let inputDir = [];
-            fs_1.default.readdir("../day1", (error, files) => {
-                if (error)
-                    reject(error);
-                inputDir = files;
-                const inputVal = fs_1.default.readFileSync(`../day1/${inputDir[1]}`, { encoding: "utf-8" });
+            try {
+                const inputVal = fs_1.default.readFileSync(`../day1/input.txt`, { encoding: "utf-8" });
                 const splitInput = inputVal.split("\n");
                 let current = 0;
                 let prev = void 0;
@@ -33,9 +29,12 @@ let increaseAmount = 0;
                         increaseAmount++;
                 }
                 console.log(increaseAmount);
-            });
-            resolve();
+                resolve();
+            }
+            catch (error) {
+                reject(error);
+            }
         });
     });
 })();
-//# sourceMappingURL=day1.js.map
+//# sourceMappingURL=d1p1.js.map
