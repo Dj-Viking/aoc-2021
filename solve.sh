@@ -1,6 +1,6 @@
 if [ -z "$1" ]
   then
-    echo "Please provide a solution file name \nfor example (npm run solve day1)\n .js will be appended"
+    echo "Please provide a solution file name \nfor example (npm run solve day1)\n.js extension will be appended"
     exit
 fi
 
