@@ -1,0 +1,27 @@
+{
+  "name": "aoc-2021",
+  "version": "1.0.0",
+  "description": "SAVE CHRISTMAS",
+  "main": "index.js",
+  "scripts": {
+    "tsw": "tsc -w",
+    "tsc": "tsc",
+    "start": "sh dev.sh",
+    "concurrent": "concurrently \"tsc -w\" \"cd dist; nodemon -L index.js\""
+  },
+  "keywords": [],
+  "author": "DJ Viking <anders.swedishviking@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "@types/node": "16.11.11",
+    "ts-node": "^10.4.0",
+    "typescript": "^4.5.2",
+    "concurrently": "^6.4.0",
+    "@typescript-eslint/eslint-plugin": "^5.4.0",
+    "@typescript-eslint/parser": "^5.4.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "nodemon": "^2.0.15",
+    "prettier": "^2.5.0"
+  }
+}
