@@ -6,13 +6,14 @@
  * The sum of measurements in the second window B is larger than the sum of the first A , so this first comparison increased.
  */
 
-import fs from "fs";
+import { getInput } from "utils/getInput";
+
 (async function(): Promise<void> {
   return new Promise((resolve, reject) => {
     try {
       //keep in mind the solve script is running in the context of the dist directory
-      const inputVal = fs.readFileSync(`../day1/input.txt`, { encoding: "utf-8" });
-      const splitInput = inputVal.split("\n");
+      
+      const splitInput = getInput("../day1/input.txt");
       let increased = 0;
       let currentSum = 0;
       let prevSum = 0;
@@ -43,5 +44,5 @@ import fs from "fs";
     } catch (error) {
       reject(error);
     }
-  })
+  });
 })();

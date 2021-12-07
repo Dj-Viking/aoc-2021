@@ -18,13 +18,13 @@
   After following these new instructions, you would have a horizontal position of 15 and a depth of 60. (Multiplying these produces 900.)
  */
 
-import fs from "fs";
+import { getInput } from "../utils/getInput";
 (async function(): Promise<void> {
   return new Promise((resolve, reject) => {
     try {
       //keep in mind the solve script is running in the context of the dist directory
-      const inputVal = fs.readFileSync(`../day2/input.txt`, { encoding: "utf-8" });
-      const splitInput = inputVal.split("\n");
+
+      const splitInput = getInput("../day2/input.txt");
 
       let aim = 0;
       let hPos = 0;
@@ -60,5 +60,5 @@ import fs from "fs";
     } catch (error) {
       reject(error);
     }
-  })
+  });
 })();

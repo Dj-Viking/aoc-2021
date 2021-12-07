@@ -1,11 +1,11 @@
-import fs from "fs";
+import { getInput } from "../utils/getInput";
 let increaseAmount = 0;
 (async function(): Promise<void> {
   return new Promise((resolve, reject) => {
     try {
       //keep in mind the solve script is running in the context of the dist directory
-      const inputVal = fs.readFileSync(`../day1/input.txt`, { encoding: "utf-8" });
-      const splitInput = inputVal.split("\n");
+
+      const splitInput = getInput("../day1/input.txt");
       let current = 0;
       let prev = void 0 as void | number;
       for (let i = 1; i < splitInput.length; i++) {
@@ -18,5 +18,5 @@ let increaseAmount = 0;
     } catch (error) {
       reject(error);
     }
-  })
+  });
 })();

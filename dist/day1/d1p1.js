@@ -8,18 +8,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const fs_1 = __importDefault(require("fs"));
+const getInput_1 = require("../utils/getInput");
 let increaseAmount = 0;
 (function () {
     return __awaiter(this, void 0, void 0, function* () {
         return new Promise((resolve, reject) => {
             try {
-                const inputVal = fs_1.default.readFileSync(`../day1/input.txt`, { encoding: "utf-8" });
-                const splitInput = inputVal.split("\n");
+                const splitInput = (0, getInput_1.getInput)("../day1/input.txt");
                 let current = 0;
                 let prev = void 0;
                 for (let i = 1; i < splitInput.length; i++) {

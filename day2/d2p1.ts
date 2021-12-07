@@ -18,13 +18,14 @@
     Calculate the horizontal position and depth you would have after following the planned course. What do you get if you multiply your final horizontal position by your final depth?
  */
 
-import fs from "fs";
+import { getInput } from "../utils/getInput";
+
 (async function(): Promise<void> {
   return new Promise((resolve, reject) => {
     try {
       //keep in mind the solve script is running in the context of the dist directory
-      const inputVal = fs.readFileSync(`../day2/input.txt`, { encoding: "utf-8" });
-      const splitInput = inputVal.split("\n");
+
+      const splitInput = getInput("../day2/input.txt");
 
       let hPos = 0;
       let vPos = 0;
@@ -34,7 +35,7 @@ import fs from "fs";
       for (let i = 0; i < splitInput.length; i++) {
         word = splitInput[i].split(" ")[0];
         num = Number(splitInput[i].split(" ")[1]);
-        
+
         switch(true) {
           case /forward/g.test(word): {
             hPos += num;
@@ -56,5 +57,5 @@ import fs from "fs";
     } catch (error) {
       reject(error);
     }
-  })
+  });
 })();
