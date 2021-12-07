@@ -1,11 +1,13 @@
-if [ -z "$1" ]
-  then
-    echo "Please provide a solution file name to compile and watch \nfor example (npm start day1)\n"
-    exit
-fi
+# Until I can figure out how to configure nodemon properly just ignoring the filename input for now.....
 
-echo "first arg after npm start"
-echo $1
+# if [ -z "$1" ]
+#   then
+#     echo "Please provide a solution file name to compile and watch \nfor example (npm start day1)\n"
+#     exit
+# fi
+
+# echo "first arg after npm start"
+# echo $1
 
 if [ -d "dist" ]; then
   echo "found dist directory, starting server..."

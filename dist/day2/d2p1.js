@@ -17,26 +17,35 @@ const fs_1 = __importDefault(require("fs"));
     return __awaiter(this, void 0, void 0, function* () {
         return new Promise((resolve, reject) => {
             try {
-                const inputVal = fs_1.default.readFileSync(`../day1/input.txt`, { encoding: "utf-8" });
+                const inputVal = fs_1.default.readFileSync(`../day2/input.txt`, { encoding: "utf-8" });
                 const splitInput = inputVal.split("\n");
-                let increased = 0;
-                let currentSum = 0;
-                let prevSum = 0;
-                let currentWindow = [];
-                let prevWindow = [];
+                let hPos = 0;
+                let vPos = 0;
+                let word = "";
+                let num = 0;
                 for (let i = 0; i < splitInput.length; i++) {
-                    currentWindow = [];
-                    currentSum = 0;
-                    prevWindow = [];
-                    prevSum = 0;
-                    currentWindow.push(Number(!!splitInput[i + 3] ? splitInput[i + 3] : 0), Number(!!splitInput[i + 2] ? splitInput[i + 2] : 0), Number(!!splitInput[i + 1] ? splitInput[i + 1] : 0));
-                    currentSum = currentWindow.reduce((total, nextNum) => total + nextNum, 0);
-                    prevWindow.push(Number(!!splitInput[i + 2] ? splitInput[i + 2] : 0), Number(!!splitInput[i + 1] ? splitInput[i + 1] : 0), Number(!!splitInput[i] ? splitInput[i] : 0));
-                    prevSum = prevWindow.reduce((total, nextNum) => total + nextNum, 0);
-                    if ((currentSum - prevSum) > 0)
-                        increased++;
+                    word = splitInput[i].split(" ")[0];
+                    num = Number(splitInput[i].split(" ")[1]);
+                    switch (true) {
+                        case /forward/g.test(word):
+                            {
+                                hPos += num;
+                            }
+                            break;
+                        case /up/g.test(word):
+                            {
+                                vPos -= num;
+                            }
+                            break;
+                        case /down/g.test(word):
+                            {
+                                vPos += num;
+                            }
+                            break;
+                        default: break;
+                    }
                 }
-                console.log(increased);
+                console.log(hPos * vPos);
                 resolve();
             }
             catch (error) {
@@ -45,4 +54,4 @@ const fs_1 = __importDefault(require("fs"));
         });
     });
 })();
-//# sourceMappingURL=d1p2.js.map
+//# sourceMappingURL=d2p1.js.map
