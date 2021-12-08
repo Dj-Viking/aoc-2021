@@ -20,7 +20,7 @@
 
 import { getInput } from "../utils/getInput";
 
-(async function(): Promise<void> {
+(async function (): Promise<void> {
   return new Promise((resolve, reject) => {
     try {
       //keep in mind the solve script is running in the context of the dist directory
@@ -36,20 +36,24 @@ import { getInput } from "../utils/getInput";
         word = splitInput[i].split(" ")[0];
         num = Number(splitInput[i].split(" ")[1]);
 
-        switch(true) {
-          case /forward/g.test(word): {
-            hPos += num;
-          }
-          break;
-          case /up/g.test(word): {
-            vPos -= num;
-          }
-          break;
-          case /down/g.test(word): {
-            vPos += num
-          }
-          break;
-          default: break;
+        switch (true) {
+          case /forward/g.test(word):
+            {
+              hPos += num;
+            }
+            break;
+          case /up/g.test(word):
+            {
+              vPos -= num;
+            }
+            break;
+          case /down/g.test(word):
+            {
+              vPos += num;
+            }
+            break;
+          default:
+            break;
         }
       }
       console.log(hPos * vPos);

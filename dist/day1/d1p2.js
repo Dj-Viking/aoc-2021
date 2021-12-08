@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const getInput_1 = require("utils/getInput");
+const getInput_1 = require("../utils/getInput");
 (function () {
     return __awaiter(this, void 0, void 0, function* () {
         return new Promise((resolve, reject) => {
@@ -29,7 +29,7 @@ const getInput_1 = require("utils/getInput");
                     currentSum = currentWindow.reduce((total, nextNum) => total + nextNum, 0);
                     prevWindow.push(Number(!!splitInput[i + 2] ? splitInput[i + 2] : 0), Number(!!splitInput[i + 1] ? splitInput[i + 1] : 0), Number(!!splitInput[i] ? splitInput[i] : 0));
                     prevSum = prevWindow.reduce((total, nextNum) => total + nextNum, 0);
-                    if ((currentSum - prevSum) > 0)
+                    if (currentSum - prevSum > 0)
                         increased++;
                 }
                 console.log(increased);

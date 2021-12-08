@@ -38,7 +38,8 @@ const getInput_1 = require("../utils/getInput");
                                 vPos += num;
                             }
                             break;
-                        default: break;
+                        default:
+                            break;
                     }
                 }
                 console.log(hPos * vPos);

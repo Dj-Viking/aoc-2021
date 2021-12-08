@@ -19,7 +19,7 @@
  */
 
 import { getInput } from "../utils/getInput";
-(async function(): Promise<void> {
+(async function (): Promise<void> {
   return new Promise((resolve, reject) => {
     try {
       //keep in mind the solve script is running in the context of the dist directory
@@ -38,18 +38,21 @@ import { getInput } from "../utils/getInput";
         num = Number(splitInput[i].split(" ")[1]);
         forward = 0;
         switch (true) {
-          case /forward/g.test(word): {
-            forward = num;
-            hPos += num;
-            if (aim === 0) continue;
-            if (aim > 0) {
-              vPos += (forward * aim);
+          case /forward/g.test(word):
+            {
+              forward = num;
+              hPos += num;
+              if (aim === 0) continue;
+              if (aim > 0) {
+                vPos += forward * aim;
+              }
             }
-          }
             break;
-          case /up/g.test(word): aim -= num;
+          case /up/g.test(word):
+            aim -= num;
             break;
-          case /down/g.test(word): aim += num;
+          case /down/g.test(word):
+            aim += num;
             break;
           default:
             break;

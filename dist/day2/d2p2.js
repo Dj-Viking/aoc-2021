@@ -33,7 +33,7 @@ const getInput_1 = require("../utils/getInput");
                                 if (aim === 0)
                                     continue;
                                 if (aim > 0) {
-                                    vPos += (forward * aim);
+                                    vPos += forward * aim;
                                 }
                             }
                             break;
