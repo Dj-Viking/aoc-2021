@@ -47,8 +47,8 @@ const getInput_1 = require("../utils/getInput");
                         epsAcc.push("0");
                     }
                 }
-                gammaRate = parseInt(gammaAcc.join(''), 2);
-                epsRate = parseInt(epsAcc.join(''), 2);
+                gammaRate = parseInt(gammaAcc.join(""), 2);
+                epsRate = parseInt(epsAcc.join(""), 2);
                 console.log("bit accumulator", bitAcc);
                 console.log("gamma accumulator", gammaAcc);
                 console.log("eps accumulator", epsAcc);

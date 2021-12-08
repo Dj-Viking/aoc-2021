@@ -9,56 +9,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const getInput_1 = require("../utils/getInput");
+const utils_1 = require("../utils");
 (function () {
     return __awaiter(this, void 0, void 0, function* () {
         return new Promise((resolve, reject) => {
             try {
-                const splitInput = (0, getInput_1.getInput)("../day3/input.txt");
-                function recurseOxy(list, step = 0) {
-                    let count = 0;
-                    for (let i = 0; i < list.length; i++) {
-                        if (parseInt(list[i][step]) === 1)
-                            count++;
-                    }
-                    let k = 1;
-                    if (count < list.length / 2)
-                        k = 0;
-                    let subOxy = [];
-                    for (let j = 0; j < list.length; j++) {
-                        if (parseInt(list[j][step]) === k)
-                            subOxy.push(list[j]);
-                    }
-                    if (subOxy.length > 1 && step < subOxy[0].length)
-                        return recurseOxy(subOxy, step + 1);
-                    else
-                        return subOxy[0];
-                }
-                recurseOxy(splitInput);
-                function recurseCo2(list, step = 0) {
-                    let count = 0;
-                    for (let i = 0; i < list.length; i++) {
-                        if (parseInt(list[i][step]) === 1)
-                            count++;
-                    }
-                    let k = 0;
-                    if (count < list.length / 2)
-                        k = 1;
-                    let subOxy = [];
-                    for (let j = 0; j < list.length; j++) {
-                        if (parseInt(list[j][step]) === k)
-                            subOxy.push(list[j]);
-                    }
-                    if (subOxy.length > 1 && step < subOxy[0].length)
-                        return recurseCo2(subOxy, step + 1);
-                    else
-                        return subOxy[0];
-                }
-                recurseOxy(splitInput);
-                console.log("oxy acc", recurseOxy(splitInput));
-                console.log("co2 acc", recurseCo2(splitInput));
-                console.log(parseInt(recurseOxy(splitInput), 2) *
-                    parseInt(recurseCo2(splitInput), 2));
+                const splitInput = (0, utils_1.getInput)("../day3/input.txt");
+                console.log("oxy acc", (0, utils_1.recurseOxy)(splitInput));
+                console.log("co2 acc", (0, utils_1.recurseCo2)(splitInput));
+                console.log(parseInt((0, utils_1.recurseOxy)(splitInput), 2) *
+                    parseInt((0, utils_1.recurseCo2)(splitInput), 2));
                 resolve();
             }
             catch (error) {

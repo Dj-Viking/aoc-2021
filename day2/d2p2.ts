@@ -18,7 +18,7 @@
   After following these new instructions, you would have a horizontal position of 15 and a depth of 60. (Multiplying these produces 900.)
  */
 
-import { getInput } from "../utils/getInput";
+import { getInput } from "../utils";
 (async function (): Promise<void> {
   return new Promise((resolve, reject) => {
     try {

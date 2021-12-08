@@ -6,7 +6,7 @@
  * The sum of measurements in the second window B is larger than the sum of the first A , so this first comparison increased.
  */
 
-import { getInput } from "../utils/getInput";
+import { getInput } from "../utils";
 
 (async function (): Promise<void> {
   return new Promise((resolve, reject) => {

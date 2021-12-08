@@ -1,13 +1,13 @@
 import { getInput } from "../utils/getInput";
-(async function(): Promise<void> {
+(async function (): Promise<void> {
   return new Promise((resolve, reject) => {
     try {
       //keep in mind the solve script is running in the context of the dist directory
       const splitInput = getInput("../day3/input.txt");
       // console.log(splitInput);
-      let bitAcc = [] as Array<string>
-      let gammaAcc = [] as Array<string>
-      let epsAcc = [] as Array<string>
+      let bitAcc = [] as Array<string>;
+      let gammaAcc = [] as Array<string>;
+      let epsAcc = [] as Array<string>;
       let gammaRate = 0;
       let epsRate = 0;
       let zeroAmount = 0;
@@ -16,9 +16,11 @@ import { getInput } from "../utils/getInput";
       for (let k = 0; k < 12; k++) {
         zeroAmount = 0;
         oneAmount = 0;
-        bitAcc = splitInput.map((_: string, idx: number, arr: Array<string>) => {
-          return arr[idx][k].split("").shift() as string;
-        });
+        bitAcc = splitInput.map(
+          (_: string, idx: number, arr: Array<string>) => {
+            return arr[idx][k].split("").shift() as string;
+          }
+        );
         console.log("bit acc should be new on each iteration", bitAcc);
         for (const bit of bitAcc) {
           if (bit === "0") zeroAmount++;
@@ -30,15 +32,14 @@ import { getInput } from "../utils/getInput";
         if (zeroAmount > oneAmount) {
           gammaAcc.push("0");
           epsAcc.push("1");
-        }
-        else {
+        } else {
           gammaAcc.push("1");
           epsAcc.push("0");
         }
       }
 
-      gammaRate = parseInt(gammaAcc.join(''), 2);
-      epsRate = parseInt(epsAcc.join(''), 2);
+      gammaRate = parseInt(gammaAcc.join(""), 2);
+      epsRate = parseInt(epsAcc.join(""), 2);
 
       console.log("bit accumulator", bitAcc);
       console.log("gamma accumulator", gammaAcc);

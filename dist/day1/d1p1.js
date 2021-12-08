@@ -9,13 +9,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const getInput_1 = require("../utils/getInput");
+const utils_1 = require("../utils");
 let increaseAmount = 0;
 (function () {
     return __awaiter(this, void 0, void 0, function* () {
         return new Promise((resolve, reject) => {
             try {
-                const splitInput = (0, getInput_1.getInput)("../day1/input.txt");
+                const splitInput = (0, utils_1.getInput)("../day1/input.txt");
                 let current = 0;
                 let prev = void 0;
                 for (let i = 1; i < splitInput.length; i++) {

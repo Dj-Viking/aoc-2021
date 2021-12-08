@@ -1,6 +1,6 @@
-import { getInput } from "../utils/getInput";
+import { getInput } from "../utils";
 let increaseAmount = 0;
-(async function(): Promise<void> {
+(async function (): Promise<void> {
   return new Promise((resolve, reject) => {
     try {
       //keep in mind the solve script is running in the context of the dist directory
