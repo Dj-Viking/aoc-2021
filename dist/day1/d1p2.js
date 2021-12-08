@@ -8,17 +8,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const fs_1 = __importDefault(require("fs"));
+const utils_1 = require("../utils");
 (function () {
     return __awaiter(this, void 0, void 0, function* () {
         return new Promise((resolve, reject) => {
             try {
-                const inputVal = fs_1.default.readFileSync(`../day1/input.txt`, { encoding: "utf-8" });
-                const splitInput = inputVal.split("\n");
+                const splitInput = (0, utils_1.getInput)("../day1/input.txt");
                 let increased = 0;
                 let currentSum = 0;
                 let prevSum = 0;
@@ -33,7 +29,7 @@ const fs_1 = __importDefault(require("fs"));
                     currentSum = currentWindow.reduce((total, nextNum) => total + nextNum, 0);
                     prevWindow.push(Number(!!splitInput[i + 2] ? splitInput[i + 2] : 0), Number(!!splitInput[i + 1] ? splitInput[i + 1] : 0), Number(!!splitInput[i] ? splitInput[i] : 0));
                     prevSum = prevWindow.reduce((total, nextNum) => total + nextNum, 0);
-                    if ((currentSum - prevSum) > 0)
+                    if (currentSum - prevSum > 0)
                         increased++;
                 }
                 console.log(increased);

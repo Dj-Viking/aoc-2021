@@ -8,17 +8,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const fs_1 = __importDefault(require("fs"));
+const utils_1 = require("../utils");
 (function () {
     return __awaiter(this, void 0, void 0, function* () {
         return new Promise((resolve, reject) => {
             try {
-                const inputVal = fs_1.default.readFileSync(`../day2/input.txt`, { encoding: "utf-8" });
-                const splitInput = inputVal.split("\n");
+                const splitInput = (0, utils_1.getInput)("../day2/input.txt");
                 let hPos = 0;
                 let vPos = 0;
                 let word = "";
@@ -42,7 +38,8 @@ const fs_1 = __importDefault(require("fs"));
                                 vPos += num;
                             }
                             break;
-                        default: break;
+                        default:
+                            break;
                     }
                 }
                 console.log(hPos * vPos);

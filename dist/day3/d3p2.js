@@ -10,21 +10,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const utils_1 = require("../utils");
-let increaseAmount = 0;
 (function () {
     return __awaiter(this, void 0, void 0, function* () {
         return new Promise((resolve, reject) => {
             try {
-                const splitInput = (0, utils_1.getInput)("../day1/input.txt");
-                let current = 0;
-                let prev = void 0;
-                for (let i = 1; i < splitInput.length; i++) {
-                    prev = Number(splitInput[i - 1]);
-                    current = Number(splitInput[i]);
-                    if (current > prev)
-                        increaseAmount++;
-                }
-                console.log(increaseAmount);
+                const splitInput = (0, utils_1.getInput)("../day3/input.txt");
+                console.log("oxy acc", (0, utils_1.recurseOxy)(splitInput));
+                console.log("co2 acc", (0, utils_1.recurseCo2)(splitInput));
+                console.log(parseInt((0, utils_1.recurseOxy)(splitInput), 2) *
+                    parseInt((0, utils_1.recurseCo2)(splitInput), 2));
                 resolve();
             }
             catch (error) {
@@ -33,4 +27,4 @@ let increaseAmount = 0;
         });
     });
 })();
-//# sourceMappingURL=d1p1.js.map
+//# sourceMappingURL=d3p2.js.map
