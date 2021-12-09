@@ -108,7 +108,12 @@ const utils_1 = require("../utils");
                 console.log("new board row 3", boardMap["board-3"].rows);
                 console.log("drawn nums", drawnNums);
                 for (let s = 0; s < Object.keys(boardMap).length; s++) {
-                    for (let n = 0; n < boardMap[`board-${s + 1}`].rows.length; n++) { }
+                    for (let r = 0; r < boardMap[`board-${s + 1}`].rows.length; r++) {
+                        for (let n = 0; n <
+                            boardMap[`board-${s + 1}`].rows[r].length; n++) {
+                            console.log("looks okay to me", s, r, n);
+                        }
+                    }
                 }
                 resolve();
             }

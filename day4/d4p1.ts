@@ -142,7 +142,20 @@ interface BoardMap {
 
       //check which board will win first
       for (let s = 0; s < Object.keys(boardMap).length; s++) {
-        for (let n = 0; n < boardMap[`board-${s + 1}`].rows.length; n++) {}
+        for (let r = 0; r < boardMap[`board-${s + 1}`].rows.length; r++) {
+          for (
+            let n = 0;
+            // eslint-disable-next-line
+            // @ts-ignore
+            n <
+            // eslint-disable-next-line
+            // @ts-ignore
+            (boardMap[`board-${s + 1}`].rows[r].length as Array<Array<number>>);
+            n++
+          ) {
+            console.log("looks okay to me", s, r, n);
+          }
+        }
       }
 
       //add all unmarked numbers on the board that won first
