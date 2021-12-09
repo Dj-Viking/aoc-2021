@@ -76,18 +76,13 @@ interface BoardMap {
         if (sample[i] !== "") {
           boardNum = 0;
           boardNum = getBoardNum(i);
-          if (Object.keys(boardMap).length > 1 && hitBoundary > 2)
-            boardNum = hitBoundary;
+          if (Object.keys(boardMap).length > 1 && hitBoundary > 2) boardNum = hitBoundary;
           boardMap = {
             ...boardMap,
             [`board-${boardNum}`]: {
               rows:
-                !!boardMap[`board-${boardNum}`] &&
-                !!boardMap[`board-${boardNum}`].rows
-                  ? ([
-                      ...boardMap[`board-${boardNum}`].rows,
-                      sample[i],
-                    ] as Array<string>)
+                !!boardMap[`board-${boardNum}`] && !!boardMap[`board-${boardNum}`].rows
+                  ? ([...boardMap[`board-${boardNum}`].rows, sample[i]] as Array<string>)
                   : [sample[i]],
             },
           };
@@ -147,10 +142,7 @@ interface BoardMap {
             let n = 0;
             // eslint-disable-next-line
             // @ts-ignore
-            n <
-            // eslint-disable-next-line
-            // @ts-ignore
-            (boardMap[`board-${s + 1}`].rows[r].length as Array<Array<number>>);
+            n < (boardMap[`board-${s + 1}`].rows[r].length as Array<Array<number>>["length"]);
             n++
           ) {
             console.log("looks okay to me", s, r, n);

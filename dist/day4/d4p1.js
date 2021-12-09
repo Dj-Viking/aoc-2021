@@ -61,12 +61,8 @@ const utils_1 = require("../utils");
                         if (Object.keys(boardMap).length > 1 && hitBoundary > 2)
                             boardNum = hitBoundary;
                         boardMap = Object.assign(Object.assign({}, boardMap), { [`board-${boardNum}`]: {
-                                rows: !!boardMap[`board-${boardNum}`] &&
-                                    !!boardMap[`board-${boardNum}`].rows
-                                    ? [
-                                        ...boardMap[`board-${boardNum}`].rows,
-                                        sample[i],
-                                    ]
+                                rows: !!boardMap[`board-${boardNum}`] && !!boardMap[`board-${boardNum}`].rows
+                                    ? [...boardMap[`board-${boardNum}`].rows, sample[i]]
                                     : [sample[i]],
                             } });
                     }
@@ -109,8 +105,7 @@ const utils_1 = require("../utils");
                 console.log("drawn nums", drawnNums);
                 for (let s = 0; s < Object.keys(boardMap).length; s++) {
                     for (let r = 0; r < boardMap[`board-${s + 1}`].rows.length; r++) {
-                        for (let n = 0; n <
-                            boardMap[`board-${s + 1}`].rows[r].length; n++) {
+                        for (let n = 0; n < boardMap[`board-${s + 1}`].rows[r].length; n++) {
                             console.log("looks okay to me", s, r, n);
                         }
                     }
