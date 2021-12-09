@@ -138,6 +138,16 @@ interface BoardMap {
       console.log("new board row 2", boardMap["board-2"].rows);
       console.log("new board row 3", boardMap["board-3"].rows);
 
+      console.log("drawn nums", drawnNums);
+
+      //check which board will win first
+      for (let s = 0; s < Object.keys(boardMap).length; s++) {
+        for (let n = 0; n < boardMap[`board-${s + 1}`].rows.length; n++) {}
+      }
+
+      //add all unmarked numbers on the board that won first
+      // multiply that sum by the last number that was called => solution
+
       // console.log(sample);
       // console.log("drawn nums", drawnNums);
       resolve();

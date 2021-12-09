@@ -106,6 +106,10 @@ const utils_1 = require("../utils");
                 console.log("new board row 1", boardMap["board-1"].rows);
                 console.log("new board row 2", boardMap["board-2"].rows);
                 console.log("new board row 3", boardMap["board-3"].rows);
+                console.log("drawn nums", drawnNums);
+                for (let s = 0; s < Object.keys(boardMap).length; s++) {
+                    for (let n = 0; n < boardMap[`board-${s + 1}`].rows.length; n++) { }
+                }
                 resolve();
             }
             catch (error) {
