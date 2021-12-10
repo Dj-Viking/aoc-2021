@@ -20,13 +20,12 @@ interface BoardMap {
   return new Promise((resolve, reject) => {
     try {
       //keep in mind the solve script is running in the context of the dist directory
-      // const splitInput = getInput("../day4/input.txt");
-      const sample = getInput("../day4/sample.txt");
+      const splitInput = getInput("../day4/input.txt");
+      // const sample = getInput("../day4/sample.txt");
       let drawnNums = [] as Array<number>;
       let boardMap = {} as BoardMap;
       let boardNum = 0 as number;
       let hitBoundary = 0;
-      // let xs = 0;
 
       function getBoardNum(currIdx: number): number {
         if (currIdx >= 1 && currIdx <= 5) {
@@ -36,18 +35,18 @@ interface BoardMap {
         }
       }
 
-      drawnNums = sample
+      drawnNums = splitInput
         .shift()
         ?.split(",")
         .map((str) => parseInt(str)) as Array<number>;
 
-      console.log("samples after shifting drawn nums out", sample);
+      console.log("splitInputs after shifting drawn nums out", splitInput);
 
-      for (let i = 0; i < sample.length; i++) {
+      for (let i = 0; i < splitInput.length; i++) {
         //keep tabs on how many times we hit a boundary
         // to determine if we increment the board number
-        if (sample[i] === "") hitBoundary++;
-        if (sample[i] !== "") {
+        if (splitInput[i] === "") hitBoundary++;
+        if (splitInput[i] !== "") {
           boardNum = 0;
           boardNum = getBoardNum(i);
           if (Object.keys(boardMap).length > 1 && hitBoundary > 2) boardNum = hitBoundary;
@@ -56,8 +55,8 @@ interface BoardMap {
             [`board-${boardNum}`]: {
               rows:
                 !!boardMap[`board-${boardNum}`] && !!boardMap[`board-${boardNum}`].rows
-                  ? ([...boardMap[`board-${boardNum}`].rows, sample[i]] as Array<string>)
-                  : [sample[i]],
+                  ? ([...boardMap[`board-${boardNum}`].rows, splitInput[i]] as Array<string>)
+                  : [splitInput[i]],
             },
           };
         }
@@ -90,98 +89,92 @@ interface BoardMap {
 
       console.log("drawn nums", drawnNums);
 
-      let boardExMap = {} as any;
+      /**
+       *
+       * @param boardMap boardmap created above with the rows matrices
+       * @param drawn drawn number
+       * @returns [didWin, lastDraw, whoWon] an array of three items to destructure out of the function to break the draw loop calling this function repeatedly and give values to a score calculator
+       */
+      // function boardEx(
+      //   boardMap: BoardMap,
+      //   drawn: number
+      // ): { didWin: boolean; lastDraw: number | null; whoWon: string } {
+      // }
 
-      function boardEx(boardMap: BoardMap, drawn: number): void {
-        //check which board will win first
-        //for each board
-        for (let b = 0; b < Object.keys(boardMap).length; b++) {
-          // for each row
-          for (let r = 0; r < boardMap[`board-${b + 1}`].rows.length; r++) {
-            //for each num in row
-            // eslint-disable-next-line
-            // @ts-ignore
-            for (let n = 0; n < boardMap[`board-${b + 1}`].rows[r].length; n++) {
-              console.log(
-                "what is happening here",
-                "drawn",
-                drawn,
-                "board",
-                b + 1,
-                "row",
-                r,
-                // eslint-disable-next-line
-                // @ts-ignore
-                boardMap[`board-${b + 1}`].rows[r][n]
-              );
+      //check which board will win first
+      //for each board
+      // eslint-disable-next-line
+        // @ts-ignore
+      function boardEx(): { lastDraw: number; whoWon: string } {
+        for (const drawn of drawnNums) {
+          console.log("drawn", drawn);
+          // const { didWin, lastDraw, whoWon } = boardEx(boardMap, drawn);
+          for (let b = 0; b < Object.keys(boardMap).length; b++) {
+            // for each row
+            for (let r = 0; r < boardMap[`board-${b + 1}`].rows.length; r++) {
+              //for each num in row
               // eslint-disable-next-line
-                // @ts-ignore
-              if (boardMap[`board-${b + 1}`].rows[r][n] === drawn) {
-                console.log(
-                  "IN THE EX CHECK",
-                  "drawn",
-                  drawn,
-                  "board",
-                  b + 1,
-                  "row",
-                  r,
-                  "location",
+              // @ts-ignore
+              for (let n = 0; n < boardMap[`board-${b + 1}`].rows[r].length; n++) {
+                // eslint-disable-next-line
+                  // @ts-ignore
+                if (boardMap[`board-${b + 1}`].rows[r][n] === drawn) {
                   // eslint-disable-next-line
                   // @ts-ignore
-                  boardMap[`board-${b + 1}`].rows[r][n]
-                );
-                // eslint-disable-next-line
+                  boardMap[`board-${b + 1}`].rows[r][n] = "x";
+
+                  //check boards for winner
+                  // eslint-disable-next-line
                   // @ts-ignore
+                  let rowExs = boardMap[`board-${b + 1}`].rows[r].filter((slot) => slot === "x");
 
-                boardExMap = {
-                  ...boardExMap,
-                  [`board-${b + 1}`]: {
-                    location:
-                      boardExMap[`board-${b + 1}`] && boardExMap[`board-${b + 1}`].location
-                        ? [
-                            ...boardExMap[`board-${b + 1}`].location,
-                            // eslint-disable-next-line
-                            // @ts-ignore
-                            boardMap[`board-${b + 1}`].rows[r][n],
-                          ]
-                        : // eslint-disable-next-line
-                          // @ts-ignore
-                          new Array(1).fill(boardMap[`board-${b + 1}`].rows[r][n]),
-                    row:
-                      boardExMap[`board-${b + 1}`] && !!boardExMap[`board-${b + 1}`].row
-                        ? [...boardExMap[`board-${b + 1}`].row, r]
-                        : new Array(1).fill(r),
-                    drawn:
-                      boardExMap[`board-${b + 1}`] && !!boardExMap[`board-${b + 1}`].drawn
-                        ? [...boardExMap[`board-${b + 1}`].drawn, drawn]
-                        : new Array(1).fill(drawn),
-                  },
-                };
-                console.log("ex me", boardExMap);
+                  console.log("rows exes", rowExs.length, rowExs, "row", r + 1, "board", b + 1);
+                  console.log(
+                    "what is board here before checking exes",
+                    "board",
+                    b + 1,
+                    boardMap[`board-${b + 1}`].rows
+                  );
+                  //check columns with exes part 1 worked even not checking columns...
 
-                // eslint-disable-next-line
-                    // @ts-ignore
+                  //check rows with exes
+                  if (rowExs.length === 5) {
+                    console.log("SHOULD EXIT");
+                    return { lastDraw: drawn, whoWon: (b + 1).toString() };
+                  }
+                }
               }
             }
           }
         }
       }
-
-      for (const drawn of drawnNums) {
-        boardEx(boardMap, drawn);
+      function getScore(boardMap: BoardMap, lastDraw: number, whoWon: string): void {
+        const board = `board-${whoWon}`;
+        console.log("calculate score");
+        console.log("what is the board that won", boardMap[board].rows);
+        let nums = [] as Array<number>;
+        for (let r = 0; r < boardMap[board].rows.length; r++) {
+          // eslint-disable-next-line
+          // @ts-ignore
+          for (let n = 0; n < boardMap[board].rows[r].length; n++) {
+            // eslint-disable-next-line
+            // @ts-ignore
+            if (typeof boardMap[board].rows[r][n] === "number")
+              // eslint-disable-next-line
+            // @ts-ignore
+              nums.push(boardMap[board].rows[r][n]);
+          }
+        }
+        const sum = nums.reduce((curr, next) => curr + next, 0);
+        console.log("nums of winning board", nums);
+        console.log("sum", sum);
+        console.log("answer", sum * lastDraw);
+        // sum all numbers left on the winning board * last number
+        // multiply that sum by the last number that was called => solution
       }
+      const { lastDraw, whoWon } = boardEx();
+      getScore(boardMap, lastDraw, whoWon);
 
-      //check marked numbers with x in that position
-      console.log("x board 1", boardMap["board-1"].rows);
-      console.log("x board 2", boardMap["board-2"].rows);
-      console.log("x board 3", boardMap["board-3"].rows);
-      console.log("ex board", boardExMap);
-
-      //add all unmarked numbers on the board that won first
-      // multiply that sum by the last number that was called => solution
-
-      // console.log(sample);
-      // console.log("drawn nums", drawnNums);
       resolve();
     } catch (error) {
       reject(error);
