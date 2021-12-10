@@ -89,18 +89,6 @@ interface BoardMap {
 
       console.log("drawn nums", drawnNums);
 
-      /**
-       *
-       * @param boardMap boardmap created above with the rows matrices
-       * @param drawn drawn number
-       * @returns [didWin, lastDraw, whoWon] an array of three items to destructure out of the function to break the draw loop calling this function repeatedly and give values to a score calculator
-       */
-      // function boardEx(
-      //   boardMap: BoardMap,
-      //   drawn: number
-      // ): { didWin: boolean; lastDraw: number | null; whoWon: string } {
-      // }
-
       //check which board will win first
       //for each board
       // eslint-disable-next-line
@@ -108,7 +96,6 @@ interface BoardMap {
       function boardEx(): { lastDraw: number; whoWon: string } {
         for (const drawn of drawnNums) {
           console.log("drawn", drawn);
-          // const { didWin, lastDraw, whoWon } = boardEx(boardMap, drawn);
           for (let b = 0; b < Object.keys(boardMap).length; b++) {
             // for each row
             for (let r = 0; r < boardMap[`board-${b + 1}`].rows.length; r++) {
