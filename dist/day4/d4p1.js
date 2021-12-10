@@ -17,12 +17,10 @@ const utils_1 = require("../utils");
             try {
                 const sample = (0, utils_1.getInput)("../day4/sample.txt");
                 let drawnNums = [];
-                let newRows = [];
-                let matchedNums = [];
-                let newRowsMatrix = [];
                 let boardMap = {};
                 let boardNum = 0;
                 let hitBoundary = 0;
+                let xs = 0;
                 function getBoardNum(currIdx) {
                     if (currIdx >= 1 && currIdx <= 5) {
                         return 1;
@@ -34,24 +32,6 @@ const utils_1 = require("../utils");
                 drawnNums = (_a = sample
                     .shift()) === null || _a === void 0 ? void 0 : _a.split(",").map((str) => parseInt(str));
                 console.log("samples after shifting drawn nums out", sample);
-                newRows = sample.filter((str) => str.length > 0);
-                matchedNums = (_b = newRows
-                    .join(" ")
-                    .match(/\d{1,2}/g)) === null || _b === void 0 ? void 0 : _b.map((str) => parseInt(str));
-                for (let j = 0; j < matchedNums.length; j++) {
-                    if (j % 5 === 1) {
-                        newRowsMatrix.push([
-                            matchedNums[j - 1],
-                            matchedNums[j],
-                            matchedNums[j + 1],
-                            matchedNums[j + 2],
-                            matchedNums[j + 3],
-                        ]);
-                    }
-                }
-                console.log("new rows", newRows);
-                console.log("matched nums", matchedNums);
-                console.log("newrows matrix", newRowsMatrix);
                 for (let i = 0; i < sample.length; i++) {
                     if (sample[i] === "")
                         hitBoundary++;
@@ -69,47 +49,35 @@ const utils_1 = require("../utils");
                 }
                 console.log("board map", boardMap);
                 console.log("amount of boards now", Object.keys(boardMap).length);
-                Object.keys(boardMap).forEach((board, idx) => {
-                    var _a;
-                    if (board === `board-${idx + 1}`) {
-                        boardMap = Object.assign(Object.assign({}, boardMap), { [board]: {
-                                rows: (_a = boardMap[board].rows
-                                    .join(" ")
-                                    .match(/\d{1,2}/g)) === null || _a === void 0 ? void 0 : _a.map((str) => parseInt(str)),
-                            } });
-                    }
-                });
-                console.log("new board map", boardMap);
                 for (let b = 0; b < Object.keys(boardMap).length; b++) {
                     boardMap = Object.assign(Object.assign({}, boardMap), { [`board-${b + 1}`]: {
-                            rows: boardMap[`board-${b + 1}`].rows
-                                .map((_, idx, arr) => {
-                                if (idx % 5 === 1) {
-                                    return [
-                                        arr[idx - 1],
-                                        arr[idx],
-                                        arr[idx + 1],
-                                        arr[idx + 2],
-                                        arr[idx + 3],
-                                    ];
-                                }
-                                else
-                                    return void 0;
-                            })
-                                .filter((item) => item !== void 0),
+                            rows: (_b = boardMap[`board-${b + 1}`].rows
+                                .join(" ")
+                                .match(/\d{1,2}/g)) === null || _b === void 0 ? void 0 : _b.map((str) => parseInt(str)).map((_, i, arr) => i % 5 === 1 ? [arr[i - 1], arr[i], arr[i + 1], arr[i + 2], arr[i + 3]] : void 0).filter((item) => item !== void 0),
                         } });
                 }
+                console.log("new board map", boardMap);
                 console.log("new board row 1", boardMap["board-1"].rows);
                 console.log("new board row 2", boardMap["board-2"].rows);
                 console.log("new board row 3", boardMap["board-3"].rows);
                 console.log("drawn nums", drawnNums);
-                for (let s = 0; s < Object.keys(boardMap).length; s++) {
-                    for (let r = 0; r < boardMap[`board-${s + 1}`].rows.length; r++) {
-                        for (let n = 0; n < boardMap[`board-${s + 1}`].rows[r].length; n++) {
-                            console.log("looks okay to me", s, r, n);
+                function boardEx(boardMap, drawn) {
+                    for (let s = 0; s < Object.keys(boardMap).length; s++) {
+                        for (let r = 0; r < boardMap[`board-${s + 1}`].rows.length; r++) {
+                            for (let n = 0; n < boardMap[`board-${s + 1}`].rows[r].length; n++) {
+                                if (boardMap[`board-${s + 1}`].rows[r][n] === drawn) {
+                                    boardMap[`board-${s + 1}`].rows[r][n] = "yo";
+                                }
+                            }
                         }
                     }
                 }
+                for (const draw of drawnNums) {
+                    boardEx(boardMap, draw);
+                }
+                console.log("x board 1", boardMap["board-1"].rows);
+                console.log("x board 2", boardMap["board-2"].rows);
+                console.log("x board 3", boardMap["board-3"].rows);
                 resolve();
             }
             catch (error) {
