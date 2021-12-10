@@ -121,6 +121,7 @@ interface BoardMap {
 
                   //check columns with exes part 1 worked even not checking columns...
                   // columns will get filled so have to check this somehow
+                  let columnExs = [];
 
                   console.log("rows exes", rowExs.length, rowExs, "row", r + 1, "board", b + 1);
                   console.log(
@@ -131,7 +132,7 @@ interface BoardMap {
                   );
 
                   //check rows with exes
-                  if (rowExs.length === 5) {
+                  if (rowExs.length === 5 || columnExs.length === 5) {
                     //board won place board in winning board map
                     winningBoards.push(b + 1);
                     console.log("winning boards now", winningBoards);

@@ -70,9 +70,10 @@ const utils_1 = require("../utils");
                                     if (boardMap[`board-${b + 1}`].rows[r][n] === drawn) {
                                         boardMap[`board-${b + 1}`].rows[r][n] = "x";
                                         let rowExs = boardMap[`board-${b + 1}`].rows[r].filter((slot) => slot === "x");
+                                        let columnExs = [];
                                         console.log("rows exes", rowExs.length, rowExs, "row", r + 1, "board", b + 1);
                                         console.log("what is board here before checking exes", "board", b + 1, boardMap[`board-${b + 1}`].rows);
-                                        if (rowExs.length === 5) {
+                                        if (rowExs.length === 5 || columnExs.length === 5) {
                                             winningBoards.push(b + 1);
                                             console.log("winning boards now", winningBoards);
                                         }
