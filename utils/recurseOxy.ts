@@ -12,7 +12,6 @@ export function recurseOxy(list: Array<string>, step = 0): string {
     if (parseInt(list[j][step]) === k) temp.push(list[j]);
   }
 
-  if (temp.length > 1 && step < temp[0].length)
-    return recurseOxy(temp, step + 1);
+  if (temp.length > 1 && step < temp[0].length) return recurseOxy(temp, step + 1);
   else return temp[0];
 }

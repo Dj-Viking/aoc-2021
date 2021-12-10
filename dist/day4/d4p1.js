@@ -20,7 +20,6 @@ const utils_1 = require("../utils");
                 let boardMap = {};
                 let boardNum = 0;
                 let hitBoundary = 0;
-                let xs = 0;
                 function getBoardNum(currIdx) {
                     if (currIdx >= 1 && currIdx <= 5) {
                         return 1;
@@ -61,23 +60,42 @@ const utils_1 = require("../utils");
                 console.log("new board row 2", boardMap["board-2"].rows);
                 console.log("new board row 3", boardMap["board-3"].rows);
                 console.log("drawn nums", drawnNums);
+                let boardExMap = {};
                 function boardEx(boardMap, drawn) {
-                    for (let s = 0; s < Object.keys(boardMap).length; s++) {
-                        for (let r = 0; r < boardMap[`board-${s + 1}`].rows.length; r++) {
-                            for (let n = 0; n < boardMap[`board-${s + 1}`].rows[r].length; n++) {
-                                if (boardMap[`board-${s + 1}`].rows[r][n] === drawn) {
-                                    boardMap[`board-${s + 1}`].rows[r][n] = "yo";
+                    for (let b = 0; b < Object.keys(boardMap).length; b++) {
+                        for (let r = 0; r < boardMap[`board-${b + 1}`].rows.length; r++) {
+                            for (let n = 0; n < boardMap[`board-${b + 1}`].rows[r].length; n++) {
+                                console.log("what is happening here", "drawn", drawn, "board", b + 1, "row", r, boardMap[`board-${b + 1}`].rows[r][n]);
+                                if (boardMap[`board-${b + 1}`].rows[r][n] === drawn) {
+                                    console.log("IN THE EX CHECK", "drawn", drawn, "board", b + 1, "row", r, "location", boardMap[`board-${b + 1}`].rows[r][n]);
+                                    boardExMap = Object.assign(Object.assign({}, boardExMap), { [`board-${b + 1}`]: {
+                                            location: boardExMap[`board-${b + 1}`] && boardExMap[`board-${b + 1}`].location
+                                                ? [
+                                                    ...boardExMap[`board-${b + 1}`].location,
+                                                    boardMap[`board-${b + 1}`].rows[r][n],
+                                                ]
+                                                :
+                                                    new Array(1).fill(boardMap[`board-${b + 1}`].rows[r][n]),
+                                            row: boardExMap[`board-${b + 1}`] && !!boardExMap[`board-${b + 1}`].row
+                                                ? [...boardExMap[`board-${b + 1}`].row, r]
+                                                : new Array(1).fill(r),
+                                            drawn: boardExMap[`board-${b + 1}`] && !!boardExMap[`board-${b + 1}`].drawn
+                                                ? [...boardExMap[`board-${b + 1}`].drawn, drawn]
+                                                : new Array(1).fill(drawn),
+                                        } });
+                                    console.log("ex me", boardExMap);
                                 }
                             }
                         }
                     }
                 }
-                for (const draw of drawnNums) {
-                    boardEx(boardMap, draw);
+                for (const drawn of drawnNums) {
+                    boardEx(boardMap, drawn);
                 }
                 console.log("x board 1", boardMap["board-1"].rows);
                 console.log("x board 2", boardMap["board-2"].rows);
                 console.log("x board 3", boardMap["board-3"].rows);
+                console.log("ex board", boardExMap);
                 resolve();
             }
             catch (error) {

@@ -26,7 +26,7 @@ interface BoardMap {
       let boardMap = {} as BoardMap;
       let boardNum = 0 as number;
       let hitBoundary = 0;
-      let xs = 0;
+      // let xs = 0;
 
       function getBoardNum(currIdx: number): number {
         if (currIdx >= 1 && currIdx <= 5) {
@@ -90,40 +90,92 @@ interface BoardMap {
 
       console.log("drawn nums", drawnNums);
 
+      let boardExMap = {} as any;
+
       function boardEx(boardMap: BoardMap, drawn: number): void {
         //check which board will win first
         //for each board
-        for (let s = 0; s < Object.keys(boardMap).length; s++) {
-          //for each row of the board
-          for (let r = 0; r < boardMap[`board-${s + 1}`].rows.length; r++) {
-            //for each num in the row
-            for (
-              let n = 0;
-              // eslint-disable-next-line
-              // @ts-ignore
-              n < (boardMap[`board-${s + 1}`].rows[r].length as Array<Array<number>>["length"]);
-              n++
-            ) {
-              // eslint-disable-next-line
-              // @ts-ignore
-              if (boardMap[`board-${s + 1}`].rows[r][n] === drawn) {
+        for (let b = 0; b < Object.keys(boardMap).length; b++) {
+          // for each row
+          for (let r = 0; r < boardMap[`board-${b + 1}`].rows.length; r++) {
+            //for each num in row
+            // eslint-disable-next-line
+            // @ts-ignore
+            for (let n = 0; n < boardMap[`board-${b + 1}`].rows[r].length; n++) {
+              console.log(
+                "what is happening here",
+                "drawn",
+                drawn,
+                "board",
+                b + 1,
+                "row",
+                r,
                 // eslint-disable-next-line
                 // @ts-ignore
-                boardMap[`board-${s + 1}`].rows[r][n] = "yo"; //stuck here.....
+                boardMap[`board-${b + 1}`].rows[r][n]
+              );
+              // eslint-disable-next-line
+                // @ts-ignore
+              if (boardMap[`board-${b + 1}`].rows[r][n] === drawn) {
+                console.log(
+                  "IN THE EX CHECK",
+                  "drawn",
+                  drawn,
+                  "board",
+                  b + 1,
+                  "row",
+                  r,
+                  "location",
+                  // eslint-disable-next-line
+                  // @ts-ignore
+                  boardMap[`board-${b + 1}`].rows[r][n]
+                );
+                // eslint-disable-next-line
+                  // @ts-ignore
+
+                boardExMap = {
+                  ...boardExMap,
+                  [`board-${b + 1}`]: {
+                    location:
+                      boardExMap[`board-${b + 1}`] && boardExMap[`board-${b + 1}`].location
+                        ? [
+                            ...boardExMap[`board-${b + 1}`].location,
+                            // eslint-disable-next-line
+                            // @ts-ignore
+                            boardMap[`board-${b + 1}`].rows[r][n],
+                          ]
+                        : // eslint-disable-next-line
+                          // @ts-ignore
+                          new Array(1).fill(boardMap[`board-${b + 1}`].rows[r][n]),
+                    row:
+                      boardExMap[`board-${b + 1}`] && !!boardExMap[`board-${b + 1}`].row
+                        ? [...boardExMap[`board-${b + 1}`].row, r]
+                        : new Array(1).fill(r),
+                    drawn:
+                      boardExMap[`board-${b + 1}`] && !!boardExMap[`board-${b + 1}`].drawn
+                        ? [...boardExMap[`board-${b + 1}`].drawn, drawn]
+                        : new Array(1).fill(drawn),
+                  },
+                };
+                console.log("ex me", boardExMap);
+
+                // eslint-disable-next-line
+                    // @ts-ignore
               }
             }
           }
         }
       }
 
-      for (const draw of drawnNums) {
-        boardEx(boardMap, draw);
+      for (const drawn of drawnNums) {
+        boardEx(boardMap, drawn);
       }
 
       //check marked numbers with x in that position
       console.log("x board 1", boardMap["board-1"].rows);
       console.log("x board 2", boardMap["board-2"].rows);
       console.log("x board 3", boardMap["board-3"].rows);
+      console.log("ex board", boardExMap);
 
       //add all unmarked numbers on the board that won first
       // multiply that sum by the last number that was called => solution
