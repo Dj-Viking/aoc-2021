@@ -30,9 +30,27 @@ const utils_1 = require("../utils");
                         return 2;
                     }
                 }
+                function getEntireColumn(matrix, col) {
+                    const column = [];
+                    for (let i = 0; i < matrix.length; i++) {
+                        column.push(matrix[i][col]);
+                    }
+                    return column;
+                }
+                function getColNum(matrix, drawn) {
+                    let column = 0;
+                    row: for (let r = 0; r < matrix.length; r++) {
+                        for (let n = 0; n < matrix[r].length; n++) {
+                            if (matrix[r][n] === drawn) {
+                                column = n;
+                                break row;
+                            }
+                        }
+                    }
+                    return column;
+                }
                 drawnNums = (_a = theInput
                     .shift()) === null || _a === void 0 ? void 0 : _a.split(",").map((str) => parseInt(str));
-                console.log("theInputs after shifting drawn nums out", theInput);
                 for (let i = 0; i < theInput.length; i++) {
                     if (theInput[i] === "")
                         hitBoundary++;
@@ -58,29 +76,7 @@ const utils_1 = require("../utils");
                         } });
                 }
                 console.log("new board map", boardMap);
-                console.log("new board row 1", boardMap["board-1"].rows);
-                console.log("new board row 2", boardMap["board-2"].rows);
-                console.log("new board row 3", boardMap["board-3"].rows);
                 console.log("drawn nums", drawnNums);
-                function getEntireColumn(matrix, col) {
-                    const column = [];
-                    for (let i = 0; i < matrix.length; i++) {
-                        column.push(matrix[i][col]);
-                    }
-                    return column;
-                }
-                function getColNum(matrix, drawn) {
-                    let column = 0;
-                    row: for (let r = 0; r < matrix.length; r++) {
-                        for (let n = 0; n < matrix[r].length; n++) {
-                            if (matrix[r][n] === drawn) {
-                                column = n;
-                                break row;
-                            }
-                        }
-                    }
-                    return column;
-                }
                 function boardEx() {
                     for (const drawn of drawnNums) {
                         console.log("drawn", drawn);
@@ -91,19 +87,14 @@ const utils_1 = require("../utils");
                                         let col = getColNum(boardMap[`board-${b + 1}`].rows, drawn);
                                         console.log("column that the drawn number is in", col);
                                         boardMap[`board-${b + 1}`].rows[r][n] = "x";
-                                        let rowExs = boardMap[`board-${b + 1}`].rows[r].filter((slot) => slot === "x");
-                                        let columnExs = getEntireColumn(boardMap[`board-${b + 1}`].rows, col).filter((slot) => slot === "x");
+                                        const rowExs = boardMap[`board-${b + 1}`].rows[r].filter((slot) => slot === "x");
+                                        const columnExs = getEntireColumn(boardMap[`board-${b + 1}`].rows, col).filter((slot) => slot === "x");
                                         console.log("got column", columnExs);
                                         console.log("rows exes", rowExs.length, rowExs, "row", r + 1, "board", b + 1);
                                         console.log("what is board here before checking exes", "board", b + 1, boardMap[`board-${b + 1}`].rows);
-                                        if (rowExs.length === 5 || columnExs.length === 5) {
+                                        if (rowExs.length === 5 || columnExs.length === 5)
                                             winningBoards.add(b + 1);
-                                            console.log("winning boards now", winningBoards);
-                                        }
                                         if (winningBoards.size === Object.keys(boardMap).length) {
-                                            console.log("winning boards now", winningBoards);
-                                            const currentBoards = Object.keys(boardMap).map((str) => parseInt(str.split("-")[1]));
-                                            console.log("board map numbers", currentBoards);
                                             return {
                                                 lastDraw: drawn,
                                                 whosLast: parseInt(`board-${b + 1}`.split("-")[1]),
@@ -133,7 +124,6 @@ const utils_1 = require("../utils");
                     console.log("answer", sum * lastDraw);
                 }
                 const { lastDraw, whosLast } = boardEx();
-                console.log("did we get what we need", lastDraw, whosLast);
                 getScore(boardMap, lastDraw, whosLast);
                 resolve();
             }

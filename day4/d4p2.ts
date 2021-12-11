@@ -26,6 +26,8 @@ interface BoardMap {
       // const theInput = sample;
       let drawnNums = [] as Array<number>;
       let boardMap = {} as BoardMap;
+      //prevent a winning board from being added more than once using a Set...just preserve the fact that board won
+      // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set
       const winningBoards = new Set();
       let boardNum = 0 as number;
       let hitBoundary = 0;
@@ -38,12 +40,31 @@ interface BoardMap {
         }
       }
 
+      function getEntireColumn(matrix: number[][], col: number): Array<number | string> {
+        const column = [];
+        for (let i = 0; i < matrix.length; i++) {
+          column.push(matrix[i][col]);
+        }
+        return column;
+      }
+
+      function getColNum(matrix: number[][], drawn: number): number {
+        let column = 0;
+        row: for (let r = 0; r < matrix.length; r++) {
+          for (let n = 0; n < matrix[r].length; n++) {
+            if (matrix[r][n] === drawn) {
+              column = n;
+              break row;
+            }
+          }
+        }
+        return column;
+      }
+
       drawnNums = theInput
         .shift()
         ?.split(",")
         .map((str) => parseInt(str)) as Array<number>;
-
-      console.log("theInputs after shifting drawn nums out", theInput);
 
       for (let i = 0; i < theInput.length; i++) {
         //keep tabs on how many times we hit a boundary
@@ -86,31 +107,7 @@ interface BoardMap {
 
       console.log("new board map", boardMap);
 
-      console.log("new board row 1", boardMap["board-1"].rows);
-      console.log("new board row 2", boardMap["board-2"].rows);
-      console.log("new board row 3", boardMap["board-3"].rows);
-
       console.log("drawn nums", drawnNums);
-
-      function getEntireColumn(matrix: number[][], col: number): Array<number | string> {
-        const column = [];
-        for (let i = 0; i < matrix.length; i++) {
-          column.push(matrix[i][col]);
-        }
-        return column;
-      }
-      function getColNum(matrix: number[][], drawn: number): number {
-        let column = 0;
-        row: for (let r = 0; r < matrix.length; r++) {
-          for (let n = 0; n < matrix[r].length; n++) {
-            if (matrix[r][n] === drawn) {
-              column = n;
-              break row;
-            }
-          }
-        }
-        return column;
-      }
 
       //check which board will LOSE LAST
       //for each board
@@ -140,18 +137,8 @@ interface BoardMap {
                   // exit
                   // eslint-disable-next-line
                   // @ts-ignore
-                  let rowExs = boardMap[`board-${b + 1}`].rows[r].filter((slot) => slot === "x");
-
-                  //check columns with exes part 1 worked even not checking columns...
-                  // columns will get filled so have to check this somehow
-
-                  //get the column that the drawn number is in for each board
-                  // let columnExs = getColOfDrawnNum(
-                  //   boardMap[`board-${b + 1}`].rows as number[][],
-                  //   drawn
-                  // );
-
-                  let columnExs = getEntireColumn(
+                  const rowExs = boardMap[`board-${b + 1}`].rows[r].filter((slot) => slot === "x");
+                  const columnExs = getEntireColumn(
                     boardMap[`board-${b + 1}`].rows as number[][],
                     col
                   ).filter((slot: number | string) => slot === "x") as string[];
@@ -165,25 +152,14 @@ interface BoardMap {
                     boardMap[`board-${b + 1}`].rows
                   );
 
-                  //check rows with exes
-                  if (rowExs.length === 5 || columnExs.length === 5) {
-                    //board won place board in winning board map
-                    winningBoards.add(b + 1);
-                    console.log("winning boards now", winningBoards);
-                  }
-                  //check if number of boards in the winning board map is 1 less than the amount of boards in
-                  // the entire boardmap
-                  // and return which board it is that has not won when all others won
-                  if (winningBoards.size === Object.keys(boardMap).length) {
-                    // filter out which board number from the boardmap does not match
-                    // any of the winning boards
+                  //check rows and columns with exes
+                  //board won place board in winning board Set
+                  //(will not be duplicate if already won previously via it's columns or rows first)
+                  if (rowExs.length === 5 || columnExs.length === 5) winningBoards.add(b + 1);
 
-                    //sort winning boards
-                    console.log("winning boards now", winningBoards);
-                    const currentBoards = Object.keys(boardMap).map((str) =>
-                      parseInt(str.split("-")[1])
-                    );
-                    console.log("board map numbers", currentBoards);
+                  //if all boards are finished we got to the last board
+                  if (winningBoards.size === Object.keys(boardMap).length) {
+                    //return this to calculate score
                     return {
                       lastDraw: drawn,
                       whosLast: parseInt(`board-${b + 1}`.split("-")[1]),
@@ -221,8 +197,6 @@ interface BoardMap {
         // multiply that sum by the last number that was called => solution
       }
       const { lastDraw, whosLast } = boardEx();
-      console.log("did we get what we need", lastDraw, whosLast);
-      // boardEx();
       getScore(boardMap, lastDraw, whosLast);
 
       resolve();
