@@ -1,15 +1,31 @@
 if [ -z "$1" ]
   then
-    echo "Please provide a solution directory/file path \nfor example (npm run solve day1/d1p1)\n.js extension will be appended"
+    echo "Please provide a solution directory day number as first argument"
+    echo ""
+    echo "for example:  (npm run solve (1) 2)"
+    echo ""
     exit
 fi
+
+if [ -z "$2" ]
+  then
+    echo "Please provide a part number to solve as the second argument"
+    echo ""
+    echo "for example: (npm run solve 4 (1)) or (npm run solve 4 (2))"
+    echo ""
+    exit
+fi
+
+DAYDIR="day$1"
+PART="p$2"
+FILE="d$1$PART"
 
 echo "solving file $1.js..."
 echo "printing solution..."
 echo ""
 
 cd dist;
-node "./$1.js"
+node "./$DAYDIR/$FILE.js"
 
 echo ""
 echo "done"
