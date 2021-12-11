@@ -32,16 +32,16 @@ type Graph = number[][];
         }
       }
 
-      function drawVertLine(x: number, y1: number, y2: number): void {
-        let y;
-        const ys = [y1, y2].sort((a, b) => a - b);
-        console.log("what are ys", ys);
-        for (y = ys[0]; y <= ys[1]; y++) {
-          console.log("what is x here", x);
-          console.log("what is y here", y);
-          graph[y][x]++;
-        }
-      }
+      // function drawVertLine(x: number, y1: number, y2: number): void {
+      //   let y;
+      //   const ys = [y1, y2].sort((a, b) => a - b);
+      //   console.log("what are ys", ys);
+      //   for (y = ys[0]; y <= ys[1]; y++) {
+      //     console.log("what is x here", x);
+      //     console.log("what is y here", y);
+      //     graph[y][x]++;
+      //   }
+      // }
       // function drawHorizLine(y: number, x1: number, x2: number): void {}
 
       console.log("coordinates");
@@ -52,7 +52,8 @@ type Graph = number[][];
         let y2 = getY2(theInput, row);
         console.log("x1 =", x1, "x2 =", x2, "y1 =", y1, "y2 =", y2);
         if (x1 === x2) {
-          drawVertLine(x1, y1, y2);
+          graph[y1][x1]++;
+          graph[y2][x1]++;
         }
       }
 

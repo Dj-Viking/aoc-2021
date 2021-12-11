@@ -33,16 +33,6 @@ const utils_1 = require("../utils");
                         str = "";
                     }
                 }
-                function drawVertLine(x, y1, y2) {
-                    let y;
-                    const ys = [y1, y2].sort((a, b) => a - b);
-                    console.log("what are ys", ys);
-                    for (y = ys[0]; y <= ys[1]; y++) {
-                        console.log("what is x here", x);
-                        console.log("what is y here", y);
-                        graph[y][x]++;
-                    }
-                }
                 console.log("coordinates");
                 for (let row = 0; row < theInput.length; row++) {
                     let x1 = (0, utils_1.getX1)(theInput, row);
@@ -51,7 +41,8 @@ const utils_1 = require("../utils");
                     let y2 = (0, utils_1.getY2)(theInput, row);
                     console.log("x1 =", x1, "x2 =", x2, "y1 =", y1, "y2 =", y2);
                     if (x1 === x2) {
-                        drawVertLine(x1, y1, y2);
+                        graph[y1][x1]++;
+                        graph[y2][x1]++;
                     }
                 }
                 dumpBoard();
