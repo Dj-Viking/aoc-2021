@@ -6,6 +6,13 @@ cd aoc-2021/;
 npm install;
 ```
 
+# development
+```sh
+# to change code, write in the ts files and then run
+npm start
+# this will emit the js files that node will execute
+```
+
 # run
 ```sh
 # to solve a particular day and part, place the numbers as arguments to the shell script
