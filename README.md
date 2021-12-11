@@ -11,6 +11,7 @@ npm install;
 # to change code, write in the ts files and then run
 npm start
 # this will emit the js files that node will execute
+# this runs tsc in watch mode so any changes are emitted after save
 ```
 
 # run
