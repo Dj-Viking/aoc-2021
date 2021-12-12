@@ -20,7 +20,8 @@ DAYDIR="day$1"
 PART="p$2"
 FILE="d$1$PART"
 
-echo "solving file $1.js..."
+echo "solving file $FILE.js..."
+echo "with command (node ./$DAYDIR/$FILE.js) from dist directory"
 echo "printing solution..."
 echo ""
 
