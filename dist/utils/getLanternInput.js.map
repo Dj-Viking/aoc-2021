@@ -1,0 +1,1 @@
+{"version":3,"file":"getLanternInput.js","sourceRoot":"","sources":["../../utils/getLanternInput.ts"],"names":[],"mappings":";;;;;;AAAA,4CAAoB;AACpB,SAAgB,eAAe,CAAC,IAAY;IAC1C,OAAO,YAAE,CAAC,YAAY,CAAC,IAAI,EAAE,EAAE,QAAQ,EAAE,OAAO,EAAE,CAAC,CAAC,KAAK,CAAC,GAAG,CAAC,CAAC;AACjE,CAAC;AAFD,0CAEC"}
