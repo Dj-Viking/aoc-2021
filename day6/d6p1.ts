@@ -59,7 +59,6 @@ interface FishTable {
       function nextDay(): void {
         // each fish loses a day of their life
         // console.log("fish days before changing", fishDays);
-        fishDays = fishDays.filter((num) => num !== 0);
         for (let f = 0; f < fishDays.length; f++) {
           fishDays[f]--;
         }
@@ -78,7 +77,6 @@ interface FishTable {
             fishTable["8"]++;
             fishTable["6"]++;
             fishDays.push(8, 6);
-            fishDays = fishDays.filter((num) => num !== -1);
             // console.log("fish days after spawning", fishDays);
           }
         }

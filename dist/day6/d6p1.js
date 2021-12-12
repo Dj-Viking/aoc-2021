@@ -41,7 +41,6 @@ const utils_1 = require("../utils");
                     } while (d < fishDays.length);
                 }
                 function nextDay() {
-                    fishDays = fishDays.filter((num) => num !== 0);
                     for (let f = 0; f < fishDays.length; f++) {
                         fishDays[f]--;
                     }
@@ -53,7 +52,6 @@ const utils_1 = require("../utils");
                             fishTable["8"]++;
                             fishTable["6"]++;
                             fishDays.push(8, 6);
-                            fishDays = fishDays.filter((num) => num !== -1);
                         }
                     }
                 }
