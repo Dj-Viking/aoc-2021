@@ -14,38 +14,47 @@ const utils_1 = require("../utils");
     return __awaiter(this, void 0, void 0, function* () {
         return new Promise((resolve, reject) => {
             try {
-                const sample = (0, utils_1.getInput)("../day5/sample.txt");
-                const theInput = sample;
-                console.log("the input", theInput);
-                const graph = new Array(theInput.length).fill("0"
-                    .repeat(10)
-                    .split("")
-                    .map((str) => parseInt(str)));
-                function dumpBoard() {
-                    console.log("dumping board");
-                    let x, y;
-                    let str = "";
-                    for (y = 0; y < graph.length; y++) {
-                        for (x = 0; x < graph.length; x++) {
-                            str += graph[y][x].toString() + " ";
-                        }
-                        console.log(str);
-                        str = "";
+                const splitInput = (0, utils_1.getInput)("../day5/input.txt");
+                const coords = splitInput;
+                console.log("coordinates inputs", coords.length);
+                const newGraph = [...new Array(coords.length * 2)].map(() => new Array(coords.length * 2).fill(0));
+                const graph = newGraph;
+                console.log("graph length", graph.length);
+                function drawVertLine(x, y1, y2) {
+                    let y;
+                    const ys = [y1, y2].sort((a, b) => a - b);
+                    for (y = ys[0]; y <= ys[1]; y++) {
+                        graph[y][x]++;
                     }
                 }
-                console.log("coordinates");
-                for (let row = 0; row < theInput.length; row++) {
-                    let x1 = (0, utils_1.getX1)(theInput, row);
-                    let x2 = (0, utils_1.getX2)(theInput, row);
-                    let y1 = (0, utils_1.getY1)(theInput, row);
-                    let y2 = (0, utils_1.getY2)(theInput, row);
-                    console.log("x1 =", x1, "x2 =", x2, "y1 =", y1, "y2 =", y2);
+                function drawHorizLine(y, x1, x2) {
+                    let x;
+                    const xs = [x1, x2].sort((a, b) => a - b);
+                    for (x = xs[0]; x <= xs[1]; x++) {
+                        graph[y][x]++;
+                    }
+                }
+                for (let row = 0; row < coords.length; row++) {
+                    let x1 = (0, utils_1.getX1)(coords, row);
+                    let x2 = (0, utils_1.getX2)(coords, row);
+                    let y1 = (0, utils_1.getY1)(coords, row);
+                    let y2 = (0, utils_1.getY2)(coords, row);
                     if (x1 === x2) {
-                        graph[y1][x1]++;
-                        graph[y2][x1]++;
+                        drawVertLine(x1, y1, y2);
+                    }
+                    if (y1 === y2) {
+                        drawHorizLine(y1, x1, x2);
                     }
                 }
-                dumpBoard();
+                let answer = 0;
+                for (let y = 0; y < graph.length; y++) {
+                    for (let x = 0; x < graph.length; x++) {
+                        if (graph[y][x] > 1) {
+                            answer++;
+                        }
+                    }
+                }
+                console.log("answer", answer);
                 resolve();
             }
             catch (error) {
