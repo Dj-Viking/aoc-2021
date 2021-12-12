@@ -14,7 +14,7 @@ const utils_1 = require("../utils");
     return __awaiter(this, void 0, void 0, function* () {
         return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
             try {
-                const lanternInput = (0, utils_1.getLanternInput)("../day6/sample.txt");
+                const lanternInput = (0, utils_1.getLanternInput)("../day6/input.txt");
                 const theInput = lanternInput;
                 let fishTable = {};
                 const fishTableKeysLength = 9;

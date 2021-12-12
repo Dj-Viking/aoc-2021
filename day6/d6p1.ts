@@ -7,10 +7,10 @@ interface FishTable {
 (async function (): Promise<void> {
   return new Promise(async (resolve, reject) => {
     try {
-      // const lanternInput = getLanternInput("../day6/input.txt");
-      // const theInput = lanternInput;
-      const lanternInput = getLanternInput("../day6/sample.txt");
+      const lanternInput = getLanternInput("../day6/input.txt");
       const theInput = lanternInput;
+      // const lanternInput = getLanternInput("../day6/sample.txt");
+      // const theInput = lanternInput;
       // console.log("theInput", theInput);
       let fishTable = {} as FishTable;
       //length caching to prevent lookups of how many keys there are this was slowing everything down
