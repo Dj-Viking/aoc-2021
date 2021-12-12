@@ -17,6 +17,7 @@ const utils_1 = require("../utils");
                 const lanternInput = (0, utils_1.getLanternInput)("../day6/sample.txt");
                 const theInput = lanternInput;
                 let fishTable = {};
+                const fishTableKeysLength = 9;
                 let prevTable = {};
                 let fishDays = [];
                 fishDays = theInput.map((str) => parseInt(str));
@@ -29,13 +30,15 @@ const utils_1 = require("../utils");
                     }
                 }
                 function advanceTable() {
-                    for (let d = 0; d < fishDays.length; d++) {
-                        for (const key in fishTable) {
-                            if (key === fishDays[d].toString()) {
-                                fishTable[key]++;
+                    let d = 0;
+                    do {
+                        for (let k = 0; k < fishTableKeysLength; k++) {
+                            if (k === fishDays[d]) {
+                                fishTable[k.toString()]++;
                             }
                         }
-                    }
+                        d++;
+                    } while (d < fishDays.length);
                 }
                 function nextDay() {
                     fishDays = fishDays.filter((num) => num !== 0);
@@ -56,7 +59,7 @@ const utils_1 = require("../utils");
                 }
                 zeroTable();
                 advanceTable();
-                for (let day = 0; day < 80; day++) {
+                for (let day = 0; day < 256; day++) {
                     console.log("calculating fishes....please stand by...day: ", day + 1);
                     nextDay();
                 }

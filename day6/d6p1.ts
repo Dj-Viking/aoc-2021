@@ -13,6 +13,9 @@ interface FishTable {
       const theInput = lanternInput;
       // console.log("theInput", theInput);
       let fishTable = {} as FishTable;
+      //length caching to prevent lookups of how many keys there are this was slowing everything down
+      // if i didnt do this, part 2 would take forever lol
+      const fishTableKeysLength = 9;
       let prevTable = {} as FishTable;
       let fishDays = [] as Array<number>;
       fishDays = theInput.map((str) => parseInt(str));
@@ -38,14 +41,17 @@ interface FishTable {
       }
 
       function advanceTable(): void {
-        // make first day state table.
-        for (let d = 0; d < fishDays.length; d++) {
-          for (const key in fishTable) {
-            if (key === fishDays[d].toString()) {
-              fishTable[key]++;
+        // console.log("fish days check", fishDays);
+        let d = 0;
+        do {
+          for (let k = 0; k < fishTableKeysLength; k++) {
+            if (k === fishDays[d]) {
+              fishTable[k.toString()]++;
             }
           }
-        }
+          d++;
+        } while (d < fishDays.length);
+        // console.log("fish table before advancing", fishTable);
       }
 
       // on the next day our first 5 fish will advance a day in their life cycle
@@ -81,22 +87,7 @@ interface FishTable {
       //begin
       zeroTable();
       advanceTable();
-
-      // console.log("init table");
-      // dumpTable(fishTable);
-      //day 1
-      // nextDay();
-      // dumpTable(fishTable);
-
-      // nextDay();
-      // dumpTable(fishTable);
-      // nextDay();
-      // dumpTable(fishTable);
-      // nextDay();
-      // dumpTable(fishTable);
-      // nextDay();
-      // dumpTable(fishTable);
-      for (let day = 0; day < 80; day++) {
+      for (let day = 0; day < 256; day++) {
         console.log("calculating fishes....please stand by...day: ", day + 1);
         nextDay();
         // dumpTable(fishTable);
