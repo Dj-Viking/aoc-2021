@@ -16,24 +16,12 @@ const utils_1 = require("../utils");
             try {
                 const lanternInput = (0, utils_1.getLanternInput)("../day6/sample.txt");
                 const theInput = lanternInput;
-                console.log("theInput", theInput);
                 let fishTable = {};
                 let prevTable = {};
                 let fishDays = [];
                 fishDays = theInput.map((str) => parseInt(str));
-                console.log("starting fish days'", fishDays);
-                function dumpTable(table) {
-                    for (let i = 0; i < Object.keys(table).length; i++) {
-                        console.log(`${i}: `, table[i]);
-                    }
-                }
                 function copyToPrev() {
-                    return __awaiter(this, void 0, void 0, function* () {
-                        return new Promise((resolve) => {
-                            prevTable = fishTable;
-                            resolve();
-                        });
-                    });
+                    prevTable = fishTable;
                 }
                 function zeroTable() {
                     for (let i = 0; i < 9; i++) {
@@ -50,28 +38,36 @@ const utils_1 = require("../utils");
                     }
                 }
                 function nextDay() {
-                    return __awaiter(this, void 0, void 0, function* () {
-                        console.log("fish days before changing", fishDays);
-                        for (let f = 0; f < fishDays.length; f++) {
-                            fishDays[f]--;
+                    fishDays = fishDays.filter((num) => num !== 0);
+                    for (let f = 0; f < fishDays.length; f++) {
+                        fishDays[f]--;
+                    }
+                    copyToPrev();
+                    zeroTable();
+                    advanceTable();
+                    if (prevTable["0"] > 0) {
+                        for (let f = 0; f < prevTable["0"]; f++) {
+                            fishTable["8"]++;
+                            fishTable["6"]++;
+                            fishDays.push(8, 6);
+                            fishDays = fishDays.filter((num) => num !== -1);
                         }
-                        copyToPrev();
-                        console.log("previous table");
-                        dumpTable(prevTable);
-                        zeroTable();
-                        advanceTable();
-                    });
+                    }
                 }
                 zeroTable();
                 advanceTable();
-                console.log("init table");
-                dumpTable(fishTable);
-                nextDay();
-                console.log("next day table");
-                dumpTable(fishTable);
-                nextDay();
-                console.log("next day table");
-                dumpTable(fishTable);
+                for (let day = 0; day < 80; day++) {
+                    console.log("calculating fishes....please stand by...day: ", day + 1);
+                    nextDay();
+                }
+                console.log("answer", sumFishes(fishTable));
+                function sumFishes(table) {
+                    return Object.keys(table)
+                        .map((key) => {
+                        return table[key];
+                    })
+                        .reduce((prev, curr) => prev + curr, 0);
+                }
                 resolve();
             }
             catch (error) {
