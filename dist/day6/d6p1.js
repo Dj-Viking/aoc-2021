@@ -59,7 +59,7 @@ const utils_1 = require("../utils");
                 }
                 zeroTable();
                 advanceTable();
-                for (let day = 0; day < 256; day++) {
+                for (let day = 0; day < 80; day++) {
                     console.log("calculating fishes....please stand by...day: ", day + 1);
                     nextDay();
                 }

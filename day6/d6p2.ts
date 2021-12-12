@@ -7,15 +7,16 @@ interface FishTable {
 (async function (): Promise<void> {
   return new Promise(async (resolve, reject) => {
     try {
-      // const lanternInput = getLanternInput("../day6/input.txt");
-      // const theInput = lanternInput;
-      const lanternInput = getLanternInput("../day6/sample.txt");
+      const lanternInput = getLanternInput("../day6/input.txt");
       const theInput = lanternInput;
+      // const lanternInput = getLanternInput("../day6/sample.txt");
+      // const theInput = lanternInput;
       // console.log("theInput", theInput);
       let fishTable = {} as FishTable;
       //length caching to prevent lookups of how many keys there are this was slowing everything down
       // if i didnt do this, part 2 would take forever lol
       const fishTableKeysLength = 9;
+      const DAYS = 256;
       let prevTable = {} as FishTable;
       let fishDays = [] as Array<number>;
       fishDays = theInput.map((str) => parseInt(str));
@@ -42,15 +43,17 @@ interface FishTable {
 
       function advanceTable(): void {
         // console.log("fish days check", fishDays);
-        let d = 0;
-        do {
+        for (let d = 0; d < fishDays.length; d++) {
           for (let k = 0; k < fishTableKeysLength; k++) {
             if (k === fishDays[d]) {
               fishTable[k.toString()]++;
             }
           }
-          d++;
-        } while (d < fishDays.length);
+        }
+        // let d = 0;
+        // do {
+        //   d++;
+        // } while (d < fishDays.length);
         // console.log("fish table before advancing", fishTable);
       }
 
@@ -59,9 +62,8 @@ interface FishTable {
       function nextDay(): void {
         // each fish loses a day of their life
         // console.log("fish days before changing", fishDays);
-        fishDays = fishDays.filter((num) => num !== 0);
-        for (let f = 0; f < fishDays.length; f++) {
-          fishDays[f]--;
+        for (let day = 0; day < fishDays.length; day++) {
+          fishDays[day]--;
         }
         // make a table copy of the previous day to compare the arriving current day
         copyToPrev();
@@ -78,8 +80,8 @@ interface FishTable {
             fishTable["8"]++;
             fishTable["6"]++;
             fishDays.push(8, 6);
-            fishDays = fishDays.filter((num) => num !== -1);
             // console.log("fish days after spawning", fishDays);
+            // fishDays = fishDays.filter((num) => num !== -1);
           }
         }
       }
@@ -87,7 +89,7 @@ interface FishTable {
       //begin
       zeroTable();
       advanceTable();
-      for (let day = 0; day < 256; day++) {
+      for (let day = 0; day < DAYS; day++) {
         console.log("calculating fishes....please stand by...day: ", day + 1);
         nextDay();
         // dumpTable(fishTable);

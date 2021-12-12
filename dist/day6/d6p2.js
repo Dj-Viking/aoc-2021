@@ -14,10 +14,11 @@ const utils_1 = require("../utils");
     return __awaiter(this, void 0, void 0, function* () {
         return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
             try {
-                const lanternInput = (0, utils_1.getLanternInput)("../day6/sample.txt");
+                const lanternInput = (0, utils_1.getLanternInput)("../day6/input.txt");
                 const theInput = lanternInput;
                 let fishTable = {};
                 const fishTableKeysLength = 9;
+                const DAYS = 256;
                 let prevTable = {};
                 let fishDays = [];
                 fishDays = theInput.map((str) => parseInt(str));
@@ -30,20 +31,17 @@ const utils_1 = require("../utils");
                     }
                 }
                 function advanceTable() {
-                    let d = 0;
-                    do {
+                    for (let d = 0; d < fishDays.length; d++) {
                         for (let k = 0; k < fishTableKeysLength; k++) {
                             if (k === fishDays[d]) {
                                 fishTable[k.toString()]++;
                             }
                         }
-                        d++;
-                    } while (d < fishDays.length);
+                    }
                 }
                 function nextDay() {
-                    fishDays = fishDays.filter((num) => num !== 0);
-                    for (let f = 0; f < fishDays.length; f++) {
-                        fishDays[f]--;
+                    for (let day = 0; day < fishDays.length; day++) {
+                        fishDays[day]--;
                     }
                     copyToPrev();
                     zeroTable();
@@ -53,13 +51,12 @@ const utils_1 = require("../utils");
                             fishTable["8"]++;
                             fishTable["6"]++;
                             fishDays.push(8, 6);
-                            fishDays = fishDays.filter((num) => num !== -1);
                         }
                     }
                 }
                 zeroTable();
                 advanceTable();
-                for (let day = 0; day < 256; day++) {
+                for (let day = 0; day < DAYS; day++) {
                     console.log("calculating fishes....please stand by...day: ", day + 1);
                     nextDay();
                 }
