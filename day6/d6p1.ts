@@ -16,7 +16,7 @@ interface FishTable {
       //length caching to prevent lookups of how many keys there are this was slowing everything down
       // if i didnt do this, part 2 would take forever lol
       const fishTableKeysLength = 9;
-      const DAYS = 18;
+      const DAYS = 80;
       let prevTable = {} as FishTable;
       let fishDays = [] as Array<number>;
       fishDays = theInput.map((str) => parseInt(str));

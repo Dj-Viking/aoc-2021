@@ -18,7 +18,7 @@ const utils_1 = require("../utils");
                 const theInput = lanternInput;
                 let fishTable = {};
                 const fishTableKeysLength = 9;
-                const DAYS = 18;
+                const DAYS = 80;
                 let prevTable = {};
                 let fishDays = [];
                 fishDays = theInput.map((str) => parseInt(str));
