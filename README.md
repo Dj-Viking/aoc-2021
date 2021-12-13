@@ -1,9 +1,9 @@
 # setup
 
 ```sh
-git clone git@github.com:Dj-Viking/aoc-2021.git;
-cd aoc-2021/;
-npm install;
+git clone git@github.com:Dj-Viking/aoc-2021.git; \
+cd aoc-2021/; \
+npm install
 ```
 
 # development
