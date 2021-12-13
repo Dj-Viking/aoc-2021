@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getLanternInput = exports.dumpBoard = exports.recurseOxy = exports.recurseCo2 = exports.getInput = exports.getY2 = exports.getY1 = exports.getX2 = exports.getX1 = void 0;
+exports.getCrabInput = exports.getLanternInput = exports.dumpBoard = exports.recurseOxy = exports.recurseCo2 = exports.getInput = exports.getY2 = exports.getY1 = exports.getX2 = exports.getX1 = void 0;
 const getInput_1 = require("./getInput");
 Object.defineProperty(exports, "getInput", { enumerable: true, get: function () { return getInput_1.getInput; } });
 const recurseCo2_1 = require("./recurseCo2");
@@ -11,6 +11,8 @@ const dumpBoard_1 = require("./dumpBoard");
 Object.defineProperty(exports, "dumpBoard", { enumerable: true, get: function () { return dumpBoard_1.dumpBoard; } });
 const getLanternInput_1 = require("./getLanternInput");
 Object.defineProperty(exports, "getLanternInput", { enumerable: true, get: function () { return getLanternInput_1.getLanternInput; } });
+const getCrabInput_1 = require("./getCrabInput");
+Object.defineProperty(exports, "getCrabInput", { enumerable: true, get: function () { return getCrabInput_1.getCrabInput; } });
 function getX1(coords, iter) {
     return parseInt(coords[iter].split(/\s->\s/g)[0].split(",")[0]);
 }
