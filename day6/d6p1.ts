@@ -7,25 +7,26 @@ interface FishTable {
 (async function (): Promise<void> {
   return new Promise(async (resolve, reject) => {
     try {
-      const lanternInput = getLanternInput("../day6/input.txt");
-      const theInput = lanternInput;
-      // const lanternInput = getLanternInput("../day6/sample.txt");
+      // const lanternInput = getLanternInput("../day6/input.txt");
       // const theInput = lanternInput;
+      const lanternInput = getLanternInput("../day6/sample.txt");
+      const theInput = lanternInput;
       // console.log("theInput", theInput);
       let fishTable = {} as FishTable;
       //length caching to prevent lookups of how many keys there are this was slowing everything down
       // if i didnt do this, part 2 would take forever lol
       const fishTableKeysLength = 9;
+      const DAYS = 18;
       let prevTable = {} as FishTable;
       let fishDays = [] as Array<number>;
       fishDays = theInput.map((str) => parseInt(str));
       // console.log("starting fish days'", fishDays);
 
-      // function dumpTable(table: FishTable): void {
-      //   for (let i = 0; i < Object.keys(table).length; i++) {
-      //     console.log(`${i}: `, table[i]);
-      //   }
-      // }
+      function dumpTable(table: FishTable): void {
+        for (let i = 0; i < Object.keys(table).length; i++) {
+          console.log(`${i}: `, table[i]);
+        }
+      }
       function copyToPrev(): void {
         prevTable = fishTable;
       }
@@ -62,6 +63,7 @@ interface FishTable {
         for (let f = 0; f < fishDays.length; f++) {
           fishDays[f]--;
         }
+        fishDays = fishDays.filter((day) => day !== -1);
         // make a table copy of the previous day to compare the arriving current day
         copyToPrev();
         // console.log("previous table");
@@ -85,10 +87,13 @@ interface FishTable {
       //begin
       zeroTable();
       advanceTable();
-      for (let day = 0; day < 80; day++) {
+      console.log("fish days", fishDays);
+      dumpTable(fishTable);
+      for (let day = 0; day < DAYS; day++) {
         console.log("calculating fishes....please stand by...day: ", day + 1);
         nextDay();
-        // dumpTable(fishTable);
+        console.log("fish days", fishDays);
+        dumpTable(fishTable);
       }
       console.log("answer", sumFishes(fishTable));
 

@@ -14,13 +14,19 @@ const utils_1 = require("../utils");
     return __awaiter(this, void 0, void 0, function* () {
         return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
             try {
-                const lanternInput = (0, utils_1.getLanternInput)("../day6/input.txt");
+                const lanternInput = (0, utils_1.getLanternInput)("../day6/sample.txt");
                 const theInput = lanternInput;
                 let fishTable = {};
                 const fishTableKeysLength = 9;
+                const DAYS = 18;
                 let prevTable = {};
                 let fishDays = [];
                 fishDays = theInput.map((str) => parseInt(str));
+                function dumpTable(table) {
+                    for (let i = 0; i < Object.keys(table).length; i++) {
+                        console.log(`${i}: `, table[i]);
+                    }
+                }
                 function copyToPrev() {
                     prevTable = fishTable;
                 }
@@ -44,6 +50,7 @@ const utils_1 = require("../utils");
                     for (let f = 0; f < fishDays.length; f++) {
                         fishDays[f]--;
                     }
+                    fishDays = fishDays.filter((day) => day !== -1);
                     copyToPrev();
                     zeroTable();
                     advanceTable();
@@ -57,9 +64,13 @@ const utils_1 = require("../utils");
                 }
                 zeroTable();
                 advanceTable();
-                for (let day = 0; day < 80; day++) {
+                console.log("fish days", fishDays);
+                dumpTable(fishTable);
+                for (let day = 0; day < DAYS; day++) {
                     console.log("calculating fishes....please stand by...day: ", day + 1);
                     nextDay();
+                    console.log("fish days", fishDays);
+                    dumpTable(fishTable);
                 }
                 console.log("answer", sumFishes(fishTable));
                 function sumFishes(table) {
