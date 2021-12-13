@@ -64,7 +64,7 @@ console.time("main finished in");
 
       function Main(): void {
         let result = Number.MAX_SAFE_INTEGER;
-        //loop through the range of available numbers in the input array
+        //loop through all numbers in the available array since this is not linear anymore
         for (let i = MIN; i <= MAX; i++) {
           result = Math.min(result, fuelCount2(i));
         }
