@@ -17,7 +17,6 @@ const utils_1 = require("../utils");
                 const input = (0, utils_1.getSegmentInput)("../day8/input.txt");
                 const theInput = input.map((str) => str.split(/\s\|\s/g)[1]);
                 const INPUT_LENGTH = theInput.length;
-                console.log("the input\n", theInput);
                 let comboMap = {};
                 comboMap = ((cm) => {
                     let init = cm;
@@ -28,7 +27,6 @@ const utils_1 = require("../utils");
                 })(comboMap);
                 function countComboInRow(spi, cmRef, key) {
                     let num = 0;
-                    console.log("split input row in function", spi, "at key", key);
                     switch (true) {
                         case key === 0 || key === 6 || key === 9:
                             {

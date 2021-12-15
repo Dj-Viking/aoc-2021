@@ -46,7 +46,7 @@ type ComboMap = Record<string | number, number>;
       // const theInput = sample.map((str) => str.split(/\s\|\s/g)[1]);
       // const INPUT_LENGTH = theInput.length;
 
-      console.log("the input\n", theInput);
+      // console.log("the input\n", theInput);
       let comboMap = {} as ComboMap;
 
       //init the map with zeros
@@ -63,7 +63,7 @@ type ComboMap = Record<string | number, number>;
 
       function countComboInRow(spi: Array<string>, cmRef: ComboMap, key: number): number {
         let num = 0;
-        console.log("split input row in function", spi, "at key", key);
+        // console.log("split input row in function", spi, "at key", key);
         //counting occurances of strings of length 6 that are possibly representing 0 6 or 9
         switch (true) {
           case key === 0 || key === 6 || key === 9:
