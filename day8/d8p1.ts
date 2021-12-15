@@ -143,8 +143,8 @@ type ComboMap = Record<string | number, number>;
       console.log("new combomap", comboMap);
 
       //sum the occurances of 1 4 7 and 8
-      let sum = 0;
       function sumOccurances(cm: ComboMap): number {
+        let sum = 0;
         Object.keys(cm).forEach((key) => {
           if (key === "1" || key === "4" || key === "7" || key === "8") {
             sum += cm[key];

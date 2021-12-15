@@ -106,8 +106,8 @@ const utils_1 = require("../utils");
                     return newCm;
                 })(comboMap);
                 console.log("new combomap", comboMap);
-                let sum = 0;
                 function sumOccurances(cm) {
+                    let sum = 0;
                     Object.keys(cm).forEach((key) => {
                         if (key === "1" || key === "4" || key === "7" || key === "8") {
                             sum += cm[key];
