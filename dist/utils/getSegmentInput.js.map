@@ -1,0 +1,1 @@
+{"version":3,"file":"getSegmentInput.js","sourceRoot":"","sources":["../../utils/getSegmentInput.ts"],"names":[],"mappings":";;;;;;AAAA,4CAAoB;AACpB,SAAgB,eAAe,CAAC,IAAY;IAC1C,OAAO,YAAE,CAAC,YAAY,CAAC,IAAI,EAAE,EAAE,QAAQ,EAAE,OAAO,EAAE,CAAC,CAAC,KAAK,CAAC,IAAI,CAAC,CAAC;AAClE,CAAC;AAFD,0CAEC"}
