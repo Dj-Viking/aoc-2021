@@ -41,6 +41,11 @@ import { getSegmentInput } from "../utils";
  * fdgacbe cefdb cefbgd gcbe: 8394 += the number the next row creates (9871)
  *    9      7     8      1
  * fcgedb   cgb  dgebacf  gc
+ * 
+ * turns out part 2 is more complicated because there has to be a context in which some segments
+ * are supposed to match up according to the orientation of the other inputs on the left side of the | on the input 
+ * otherwise the segment orientation will not represent a number
+ * 
  */
 
 /**
@@ -124,7 +129,7 @@ type ComboMap = Record<string | number, number>;
               segstr += "2";
               continue;
             }
-            if (/^bcdef$|^abcfg$|^abcde$|^abefg$/g.test(sSplit[s])) {
+            if (/^abcfg$|^abcde$|^abefg$/g.test(sSplit[s])) {
               segstr += "3";
               continue;
             }
@@ -167,15 +172,15 @@ type ComboMap = Record<string | number, number>;
 
       console.log("new combomap", comboMap);
 
-      //sum the occurances of 1 4 7 and 8
-      function sumOccurances(cm: ComboMap): number {
+      //sum the digits decoded from the encoded input segments
+      function sumDecoded(cm: ComboMap): number {
         let sum = 0;
         Object.keys(cm).forEach((key) => {
           sum += cm[key];
         });
         return sum;
       }
-      console.log("answer", sumOccurances(comboMap));
+      console.log("answer", sumDecoded(comboMap));
 
       resolve();
     } catch (error) {

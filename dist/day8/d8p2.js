@@ -62,7 +62,7 @@ const utils_1 = require("../utils");
                                 segstr += "2";
                                 continue;
                             }
-                            if (/^bcdef$|^abcfg$|^abcde$|^abefg$/g.test(sSplit[s])) {
+                            if (/^abcfg$|^abcde$|^abefg$/g.test(sSplit[s])) {
                                 segstr += "3";
                                 continue;
                             }
@@ -98,14 +98,14 @@ const utils_1 = require("../utils");
                     return newCm;
                 })(comboMap);
                 console.log("new combomap", comboMap);
-                function sumOccurances(cm) {
+                function sumDecoded(cm) {
                     let sum = 0;
                     Object.keys(cm).forEach((key) => {
                         sum += cm[key];
                     });
                     return sum;
                 }
-                console.log("answer", sumOccurances(comboMap));
+                console.log("answer", sumDecoded(comboMap));
                 resolve();
             }
             catch (error) {
