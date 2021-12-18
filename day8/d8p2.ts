@@ -5,10 +5,13 @@
  *
  * find the instances where only 1, 4, 7, and 8 appear. since they all use unique combinations
  *
- * 1 is 2 letter combo 
- * 4 is 4 letter combo 
- * 7 is 3 letter combo 
- * 8 is 7 letter combo 
+ * 1 =>        2 letter combo 
+ * 4 =>        4 letter combo 
+ * 7 =>        3 letter combo 
+ * 8 =>        7 letter combo 
+ * 
+ * 2, 3, 5 => 5 letter combo
+ * 0, 6, 9 => 6 letter combo
  *
  * (can count these but day 1 solution doesn't care how many of these occur)
  *
@@ -64,6 +67,7 @@
 /**
  * I64 digit_masks[DIGIT_CNT] = {
  *      6543210
+ *      cbgfaed
  *  0 0b1110111
  *  1 0b0010010
  *  2 0b1011101
@@ -77,7 +81,11 @@
  * }
  */
 /**
- * enumeration of digits 0-9 to 7 segment binary mask
+ * enumeration of digits 0-9 to 7 segment binary mask.
+ * 
+ * The location of the letters can change per row according to
+ * 
+ * which unique digits are logically contained within the mask.
  * 
        *
         *   dddd     0
@@ -89,13 +97,15 @@
            cccc     6
  * @example
  * {     //6543210
+ *       //cbgfead
  *  "0": 0b1110111
+ *  "1": 0b0100010
+ *  "2": 0b1011101
  * }
  * */
 type MaskTable = Record<string, number>;
 type SegmentMap = Record<string | number, number>;
-import { getSegmentInput } from "../utils";
-import fs from "fs";
+import { getPermutations, getSegmentInput, decimalToBinary } from "../utils";
 (async function (): Promise<void> {
   return new Promise((resolve, reject) => {
     try {
@@ -103,19 +113,27 @@ import fs from "fs";
       // const wires = input.map((str) => str.split(/\s\|\s/g)[1]);
 
       const input = getSegmentInput("../day8/sample.txt");
+      const wireContext = input.map((str) => str.split(/\s\|\s/g)[0]);
       const wires = input.map((str) => str.split(/\s\|\s/g)[1]);
+
       const DIGITS_COUNT = 10;
       const SEGS_SIZE = 7;
-      const ALL_PERMS = fs.readFileSync("../day8/segs.txt", { encoding: "utf-8" }).split("\n");
+      const ALL_PERMS = getPermutations("abcdefg");
+      const wireContextContainer = wireContext.map((str) => {
+        return str.split(" ");
+      }) as string[][];
       const wireContainer = wires.map((wire) => {
         return wire.split(" ");
       }) as string[][];
 
-      console.log("row wires\n", wireContainer);
+      // console.log("wire context\n", wireContextContainer);
+      // console.log("row wires\n", wireContainer);
       let SegmentMap = {} as SegmentMap;
 
-      const MASK_TABLE = {
+      //subject to change according to the wire context segments
+      let MASK_TABLE = {
         //     6543210
+        //     cbgfaed
         "0": 0b1110111,
         "1": 0b0100100,
         "2": 0b1011110,
@@ -128,8 +146,61 @@ import fs from "fs";
         "9": 0b1101111,
       } as MaskTable;
 
-      let numstr = "";
-      let smKey = 0;
+      function isUniqueSeg(seg: string): boolean {
+        switch (true) {
+          case seg.length === 2:
+          case seg.length === 4:
+          case seg.length === 3:
+          case seg.length === 7:
+            return true;
+          default:
+            return false;
+        }
+      }
+      dumpMaskTable(MASK_TABLE);
+
+      //debug mask table binary values
+      function dumpMaskTable(mt: MaskTable): void {
+        for (let i = 0; i < Object.keys(mt).length; i++) {
+          console.log(`${i}: ${decimalToBinary(mt[i])}`, mt[i]);
+        }
+      }
+
+      function sevenSegToBinary(ctx: string): number {
+        let result = 0;
+        for (let i = 0; i < ctx.length; i++) {
+          result |= 1 << (i & 7);
+        }
+        return result;
+      }
+
+      function createContext(seg: string, startingContext: string, mt: MaskTable): MaskTable {
+        let contextStr = startingContext;
+        //rebuild context string according to what the unique segment will
+        // generate as the correct number
+        console.log("sevensegtobinary", sevenSegToBinary(seg));
+        // mt = {
+        //   "0": sevenSegToBinary(contextStr),
+        // };
+        return mt;
+      }
+
+      function changeMaskContext(wc: string[], mt: MaskTable): MaskTable {
+        let newmt = mt;
+        let seg = "";
+        let startingContext = "";
+        for (let i = 0; i < wc.length; i++) {
+          // console.log("what is wc here", i, wc[i], isUniqueSeg(wc[i]));
+          if (wc[i].length === 7) startingContext = wc[i];
+          if (isUniqueSeg(wc[i])) {
+            seg = wc[i];
+            // break seg;
+          }
+        }
+        // console.log("did i break when found unique seg");
+        newmt = createContext(seg, startingContext, newmt);
+        return newmt;
+      }
       //need to tweak the decode to only match the 2,3,5 and 0,6,9 according to strings that contain the unique strings inside them
       /**
        *
@@ -151,7 +222,7 @@ import fs from "fs";
 
         for (let m = 0; m < DIGITS_COUNT; m++) {
           if (MASK_TABLE[m] === mask) {
-            console.log("what is m here", m, "segs", segs, "wire", wire);
+            // console.log("what is m here", m, "segs", segs, "wire", wire);
             return m;
           }
         }
@@ -176,8 +247,9 @@ import fs from "fs";
       function verifySegs(segs: string, wire: string): boolean {
         // console.log("what are we comparing", "segs", segs, "wire", wire);
         for (let i = 0; i < DIGITS_COUNT; i++) {
-          if (decode(segs, wire) < 0) {
-            return false;
+          switch (true) {
+            case decode(segs, wire) < 0:
+              return false;
           }
         }
         return true;
@@ -187,6 +259,9 @@ import fs from "fs";
         //if found a match through all permutations break loop
         // and start checking the next wire for a match
         for (let c = 0; c < wireContainer.length; c++) {
+          // console.log("change context here");
+          MASK_TABLE = changeMaskContext(wireContextContainer[c], MASK_TABLE);
+          // console.log("mask table now", MASK_TABLE);
           for (let w = 0; w < wireContainer[c].length; w++) {
             for (let i = 0; i < ALL_PERMS.length; i++) {
               if (verifySegs(ALL_PERMS[i], wireContainer[c][w])) break;

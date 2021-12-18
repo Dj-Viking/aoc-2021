@@ -6,6 +6,7 @@ import { getLanternInput } from "./getLanternInput";
 import { getCrabInput } from "./getCrabInput";
 import { getSegmentInput } from "./getSegmentInput";
 import { getPermutations } from "./getPermutations";
+import { decimalToBinary } from "./decimalToBinary";
 export function getX1(coords: string[], iter: number): number {
   return parseInt(coords[iter].split(/\s->\s/g)[0].split(",")[0]);
 }
@@ -28,4 +29,5 @@ export {
   getCrabInput,
   getSegmentInput,
   getPermutations,
+  decimalToBinary,
 };
