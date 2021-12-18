@@ -8,104 +8,85 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const utils_1 = require("../utils");
+const fs_1 = __importDefault(require("fs"));
 (function () {
     return __awaiter(this, void 0, void 0, function* () {
         return new Promise((resolve, reject) => {
             try {
-                const sample = (0, utils_1.getSegmentInput)("../day8/sample.txt");
-                const theInput = sample.map((str) => str.split(/\s\|\s/g)[1]);
-                console.log("the input\n", theInput);
-                let comboMap = {};
-                comboMap = ((cm) => {
-                    let init = cm;
-                    for (let i = 0; i < theInput.length; i++) {
+                const input = (0, utils_1.getSegmentInput)("../day8/sample.txt");
+                const wires = input.map((str) => str.split(/\s\|\s/g)[1]);
+                const DIGITS_COUNT = 10;
+                const SEGS_SIZE = 7;
+                const ALL_PERMS = fs_1.default.readFileSync("../day8/segs.txt", { encoding: "utf-8" }).split("\n");
+                const wireContainer = wires.map((wire) => {
+                    return wire.split(" ");
+                });
+                console.log("row wires\n", wireContainer);
+                let SegmentMap = {};
+                const MASK_TABLE = {
+                    "0": 0b1110111,
+                    "1": 0b0100100,
+                    "2": 0b1011110,
+                    "3": 0b1101101,
+                    "4": 0b0101110,
+                    "5": 0b1101011,
+                    "6": 0b1111011,
+                    "7": 0b0100101,
+                    "8": 0b1111111,
+                    "9": 0b1101111,
+                };
+                let numstr = "";
+                let smKey = 0;
+                function decode(segs, wire) {
+                    let mask = 0;
+                    for (let i = 0; i < wire.length; i++) {
+                        for (let j = 0; j < SEGS_SIZE; j++) {
+                            if (segs[j] === wire[i]) {
+                                mask |= 1 << j;
+                            }
+                        }
+                    }
+                    for (let m = 0; m < DIGITS_COUNT; m++) {
+                        if (MASK_TABLE[m] === mask) {
+                            console.log("what is m here", m, "segs", segs, "wire", wire);
+                            return m;
+                        }
+                    }
+                    return -1;
+                }
+                SegmentMap = ((sm) => {
+                    let init = sm;
+                    for (let i = 0; i < DIGITS_COUNT; i++) {
                         init = Object.assign(Object.assign({}, init), { [i]: 0 });
                     }
                     return init;
-                })(comboMap);
-                function createSegmentNum(spi) {
-                    let segsstr = "";
-                    for (let n = 0; n < spi.length; n++) {
-                        segsstr += spi[n] + " ";
-                    }
-                    return segsstr.trim();
-                }
-                function parseSegments(segsstr) {
-                    let segstr = "";
-                    let sSplit = segsstr.split(" ");
-                    sSplit = sSplit.map((str) => {
-                        return str.split("").sort().join("");
-                    });
-                    console.log("what is ssplit here", sSplit.map((str) => {
-                        return str.split("").sort().join("");
-                    }));
-                    for (let s = 0; s < sSplit.length; s++) {
-                        if (sSplit[s].length === 6) {
-                            if (/^abcdeg$/g.test(sSplit[s])) {
-                                segstr += "0";
-                                continue;
-                            }
-                            if (/^abcefg$|^acdefg$/g.test(sSplit[s])) {
-                                segstr += "6";
-                                continue;
-                            }
-                            if (/^abcdef$|^abcdfg$|^bcdefg$/g.test(sSplit[s])) {
-                                segstr += "9";
-                                continue;
-                            }
-                        }
-                        if (sSplit[s].length === 5) {
-                            if (/^abegf$|^abcdg$/g.test(sSplit[s])) {
-                                console.log("shoudl not be here on first iteration", sSplit[s]);
-                                segstr += "2";
-                                continue;
-                            }
-                            if (/^abcfg$|^abcde$|^abefg$/g.test(sSplit[s])) {
-                                segstr += "3";
-                                continue;
-                            }
-                            if (/^bcdef$|^abceg$|^bcefg$|^bcdef$/g.test(sSplit[s])) {
-                                segstr += "5";
-                                continue;
-                            }
-                        }
-                        if (sSplit[s].length === 2) {
-                            segstr += "1";
-                        }
-                        if (sSplit[s].length === 4) {
-                            segstr += "4";
-                        }
-                        if (sSplit[s].length === 3) {
-                            segstr += "7";
-                        }
-                        if (sSplit[s].length === 7) {
-                            segstr += "8";
+                })(SegmentMap);
+                console.log("init map", SegmentMap);
+                function verifySegs(segs, wire) {
+                    for (let i = 0; i < DIGITS_COUNT; i++) {
+                        if (decode(segs, wire) < 0) {
+                            return false;
                         }
                     }
-                    console.log("segstr", segstr);
-                    return parseInt(segstr);
+                    return true;
                 }
-                comboMap = ((cm) => {
-                    let newCm = cm;
-                    for (let i = 0; i < theInput.length; i++) {
-                        for (let j = 0; j < theInput.length; j++) {
-                            let splitInputRow = theInput[i].split(" ");
-                            newCm = Object.assign(Object.assign({}, newCm), { [i]: parseSegments(createSegmentNum(splitInputRow)) });
+                function main() {
+                    for (let c = 0; c < wireContainer.length; c++) {
+                        for (let w = 0; w < wireContainer[c].length; w++) {
+                            for (let i = 0; i < ALL_PERMS.length; i++) {
+                                if (verifySegs(ALL_PERMS[i], wireContainer[c][w]))
+                                    break;
+                            }
                         }
                     }
-                    return newCm;
-                })(comboMap);
-                console.log("new combomap", comboMap);
-                function sumDecoded(cm) {
-                    let sum = 0;
-                    Object.keys(cm).forEach((key) => {
-                        sum += cm[key];
-                    });
-                    return sum;
+                    return 0;
                 }
-                console.log("answer", sumDecoded(comboMap));
+                main();
                 resolve();
             }
             catch (error) {
