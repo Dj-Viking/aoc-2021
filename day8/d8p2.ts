@@ -130,6 +130,7 @@ import fs from "fs";
 
       let numstr = "";
       let smKey = 0;
+      //need to tweak the decode to only match the 2,3,5 and 0,6,9 according to strings that contain the unique strings inside them
       /**
        *
        * @param segs all permutations of all possible segments configurations
