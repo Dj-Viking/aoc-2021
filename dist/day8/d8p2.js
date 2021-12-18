@@ -1,139 +1,67 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const utils_1 = require("../utils");
-(function () {
-    return __awaiter(this, void 0, void 0, function* () {
-        return new Promise((resolve, reject) => {
-            try {
-                const input = (0, utils_1.getSegmentInput)("../day8/sample.txt");
-                const wireContext = input.map((str) => str.split(/\s\|\s/g)[0]);
-                const wires = input.map((str) => str.split(/\s\|\s/g)[1]);
-                const DIGITS_COUNT = 10;
-                const SEGS_SIZE = 7;
-                const ALL_PERMS = (0, utils_1.getPermutations)("abcdefg");
-                const wireContextContainer = wireContext.map((str) => {
-                    return str.split(" ");
-                });
-                const wireContainer = wires.map((wire) => {
-                    return wire.split(" ");
-                });
-                let SegmentMap = {};
-                let MASK_TABLE = {
-                    "0": 0b1110111,
-                    "1": 0b0100100,
-                    "2": 0b1011110,
-                    "3": 0b1101101,
-                    "4": 0b0101110,
-                    "5": 0b1101011,
-                    "6": 0b1111011,
-                    "7": 0b0100101,
-                    "8": 0b1111111,
-                    "9": 0b1101111,
-                };
-                function isUniqueSeg(seg) {
-                    switch (true) {
-                        case seg.length === 2:
-                        case seg.length === 4:
-                        case seg.length === 3:
-                        case seg.length === 7:
-                            return true;
-                        default:
-                            return false;
-                    }
-                }
-                dumpMaskTable(MASK_TABLE);
-                function dumpMaskTable(mt) {
-                    for (let i = 0; i < Object.keys(mt).length; i++) {
-                        console.log(`${i}: ${(0, utils_1.decimalToBinary)(mt[i])}`, mt[i]);
-                    }
-                }
-                function sevenSegToBinary(ctx) {
-                    let result = 0;
-                    for (let i = 0; i < ctx.length; i++) {
-                        result |= 1 << (i & 7);
-                    }
-                    return result;
-                }
-                function createContext(seg, startingContext, mt) {
-                    let contextStr = startingContext;
-                    console.log("sevensegtobinary", sevenSegToBinary(seg));
-                    return mt;
-                }
-                function changeMaskContext(wc, mt) {
-                    let newmt = mt;
-                    let seg = "";
-                    let startingContext = "";
-                    for (let i = 0; i < wc.length; i++) {
-                        if (wc[i].length === 7)
-                            startingContext = wc[i];
-                        if (isUniqueSeg(wc[i])) {
-                            seg = wc[i];
-                        }
-                    }
-                    newmt = createContext(seg, startingContext, newmt);
-                    return newmt;
-                }
-                function decode(segs, wire) {
-                    let mask = 0;
-                    for (let i = 0; i < wire.length; i++) {
-                        for (let j = 0; j < SEGS_SIZE; j++) {
-                            if (segs[j] === wire[i]) {
-                                mask |= 1 << j;
-                            }
-                        }
-                    }
-                    for (let m = 0; m < DIGITS_COUNT; m++) {
-                        if (MASK_TABLE[m] === mask) {
-                            return m;
-                        }
-                    }
-                    return -1;
-                }
-                SegmentMap = ((sm) => {
-                    let init = sm;
-                    for (let i = 0; i < DIGITS_COUNT; i++) {
-                        init = Object.assign(Object.assign({}, init), { [i]: 0 });
-                    }
-                    return init;
-                })(SegmentMap);
-                console.log("init map", SegmentMap);
-                function verifySegs(segs, wire) {
-                    for (let i = 0; i < DIGITS_COUNT; i++) {
-                        switch (true) {
-                            case decode(segs, wire) < 0:
-                                return false;
-                        }
-                    }
-                    return true;
-                }
-                function main() {
-                    for (let c = 0; c < wireContainer.length; c++) {
-                        MASK_TABLE = changeMaskContext(wireContextContainer[c], MASK_TABLE);
-                        for (let w = 0; w < wireContainer[c].length; w++) {
-                            for (let i = 0; i < ALL_PERMS.length; i++) {
-                                if (verifySegs(ALL_PERMS[i], wireContainer[c][w]))
-                                    break;
-                            }
-                        }
-                    }
-                    return 0;
-                }
-                main();
-                resolve();
+const fs_1 = __importDefault(require("fs"));
+function main() {
+    const inputPath = "../day8/input.txt";
+    const data = fs_1.default
+        .readFileSync(inputPath)
+        .toString()
+        .split("\n")
+        .map((line) => line.split(" | ").map((parts) => parts.split(/\s+/)));
+    let result = 0;
+    const digitSegments = [
+        "0,1,2,4,5,6",
+        "2,5",
+        "0,2,3,4,6",
+        "0,2,3,5,6",
+        "1,2,3,5",
+        "0,1,3,5,6",
+        "0,1,3,4,5,6",
+        "0,2,5",
+        "0,1,2,3,4,5,6",
+        "0,1,2,3,5,6",
+    ];
+    const knownBySegmentsCount = { 2: 1, 4: 4, 3: 7, 7: 8 };
+    const knownSegmentsByAppearance = { 6: 1, 4: 4, 9: 5 };
+    for (const [patterns, values] of data) {
+        const knownPatterns = [];
+        const segmentAppearance = {};
+        for (const pattern of patterns) {
+            if (pattern.length in knownBySegmentsCount) {
+                const digit = knownBySegmentsCount[pattern.length];
+                knownPatterns[digit] = pattern.split("");
             }
-            catch (error) {
-                reject(error);
+            for (const symbol of pattern) {
+                segmentAppearance[symbol] = segmentAppearance[symbol] + 1 || 1;
             }
-        });
-    });
-})();
+        }
+        const segments = [];
+        for (const [symbol, count] of Object.entries(segmentAppearance)) {
+            if (count in knownSegmentsByAppearance) {
+                const segmentIndex = knownSegmentsByAppearance[count];
+                segments[segmentIndex] = symbol;
+            }
+        }
+        segments[0] = knownPatterns[7].filter((s) => !knownPatterns[1].includes(s))[0];
+        segments[2] = knownPatterns[1].filter((s) => !segments.includes(s))[0];
+        segments[3] = knownPatterns[4].filter((s) => !segments.includes(s))[0];
+        segments[6] = knownPatterns[8].filter((s) => !segments.includes(s))[0];
+        let numericValue = "";
+        for (const value of values) {
+            const valueSegments = value
+                .split("")
+                .map((s) => segments.indexOf(s))
+                .sort()
+                .join();
+            const digit = digitSegments.indexOf(valueSegments);
+            numericValue += digit;
+        }
+        result += parseInt(numericValue, 10);
+    }
+    console.log(result);
+}
+main();
 //# sourceMappingURL=d8p2.js.map
