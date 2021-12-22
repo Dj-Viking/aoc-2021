@@ -14,7 +14,7 @@ const getInput_1 = require("../utils/getInput");
     return __awaiter(this, void 0, void 0, function* () {
         return new Promise((resolve, reject) => {
             try {
-                let theInput = (0, getInput_1.getInput)("../day9/sample.txt").map((str) => {
+                let theInput = (0, getInput_1.getInput)("../day9/input.txt").map((str) => {
                     return str.split("");
                 });
                 console.log("the input", theInput);
@@ -37,7 +37,6 @@ const getInput_1 = require("../utils/getInput");
                     return { isEdge: false, type: void 0 };
                 }
                 function isLowerThanAdj(item, graph, row, col, edgeType) {
-                    console.log("current item", item, "curr row", row, "curr col", col, "edge type", edgeType);
                     if (!!edgeType) {
                         switch (edgeType) {
                             case "corner": {
@@ -126,6 +125,23 @@ const getInput_1 = require("../utils/getInput");
                     }
                     return false;
                 }
+                function sumRiskLevel(nums) {
+                    let result = 0;
+                    result = nums.map((num) => num + 1).reduce((curr, next) => curr + next, 0);
+                    return result;
+                }
+                function extractLowPoints(graph) {
+                    const nums = [];
+                    for (let r = 0; r < graph.length; r++) {
+                        for (let c = 0; c < graph[r].length; c++) {
+                            if (/\[/g.test(graph[r][c])) {
+                                let str = graph[r][c].replace(/\[|\]/g, "");
+                                nums.push(parseInt(str));
+                            }
+                        }
+                    }
+                    return nums;
+                }
                 function findLowPoints(graph) {
                     let theGraph = graph;
                     for (let r = 0; r < theGraph.length; r++) {
@@ -147,6 +163,9 @@ const getInput_1 = require("../utils/getInput");
                 }
                 theInput = findLowPoints(theInput);
                 dumpGraph(theInput);
+                const nums = extractLowPoints(theInput);
+                const answer = sumRiskLevel(nums);
+                console.log("answer", answer);
                 resolve();
             }
             catch (error) {
