@@ -9,13 +9,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const getInput_1 = require("../utils/getInput");
 const utils_1 = require("../utils");
 (function () {
     return __awaiter(this, void 0, void 0, function* () {
         return new Promise((resolve, reject) => {
             try {
-                let theInput = (0, getInput_1.getInput)("../day9/input.txt").map((str) => {
+                let theInput = (0, utils_1.getInput)("../day9/input.txt").map((str) => {
                     return str.split("");
                 });
                 function isEdge(graph, row, col) {
