@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.decimalToBinary = exports.getPermutations = exports.getSegmentInput = exports.getCrabInput = exports.getLanternInput = exports.dumpBoard = exports.recurseOxy = exports.recurseCo2 = exports.getInput = exports.getY2 = exports.getY1 = exports.getX2 = exports.getX1 = void 0;
+exports.isLowerThanAdj = exports.decimalToBinary = exports.getPermutations = exports.getSegmentInput = exports.getCrabInput = exports.getLanternInput = exports.dumpBoard = exports.recurseOxy = exports.recurseCo2 = exports.getInput = exports.getY2 = exports.getY1 = exports.getX2 = exports.getX1 = void 0;
 const getInput_1 = require("./getInput");
 Object.defineProperty(exports, "getInput", { enumerable: true, get: function () { return getInput_1.getInput; } });
 const recurseCo2_1 = require("./recurseCo2");
@@ -19,6 +19,8 @@ const getPermutations_1 = require("./getPermutations");
 Object.defineProperty(exports, "getPermutations", { enumerable: true, get: function () { return getPermutations_1.getPermutations; } });
 const decimalToBinary_1 = require("./decimalToBinary");
 Object.defineProperty(exports, "decimalToBinary", { enumerable: true, get: function () { return decimalToBinary_1.decimalToBinary; } });
+const isLowerThanAdj_1 = require("./isLowerThanAdj");
+Object.defineProperty(exports, "isLowerThanAdj", { enumerable: true, get: function () { return isLowerThanAdj_1.isLowerThanAdj; } });
 function getX1(coords, iter) {
     return parseInt(coords[iter].split(/\s->\s/g)[0].split(",")[0]);
 }

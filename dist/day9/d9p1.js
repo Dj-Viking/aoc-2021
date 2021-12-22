@@ -10,6 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const getInput_1 = require("../utils/getInput");
+const isLowerThanAdj_1 = require("../utils/isLowerThanAdj");
 (function () {
     return __awaiter(this, void 0, void 0, function* () {
         return new Promise((resolve, reject) => {
@@ -36,95 +37,6 @@ const getInput_1 = require("../utils/getInput");
                     }
                     return { isEdge: false, type: void 0 };
                 }
-                function isLowerThanAdj(item, graph, row, col, edgeType) {
-                    if (!!edgeType) {
-                        switch (edgeType) {
-                            case "corner": {
-                                if (!!graph[row + 1] && !!graph[row][col - 1] && !!graph[row + 1][col]) {
-                                    if (parseInt(item) < parseInt(graph[row][col - 1]) &&
-                                        parseInt(item) < parseInt(graph[row + 1][col])) {
-                                        return true;
-                                    }
-                                    return false;
-                                }
-                                if (!!graph[row][col + 1] && !!graph[row + 1] && !!graph[row + 1][col]) {
-                                    if (parseInt(item) < parseInt(graph[row][col + 1]) &&
-                                        parseInt(item) < parseInt(graph[row + 1][col])) {
-                                        return true;
-                                    }
-                                    return false;
-                                }
-                                if (!!graph[row][col + 1] && !!graph[row - 1][col]) {
-                                    if (parseInt(item) < parseInt(graph[row][col + 1]) &&
-                                        parseInt(item) < parseInt(graph[row - 1][col])) {
-                                        return true;
-                                    }
-                                    return false;
-                                }
-                                if (!!graph[row][col - 1] && !!graph[row - 1][col]) {
-                                    if (parseInt(item) < parseInt(graph[row][col - 1]) &&
-                                        parseInt(item) < parseInt(graph[row - 1][col])) {
-                                        return true;
-                                    }
-                                    return false;
-                                }
-                                break;
-                            }
-                            case "side": {
-                                if (!!graph[row - 1][col] && !!graph[row][col - 1] && !!graph[row + 1][col]) {
-                                    if (parseInt(item) < parseInt(graph[row - 1][col]) &&
-                                        parseInt(item) < parseInt(graph[row][col - 1]) &&
-                                        parseInt(item) < parseInt(graph[row + 1][col])) {
-                                        return true;
-                                    }
-                                    return false;
-                                }
-                                if (!!graph[row - 1][col] && !!graph[row][col + 1] && !!graph[row + 1][col]) {
-                                    if (parseInt(item) < parseInt(graph[row - 1][col]) &&
-                                        parseInt(item) < parseInt(graph[row][col + 1]) &&
-                                        parseInt(item) < parseInt(graph[row + 1][col])) {
-                                        return true;
-                                    }
-                                    return false;
-                                }
-                                break;
-                            }
-                            case "top-bottom": {
-                                if (!!graph[row + 1] &&
-                                    !!graph[row][col - 1] &&
-                                    !!graph[row][col + 1] &&
-                                    !!graph[row + 1][col]) {
-                                    if (parseInt(item) < parseInt(graph[row][col - 1]) &&
-                                        parseInt(item) < parseInt(graph[row][col + 1]) &&
-                                        parseInt(item) < parseInt(graph[row + 1][col])) {
-                                        return true;
-                                    }
-                                    return false;
-                                }
-                                if (!!graph[row - 1] &&
-                                    !!graph[row][col - 1] &&
-                                    !!graph[row - 1][col] &&
-                                    !!graph[row][col + 1]) {
-                                    if (parseInt(item) < parseInt(graph[row][col - 1]) &&
-                                        parseInt(item) < parseInt(graph[row - 1][col]) &&
-                                        parseInt(item) < parseInt(graph[row][col + 1])) {
-                                        return true;
-                                    }
-                                    return false;
-                                }
-                            }
-                        }
-                    }
-                    else {
-                        if (parseInt(item) < parseInt(graph[row - 1][col]) &&
-                            parseInt(item) < parseInt(graph[row + 1][col]) &&
-                            parseInt(item) < parseInt(graph[row][col - 1]) &&
-                            parseInt(item) < parseInt(graph[row][col + 1]))
-                            return true;
-                        return false;
-                    }
-                    return false;
-                }
                 function sumRiskLevel(nums) {
                     let result = 0;
                     result = nums.map((num) => num + 1).reduce((curr, next) => curr + next, 0);
@@ -148,12 +60,12 @@ const getInput_1 = require("../utils/getInput");
                         for (let c = 0; c < theGraph[r].length; c++) {
                             const edge = isEdge(theGraph, r, c);
                             if (!!edge.isEdge && !!edge.type) {
-                                if (isLowerThanAdj(theGraph[r][c], theGraph, r, c, edge.type)) {
+                                if ((0, isLowerThanAdj_1.isLowerThanAdj)(theGraph[r][c], theGraph, r, c, edge.type)) {
                                     theGraph[r][c] = "[" + theGraph[r][c] + "]";
                                 }
                             }
                             else {
-                                if (isLowerThanAdj(theGraph[r][c], theGraph, r, c)) {
+                                if ((0, isLowerThanAdj_1.isLowerThanAdj)(theGraph[r][c], theGraph, r, c)) {
                                     theGraph[r][c] = "[" + theGraph[r][c] + "]";
                                 }
                             }
