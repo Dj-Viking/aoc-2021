@@ -8,7 +8,7 @@ function main() {
     .readFileSync(inputPath)
     .toString()
     .split("\n")
-    .map((line) => line.split(" | ").map((parts) => parts.split(/\s+/)));
+    .map((line) => line.split(" | ").map((parts) => parts.split(/\s+/))) as string[][][];
 
   let result = 0;
 
