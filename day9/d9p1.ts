@@ -10,13 +10,13 @@ import { isLowerThanAdj, EdgeType } from "../utils/isLowerThanAdj";
       // let theInput = getInput("../day9/sample.txt").map((str) => {
       //   return str.split("");
       // });
-      console.log("the input", theInput);
+      // console.log("the input", theInput);
 
-      function dumpGraph(graph: string[][]): void {
-        for (let i = 0; i < graph.length; i++) {
-          console.log(`${graph[i]}`.replace(/,/g, ""));
-        }
-      }
+      // function dumpGraph(graph: string[][]): void {
+      //   for (let i = 0; i < graph.length; i++) {
+      //     console.log(`${graph[i]}`.replace(/,/g, ""));
+      //   }
+      // }
       // dumpGraph(theInput);
 
       function isEdge(
@@ -79,7 +79,6 @@ import { isLowerThanAdj, EdgeType } from "../utils/isLowerThanAdj";
       }
 
       theInput = findLowPoints(theInput);
-      dumpGraph(theInput);
       const nums = extractLowPoints(theInput);
       const answer = sumRiskLevel(nums);
       console.log("answer", answer);

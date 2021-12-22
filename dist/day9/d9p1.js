@@ -18,12 +18,6 @@ const isLowerThanAdj_1 = require("../utils/isLowerThanAdj");
                 let theInput = (0, getInput_1.getInput)("../day9/input.txt").map((str) => {
                     return str.split("");
                 });
-                console.log("the input", theInput);
-                function dumpGraph(graph) {
-                    for (let i = 0; i < graph.length; i++) {
-                        console.log(`${graph[i]}`.replace(/,/g, ""));
-                    }
-                }
                 function isEdge(graph, row, col) {
                     switch (true) {
                         case (col === 0 || col === graph[row].length - 1) &&
@@ -74,7 +68,6 @@ const isLowerThanAdj_1 = require("../utils/isLowerThanAdj");
                     return theGraph;
                 }
                 theInput = findLowPoints(theInput);
-                dumpGraph(theInput);
                 const nums = extractLowPoints(theInput);
                 const answer = sumRiskLevel(nums);
                 console.log("answer", answer);
