@@ -1,5 +1,5 @@
 import { getInput } from "../utils/getInput";
-import { isLowerThanAdj, EdgeType } from "../utils/isLowerThanAdj";
+import { isLowerThanAdj, EdgeType } from "../utils";
 (async function (): Promise<void> {
   return new Promise((resolve, reject) => {
     try {

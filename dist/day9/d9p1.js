@@ -10,7 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const getInput_1 = require("../utils/getInput");
-const isLowerThanAdj_1 = require("../utils/isLowerThanAdj");
+const utils_1 = require("../utils");
 (function () {
     return __awaiter(this, void 0, void 0, function* () {
         return new Promise((resolve, reject) => {
@@ -54,12 +54,12 @@ const isLowerThanAdj_1 = require("../utils/isLowerThanAdj");
                         for (let c = 0; c < theGraph[r].length; c++) {
                             const edge = isEdge(theGraph, r, c);
                             if (!!edge.isEdge && !!edge.type) {
-                                if ((0, isLowerThanAdj_1.isLowerThanAdj)(theGraph[r][c], theGraph, r, c, edge.type)) {
+                                if ((0, utils_1.isLowerThanAdj)(theGraph[r][c], theGraph, r, c, edge.type)) {
                                     theGraph[r][c] = "[" + theGraph[r][c] + "]";
                                 }
                             }
                             else {
-                                if ((0, isLowerThanAdj_1.isLowerThanAdj)(theGraph[r][c], theGraph, r, c)) {
+                                if ((0, utils_1.isLowerThanAdj)(theGraph[r][c], theGraph, r, c)) {
                                     theGraph[r][c] = "[" + theGraph[r][c] + "]";
                                 }
                             }
