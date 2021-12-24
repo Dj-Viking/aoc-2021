@@ -8,10 +8,7 @@ import { getInput, recurseCo2, recurseOxy } from "../utils";
 
       console.log("oxy acc", recurseOxy(splitInput));
       console.log("co2 acc", recurseCo2(splitInput));
-      console.log(
-        parseInt(recurseOxy(splitInput), 2) *
-          parseInt(recurseCo2(splitInput), 2)
-      );
+      console.log(parseInt(recurseOxy(splitInput), 2) * parseInt(recurseCo2(splitInput), 2));
       resolve();
     } catch (error) {
       reject(error);
