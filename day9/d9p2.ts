@@ -115,6 +115,7 @@ import { getInput, isEdge, isLowerThanAdj, dumpBoard } from "../utils";
             }
           }
           default:
+            //maybe default return to another location or the same?
             return;
         }
       }
