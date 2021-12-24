@@ -2,7 +2,7 @@
  * print a matrix to the console
  * @param board 2d array to print
  */
-export function dumpBoard(board: number[][]): void {
+export function dumpBoard(board: any[][]): void {
   console.log("dumping board");
   let x, y;
   let str = "";

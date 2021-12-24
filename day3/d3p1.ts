@@ -16,11 +16,9 @@ import { getInput } from "../utils/getInput";
       for (let k = 0; k < 12; k++) {
         zeroAmount = 0;
         oneAmount = 0;
-        bitAcc = splitInput.map(
-          (_: string, idx: number, arr: Array<string>) => {
-            return arr[idx][k].split("").shift() as string;
-          }
-        );
+        bitAcc = splitInput.map((_: string, idx: number, arr: Array<string>) => {
+          return arr[idx][k].split("").shift() as string;
+        });
         console.log("bit acc should be new on each iteration", bitAcc);
         for (const bit of bitAcc) {
           if (bit === "0") zeroAmount++;

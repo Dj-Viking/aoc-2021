@@ -28,15 +28,81 @@ const utils_1 = require("../utils");
                 }
                 const basins = new Map();
                 let visited = [];
+                visited = initVisited(visited);
                 let currentBasin = 0;
+                function initVisited(arr) {
+                    arr = [...new Array(theInput.length * 2)].map(() => new Array(theInput.length * 2).fill(false));
+                    return arr;
+                }
                 function basinDFS(startR, startC, visited, graph) {
-                    visited.push(graph[startR][startC]);
-                    basins.set(currentBasin, [
-                        ...basins.get(currentBasin),
-                        parseInt(graph[startR][startC]),
-                    ]);
-                    console.log("basins now", basins);
-                    console.log("visited in basin", visited);
+                    console.log("what is r c", startR, startC);
+                    visited[startR][startC] = true;
+                    (0, utils_1.dumpBoard)(visited);
+                    const up = !!graph[startR - 1] && !!graph[startR - 1][startC] ? graph[startR - 1][startC] : void 0;
+                    const down = !!graph[startR + 1] && !!graph[startR + 1][startC] ? graph[startR + 1][startC] : void 0;
+                    const left = !!graph[startR][startC - 1] ? graph[startR][startC - 1] : void 0;
+                    const right = !!graph[startR][startC + 1] ? graph[startR][startC + 1] : void 0;
+                    console.log("up", up, "down", down, "left", left, "right", right);
+                    switch (true) {
+                        case !!up && visited[startR - 1][startC] === false: {
+                            visited[startR - 1][startC] = true;
+                            if (parseInt(up) !== 9) {
+                                basins.set(currentBasin, [
+                                    ...basins.get(currentBasin),
+                                    parseInt(graph[startR - 1][startC]),
+                                ]);
+                                console.log("basins now", basins);
+                                return basinDFS(startR - 1, startC, visited, graph);
+                            }
+                            else {
+                                return basinDFS(startR, startC, visited, graph);
+                            }
+                        }
+                        case !!down && visited[startR + 1][startC] === false: {
+                            visited[startR + 1][startC] = true;
+                            if (parseInt(down) !== 9) {
+                                basins.set(currentBasin, [
+                                    ...basins.get(currentBasin),
+                                    parseInt(graph[startR + 1][startC]),
+                                ]);
+                                console.log("basins now", basins);
+                                return basinDFS(startR + 1, startC, visited, graph);
+                            }
+                            else {
+                                return basinDFS(startR, startC, visited, graph);
+                            }
+                        }
+                        case !!left && visited[startR][startC - 1] === false: {
+                            visited[startR][startC - 1] = true;
+                            if (parseInt(left) !== 9 && visited) {
+                                basins.set(currentBasin, [
+                                    ...basins.get(currentBasin),
+                                    parseInt(graph[startR][startC - 1]),
+                                ]);
+                                console.log("basins now", basins);
+                                return basinDFS(startR, startC - 1, visited, graph);
+                            }
+                            else {
+                                return basinDFS(startR, startC, visited, graph);
+                            }
+                        }
+                        case !!right && visited[startR][startC + 1] === false: {
+                            visited[startR][startC + 1] = true;
+                            if (parseInt(right) !== 9) {
+                                basins.set(currentBasin, [
+                                    ...basins.get(currentBasin),
+                                    parseInt(graph[startR][startC + 1]),
+                                ]);
+                                console.log("basins now", basins);
+                                return basinDFS(startR, startC + 1, visited, graph);
+                            }
+                            else {
+                                return basinDFS(startR, startC, visited, graph);
+                            }
+                        }
+                        default:
+                            return;
+                    }
                 }
                 function findBasins(graph) {
                     let theGraph = graph;
@@ -46,8 +112,12 @@ const utils_1 = require("../utils");
                                 currentBasin++;
                                 theGraph[r][c] = theGraph[r][c].replace(/\[|\]/g, "");
                                 basins.set(currentBasin, []);
+                                basins.set(currentBasin, [
+                                    ...basins.get(currentBasin),
+                                    parseInt(graph[r][c]),
+                                ]);
                                 basinDFS(r, c, visited, theGraph);
-                                visited = [];
+                                visited = initVisited(visited);
                             }
                         }
                     }

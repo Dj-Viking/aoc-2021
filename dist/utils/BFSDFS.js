@@ -82,4 +82,21 @@ DFS("PHX", visited);
 console.log("basins", basins);
 console.log("---------------");
 console.log("DFS EXAMPLE END");
+let set1 = new Set();
+let set2 = new Set();
+const mapOfSets = new Map();
+let mapKey = 0;
+for (let i = 0; i < 10; i++) {
+    mapOfSets.set(mapKey, set1.add(i));
+    for (let j = 0; j < 10; j++) {
+        mapOfSets.set(mapKey + 1, set2.add(j));
+    }
+}
+for (let i = 0; i < 10; i++) {
+    mapOfSets.set(mapKey, set1.add(i));
+    for (let j = 0; j < 10; j++) {
+        mapOfSets.set(mapKey + 1, set2.add(j));
+    }
+}
+console.log("map of sets", mapOfSets);
 //# sourceMappingURL=BFSDFS.js.map
