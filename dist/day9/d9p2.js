@@ -27,6 +27,7 @@ const utils_1 = require("../utils");
                     }
                 }
                 const basins = new Map();
+                let basinLowPoint = { startR: 0, startC: 0 };
                 let visited = [];
                 visited = initVisited(visited);
                 let currentBasin = 0;
@@ -37,71 +38,63 @@ const utils_1 = require("../utils");
                 function basinDFS(startR, startC, visited, graph) {
                     console.log("what is r c", startR, startC);
                     visited[startR][startC] = true;
-                    (0, utils_1.dumpBoard)(visited);
+                    (0, utils_1.dumpBooleanGraph)(visited);
                     const up = !!graph[startR - 1] && !!graph[startR - 1][startC] ? graph[startR - 1][startC] : void 0;
                     const down = !!graph[startR + 1] && !!graph[startR + 1][startC] ? graph[startR + 1][startC] : void 0;
                     const left = !!graph[startR][startC - 1] ? graph[startR][startC - 1] : void 0;
                     const right = !!graph[startR][startC + 1] ? graph[startR][startC + 1] : void 0;
                     console.log("up", up, "down", down, "left", left, "right", right);
-                    switch (true) {
-                        case !!up && visited[startR - 1][startC] === false: {
-                            visited[startR - 1][startC] = true;
-                            if (parseInt(up) !== 9) {
+                    if (!!up) {
+                        if (parseInt(up) !== 9) {
+                            if (visited[startR - 1][startC] === false) {
                                 basins.set(currentBasin, [
                                     ...basins.get(currentBasin),
                                     parseInt(graph[startR - 1][startC]),
                                 ]);
+                                visited[startR - 1][startC] = true;
                                 console.log("basins now", basins);
                                 return basinDFS(startR - 1, startC, visited, graph);
                             }
-                            else {
-                                return basinDFS(startR, startC, visited, graph);
-                            }
                         }
-                        case !!down && visited[startR + 1][startC] === false: {
-                            visited[startR + 1][startC] = true;
-                            if (parseInt(down) !== 9) {
+                    }
+                    if (!!down) {
+                        if (parseInt(down) !== 9) {
+                            if (visited[startR + 1][startC] === false) {
                                 basins.set(currentBasin, [
                                     ...basins.get(currentBasin),
                                     parseInt(graph[startR + 1][startC]),
                                 ]);
+                                visited[startR + 1][startC] = true;
                                 console.log("basins now", basins);
                                 return basinDFS(startR + 1, startC, visited, graph);
                             }
-                            else {
-                                return basinDFS(startR, startC, visited, graph);
-                            }
                         }
-                        case !!left && visited[startR][startC - 1] === false: {
-                            visited[startR][startC - 1] = true;
-                            if (parseInt(left) !== 9 && visited) {
+                    }
+                    if (!!left) {
+                        if (parseInt(left) !== 9) {
+                            if (visited[startR][startC - 1] === false) {
                                 basins.set(currentBasin, [
                                     ...basins.get(currentBasin),
                                     parseInt(graph[startR][startC - 1]),
                                 ]);
+                                visited[startR][startC - 1] = true;
                                 console.log("basins now", basins);
                                 return basinDFS(startR, startC - 1, visited, graph);
                             }
-                            else {
-                                return basinDFS(startR, startC, visited, graph);
-                            }
                         }
-                        case !!right && visited[startR][startC + 1] === false: {
-                            visited[startR][startC + 1] = true;
-                            if (parseInt(right) !== 9) {
+                    }
+                    if (!!right) {
+                        if (parseInt(right) !== 9) {
+                            if (visited[startR][startC + 1] === false) {
                                 basins.set(currentBasin, [
                                     ...basins.get(currentBasin),
                                     parseInt(graph[startR][startC + 1]),
                                 ]);
+                                visited[startR][startC + 1] = true;
                                 console.log("basins now", basins);
                                 return basinDFS(startR, startC + 1, visited, graph);
                             }
-                            else {
-                                return basinDFS(startR, startC, visited, graph);
-                            }
                         }
-                        default:
-                            return;
                     }
                 }
                 function findBasins(graph) {
@@ -111,6 +104,8 @@ const utils_1 = require("../utils");
                             if (/\[/g.test(theGraph[r][c])) {
                                 currentBasin++;
                                 theGraph[r][c] = theGraph[r][c].replace(/\[|\]/g, "");
+                                basinLowPoint.startR = r;
+                                basinLowPoint.startC = c;
                                 basins.set(currentBasin, []);
                                 basins.set(currentBasin, [
                                     ...basins.get(currentBasin),

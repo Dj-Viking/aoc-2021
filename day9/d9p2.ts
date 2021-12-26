@@ -1,5 +1,5 @@
 // research DFS graph traversal
-import { getInput, isEdge, isLowerThanAdj, dumpBoard } from "../utils";
+import { getInput, isEdge, isLowerThanAdj, dumpBooleanGraph } from "../utils";
 (async function (): Promise<void> {
   return new Promise((resolve, reject) => {
     try {
@@ -25,6 +25,7 @@ import { getInput, isEdge, isLowerThanAdj, dumpBoard } from "../utils";
       }
 
       const basins = new Map<number, Array<number>>();
+      let basinLowPoint = { startR: 0, startC: 0 };
       let visited = [] as boolean[][];
       visited = initVisited(visited);
       let currentBasin = 0;
@@ -44,12 +45,7 @@ import { getInput, isEdge, isLowerThanAdj, dumpBoard } from "../utils";
       ): void {
         console.log("what is r c", startR, startC);
         visited[startR][startC] = true;
-        dumpBoard(visited);
-
-        // basins.set(currentBasin, [
-        //   ...(basins.get(currentBasin) as number[]),
-        //   parseInt(graph[startR][startC]),
-        // ]);
+        dumpBooleanGraph(visited);
         const up =
           !!graph[startR - 1] && !!graph[startR - 1][startC] ? graph[startR - 1][startC] : void 0;
         const down =
@@ -58,66 +54,65 @@ import { getInput, isEdge, isLowerThanAdj, dumpBoard } from "../utils";
         const right = !!graph[startR][startC + 1] ? graph[startR][startC + 1] : void 0;
         console.log("up", up, "down", down, "left", left, "right", right);
         // store neighbors up down left right as visited
-        switch (true) {
-          case !!up && visited[startR - 1][startC] === false: {
-            visited[startR - 1][startC] = true;
-            if (parseInt(up as string) !== 9) {
+        if (!!up) {
+          if (parseInt(up as string) !== 9) {
+            if (visited[startR - 1][startC] === false) {
+              // add to basin
               basins.set(currentBasin, [
                 ...(basins.get(currentBasin) as number[]),
                 parseInt(graph[startR - 1][startC]),
               ]);
+              visited[startR - 1][startC] = true;
               console.log("basins now", basins);
-              // recurse at this new point that we added to the basin
               return basinDFS(startR - 1, startC, visited, graph);
-            } else {
-              // recurse from the current point because we visited a 9
-              return basinDFS(startR, startC, visited, graph);
             }
           }
-          case !!down && visited[startR + 1][startC] === false: {
-            visited[startR + 1][startC] = true;
-            if (parseInt(down as string) !== 9) {
+        }
+        if (!!down) {
+          if (parseInt(down as string) !== 9) {
+            if (visited[startR + 1][startC] === false) {
+              // add to basin
               basins.set(currentBasin, [
                 ...(basins.get(currentBasin) as number[]),
                 parseInt(graph[startR + 1][startC]),
               ]);
+              visited[startR + 1][startC] = true;
               console.log("basins now", basins);
               return basinDFS(startR + 1, startC, visited, graph);
-            } else {
-              //was nine start over
-              return basinDFS(startR, startC, visited, graph);
             }
           }
-          case !!left && visited[startR][startC - 1] === false: {
-            visited[startR][startC - 1] = true;
-            if (parseInt(left as string) !== 9 && visited) {
+        }
+        if (!!left) {
+          if (parseInt(left as string) !== 9) {
+            if (visited[startR][startC - 1] === false) {
+              // add to basin
               basins.set(currentBasin, [
                 ...(basins.get(currentBasin) as number[]),
                 parseInt(graph[startR][startC - 1]),
               ]);
+              visited[startR][startC - 1] = true;
               console.log("basins now", basins);
               return basinDFS(startR, startC - 1, visited, graph);
-            } else {
-              return basinDFS(startR, startC, visited, graph);
             }
           }
-          case !!right && visited[startR][startC + 1] === false: {
-            visited[startR][startC + 1] = true;
-            if (parseInt(right as string) !== 9) {
+        }
+        if (!!right) {
+          if (parseInt(right as string) !== 9) {
+            if (visited[startR][startC + 1] === false) {
+              // add to basin
               basins.set(currentBasin, [
                 ...(basins.get(currentBasin) as number[]),
                 parseInt(graph[startR][startC + 1]),
               ]);
+              visited[startR][startC + 1] = true;
               console.log("basins now", basins);
               return basinDFS(startR, startC + 1, visited, graph);
-            } else {
-              return basinDFS(startR, startC, visited, graph);
             }
           }
-          default:
-            //maybe default return to another location or the same?
-            return;
         }
+        // console.log("starting from lowpoint origin");
+
+        // return basinDFS(basinLowPoint.startR, basinLowPoint.startC, visited, graph);
       }
 
       function findBasins(graph: string[][]): void {
@@ -127,6 +122,8 @@ import { getInput, isEdge, isLowerThanAdj, dumpBoard } from "../utils";
             if (/\[/g.test(theGraph[r][c])) {
               currentBasin++;
               theGraph[r][c] = theGraph[r][c].replace(/\[|\]/g, "");
+              basinLowPoint.startR = r;
+              basinLowPoint.startC = c;
               basins.set(currentBasin, []);
               basins.set(currentBasin, [
                 ...(basins.get(currentBasin) as number[]),

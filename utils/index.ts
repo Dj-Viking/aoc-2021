@@ -1,7 +1,7 @@
 import { getInput } from "./getInput";
 import { recurseCo2 } from "./recurseCo2";
 import { recurseOxy } from "./recurseOxy";
-import { dumpBoard } from "./dumpBoard";
+import { dumpBoard, dumpBooleanGraph } from "./dumpBoard";
 import { getLanternInput } from "./getLanternInput";
 import { getCrabInput } from "./getCrabInput";
 import { getSegmentInput } from "./getSegmentInput";
@@ -35,4 +35,5 @@ export {
   isLowerThanAdj,
   EdgeType,
   isEdge,
+  dumpBooleanGraph,
 };
