@@ -43,7 +43,7 @@ import { getInput, isEdge, isLowerThanAdj, dumpBooleanGraph } from "../utils";
         c: number,
         graph: string[][]
       ): Map<string, Array<[number, number]>> {
-        let theList = adjList;
+        let theList = new Map<string, Array<[number, number]>>();
         const up = !!graph[r - 1] ? graph[r - 1][c] : void 0;
         const down = !!graph[r + 1] ? graph[r + 1][c] : void 0;
         const left = !!graph[r][c - 1] ? graph[r][c - 1] : void 0;
@@ -77,35 +77,34 @@ import { getInput, isEdge, isLowerThanAdj, dumpBooleanGraph } from "../utils";
         dumpBooleanGraph(visitedBool);
         // implement BFS here!!!
         let theAdjList = adjList;
-        const visited = new Set<string>();
         const queue = [[startR, startC]];
         console.log("what is queue here", queue);
         while (queue.length > 0) {
           const [r, c] = queue.shift() as [number, number];
           theAdjList = getAdjToPoint(r, c, graph);
-          console.log("adjecency list of current coord we are on", theAdjList);
+          console.log("adjecency list of current coord we are on looping queue", theAdjList);
           console.log("basins now", basins);
 
           visitedBool[r][c] = true;
           dumpBooleanGraph(visitedBool);
           for (const [row, col] of theAdjList.get(graph[r][c]) as Array<[number, number]>) {
-            console.log("current adj coord", row, col);
+            console.log("current adj coord", row, col, "for value", graph[row][col]);
+            console.log("adjecency list of current coord we are on in the for of loop", theAdjList);
             if (parseInt(graph[row][col]) === 9) {
               continue;
             }
-            if (!visited.has(graph[row][col])) {
+            if (visitedBool[row][col] === false) {
               visitedBool[row][col] = true;
               dumpBooleanGraph(visitedBool);
-              visited.add(graph[row][col]);
-              if (!basins.get(currentBasin)?.includes(parseInt(graph[row][col]))) {
-                basins.set(currentBasin, [
-                  ...(basins.get(currentBasin) as number[]),
-                  parseInt(graph[row][col]),
-                ]);
-              }
+              basins.set(currentBasin, [
+                ...(basins.get(currentBasin) as number[]),
+                parseInt(graph[row][col]),
+              ]);
               console.log("basins now", basins);
               queue.push([row, col]);
               console.log("what is queue now", queue);
+              // if (!basins.get(currentBasin)?.includes(parseInt(graph[row][col]))) {
+              // }
             }
           }
         }

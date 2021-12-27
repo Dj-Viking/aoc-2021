@@ -38,7 +38,7 @@ const utils_1 = require("../utils");
                 }
                 function getAdjToPoint(r, c, graph) {
                     var _a, _b, _c, _d;
-                    let theList = adjList;
+                    let theList = new Map();
                     const up = !!graph[r - 1] ? graph[r - 1][c] : void 0;
                     const down = !!graph[r + 1] ? graph[r + 1][c] : void 0;
                     const left = !!graph[r][c - 1] ? graph[r][c - 1] : void 0;
@@ -59,35 +59,31 @@ const utils_1 = require("../utils");
                     return theList;
                 }
                 function basinBFS(startR, startC, adjList, visitedBool, graph) {
-                    var _a;
                     console.log("what is r c", startR, startC);
                     (0, utils_1.dumpBooleanGraph)(visitedBool);
                     let theAdjList = adjList;
-                    const visited = new Set();
                     const queue = [[startR, startC]];
                     console.log("what is queue here", queue);
                     while (queue.length > 0) {
                         const [r, c] = queue.shift();
                         theAdjList = getAdjToPoint(r, c, graph);
-                        console.log("adjecency list of current coord we are on", theAdjList);
+                        console.log("adjecency list of current coord we are on looping queue", theAdjList);
                         console.log("basins now", basins);
                         visitedBool[r][c] = true;
                         (0, utils_1.dumpBooleanGraph)(visitedBool);
                         for (const [row, col] of theAdjList.get(graph[r][c])) {
-                            console.log("current adj coord", row, col);
+                            console.log("current adj coord", row, col, "for value", graph[row][col]);
+                            console.log("adjecency list of current coord we are on in the for of loop", theAdjList);
                             if (parseInt(graph[row][col]) === 9) {
                                 continue;
                             }
-                            if (!visited.has(graph[row][col])) {
+                            if (visitedBool[row][col] === false) {
                                 visitedBool[row][col] = true;
                                 (0, utils_1.dumpBooleanGraph)(visitedBool);
-                                visited.add(graph[row][col]);
-                                if (!((_a = basins.get(currentBasin)) === null || _a === void 0 ? void 0 : _a.includes(parseInt(graph[row][col])))) {
-                                    basins.set(currentBasin, [
-                                        ...basins.get(currentBasin),
-                                        parseInt(graph[row][col]),
-                                    ]);
-                                }
+                                basins.set(currentBasin, [
+                                    ...basins.get(currentBasin),
+                                    parseInt(graph[row][col]),
+                                ]);
                                 console.log("basins now", basins);
                                 queue.push([row, col]);
                                 console.log("what is queue now", queue);
