@@ -16,8 +16,9 @@ function addNode(airport) {
     adjList.set(airport, []);
 }
 function addEdge(origin, dest) {
-    adjList.get(origin).push(dest);
-    adjList.get(dest).push(origin);
+    var _a, _b;
+    (_a = adjList.get(origin)) === null || _a === void 0 ? void 0 : _a.push(dest);
+    (_b = adjList.get(dest)) === null || _b === void 0 ? void 0 : _b.push(origin);
 }
 for (let a = 0; a < airports.length; a++)
     addNode(airports[a]);

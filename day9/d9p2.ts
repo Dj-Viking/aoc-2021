@@ -25,9 +25,10 @@ import { getInput, isEdge, isLowerThanAdj, dumpBooleanGraph } from "../utils";
       }
 
       const basins = new Map<number, Array<number>>();
+      let adjList = new Map<string, Array<[number, number]>>();
       let basinLowPoint = { startR: 0, startC: 0 };
-      let visited = [] as boolean[][];
-      visited = initVisited(visited);
+      let visitedBool = [] as boolean[][];
+      visitedBool = initVisited(visitedBool);
       let currentBasin = 0;
 
       function initVisited(arr: boolean[][]): boolean[][] {
@@ -37,14 +38,77 @@ import { getInput, isEdge, isLowerThanAdj, dumpBooleanGraph } from "../utils";
         return arr;
       }
 
-      function basinDFS(
+      function getAdjToPoint(
+        r: number,
+        c: number,
+        graph: string[][]
+      ): Map<string, Array<[number, number]>> {
+        let theList = adjList;
+        const up = !!graph[r - 1] ? graph[r - 1][c] : void 0;
+        const down = !!graph[r + 1] ? graph[r + 1][c] : void 0;
+        const left = !!graph[r][c - 1] ? graph[r][c - 1] : void 0;
+        const right = !!graph[r][c + 1] ? graph[r][c + 1] : void 0;
+
+        theList.set(graph[r][c], [] as Array<[number, number]>);
+        if (!!up) {
+          theList.get(graph[r][c])?.push([r - 1, c]);
+        }
+        if (!!down) {
+          theList.get(graph[r][c])?.push([r + 1, c]);
+        }
+        if (!!left) {
+          theList.get(graph[r][c])?.push([r, c - 1]);
+        }
+        if (!!right) {
+          theList.get(graph[r][c])?.push([r, c + 1]);
+        }
+
+        return theList;
+      }
+
+      function basinBFS(
         startR: number,
         startC: number,
-        visited: boolean[][],
+        adjList: Map<string, Array<[number, number]>>,
+        visitedBool: boolean[][],
         graph: string[][]
       ): void {
         console.log("what is r c", startR, startC);
+        dumpBooleanGraph(visitedBool);
         // implement BFS here!!!
+        let theAdjList = adjList;
+        const visited = new Set<string>();
+        const queue = [[startR, startC]];
+        console.log("what is queue here", queue);
+        while (queue.length > 0) {
+          const [r, c] = queue.shift() as [number, number];
+          theAdjList = getAdjToPoint(r, c, graph);
+          console.log("adjecency list of current coord we are on", theAdjList);
+          console.log("basins now", basins);
+
+          visitedBool[r][c] = true;
+          dumpBooleanGraph(visitedBool);
+          for (const [row, col] of theAdjList.get(graph[r][c]) as Array<[number, number]>) {
+            console.log("current adj coord", row, col);
+            if (parseInt(graph[row][col]) === 9) {
+              continue;
+            }
+            if (!visited.has(graph[row][col])) {
+              visitedBool[row][col] = true;
+              dumpBooleanGraph(visitedBool);
+              visited.add(graph[row][col]);
+              if (!basins.get(currentBasin)?.includes(parseInt(graph[row][col]))) {
+                basins.set(currentBasin, [
+                  ...(basins.get(currentBasin) as number[]),
+                  parseInt(graph[row][col]),
+                ]);
+              }
+              console.log("basins now", basins);
+              queue.push([row, col]);
+              console.log("what is queue now", queue);
+            }
+          }
+        }
       }
 
       function findBasins(graph: string[][]): void {
@@ -61,8 +125,9 @@ import { getInput, isEdge, isLowerThanAdj, dumpBooleanGraph } from "../utils";
                 ...(basins.get(currentBasin) as number[]),
                 parseInt(graph[r][c]),
               ]);
-              basinDFS(r, c, visited, theGraph);
-              visited = initVisited(visited);
+              adjList = new Map<string, Array<[number, number]>>();
+              basinBFS(r, c, adjList, visitedBool, theGraph);
+              visitedBool = initVisited(visitedBool);
             }
           }
         }

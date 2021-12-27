@@ -12,15 +12,16 @@ const routes = [
   ["LIM", "BKK"],
 ] as Array<[string, string]>;
 
-const adjList = new Map<string, any>();
+const adjList = new Map<string, Array<string>>();
 
+//starting point
 function addNode(airport: string): void {
   adjList.set(airport, [] as string[]);
 }
 
 function addEdge(origin: string, dest: string) {
-  adjList.get(origin).push(dest);
-  adjList.get(dest).push(origin);
+  adjList.get(origin)?.push(dest);
+  adjList.get(dest)?.push(origin);
 }
 
 for (let a = 0; a < airports.length; a++) addNode(airports[a]);
@@ -38,7 +39,7 @@ function BFS(start: string, final: string) {
   while (queue.length > 0) {
     const airport = queue.shift() as string;
     console.log("queue after shifting out new airport", queue, "airport", airport);
-    const destinations = adjList.get(airport);
+    const destinations = adjList.get(airport) as string[];
     console.log("destinations of", airport, "from the queue", destinations);
     for (const dest of destinations) {
       if (dest === final) {
@@ -69,7 +70,7 @@ function DFS(start: string, visited: Set<string>, final = "BKK"): void {
   visited.add(start);
   console.log("total visited", visited);
   let steps = 1;
-  const destinations = adjList.get(start);
+  const destinations = adjList.get(start) as string[];
   for (const dest of destinations) {
     steps++;
     switch (true) {

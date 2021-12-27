@@ -27,16 +27,73 @@ const utils_1 = require("../utils");
                     }
                 }
                 const basins = new Map();
+                let adjList = new Map();
                 let basinLowPoint = { startR: 0, startC: 0 };
-                let visited = [];
-                visited = initVisited(visited);
+                let visitedBool = [];
+                visitedBool = initVisited(visitedBool);
                 let currentBasin = 0;
                 function initVisited(arr) {
                     arr = [...new Array(theInput.length * 2)].map(() => new Array(theInput.length * 2).fill(false));
                     return arr;
                 }
-                function basinDFS(startR, startC, visited, graph) {
+                function getAdjToPoint(r, c, graph) {
+                    var _a, _b, _c, _d;
+                    let theList = adjList;
+                    const up = !!graph[r - 1] ? graph[r - 1][c] : void 0;
+                    const down = !!graph[r + 1] ? graph[r + 1][c] : void 0;
+                    const left = !!graph[r][c - 1] ? graph[r][c - 1] : void 0;
+                    const right = !!graph[r][c + 1] ? graph[r][c + 1] : void 0;
+                    theList.set(graph[r][c], []);
+                    if (!!up) {
+                        (_a = theList.get(graph[r][c])) === null || _a === void 0 ? void 0 : _a.push([r - 1, c]);
+                    }
+                    if (!!down) {
+                        (_b = theList.get(graph[r][c])) === null || _b === void 0 ? void 0 : _b.push([r + 1, c]);
+                    }
+                    if (!!left) {
+                        (_c = theList.get(graph[r][c])) === null || _c === void 0 ? void 0 : _c.push([r, c - 1]);
+                    }
+                    if (!!right) {
+                        (_d = theList.get(graph[r][c])) === null || _d === void 0 ? void 0 : _d.push([r, c + 1]);
+                    }
+                    return theList;
+                }
+                function basinBFS(startR, startC, adjList, visitedBool, graph) {
+                    var _a;
                     console.log("what is r c", startR, startC);
+                    (0, utils_1.dumpBooleanGraph)(visitedBool);
+                    let theAdjList = adjList;
+                    const visited = new Set();
+                    const queue = [[startR, startC]];
+                    console.log("what is queue here", queue);
+                    while (queue.length > 0) {
+                        const [r, c] = queue.shift();
+                        theAdjList = getAdjToPoint(r, c, graph);
+                        console.log("adjecency list of current coord we are on", theAdjList);
+                        console.log("basins now", basins);
+                        visitedBool[r][c] = true;
+                        (0, utils_1.dumpBooleanGraph)(visitedBool);
+                        for (const [row, col] of theAdjList.get(graph[r][c])) {
+                            console.log("current adj coord", row, col);
+                            if (parseInt(graph[row][col]) === 9) {
+                                continue;
+                            }
+                            if (!visited.has(graph[row][col])) {
+                                visitedBool[row][col] = true;
+                                (0, utils_1.dumpBooleanGraph)(visitedBool);
+                                visited.add(graph[row][col]);
+                                if (!((_a = basins.get(currentBasin)) === null || _a === void 0 ? void 0 : _a.includes(parseInt(graph[row][col])))) {
+                                    basins.set(currentBasin, [
+                                        ...basins.get(currentBasin),
+                                        parseInt(graph[row][col]),
+                                    ]);
+                                }
+                                console.log("basins now", basins);
+                                queue.push([row, col]);
+                                console.log("what is queue now", queue);
+                            }
+                        }
+                    }
                 }
                 function findBasins(graph) {
                     let theGraph = graph;
@@ -52,8 +109,9 @@ const utils_1 = require("../utils");
                                     ...basins.get(currentBasin),
                                     parseInt(graph[r][c]),
                                 ]);
-                                basinDFS(r, c, visited, theGraph);
-                                visited = initVisited(visited);
+                                adjList = new Map();
+                                basinBFS(r, c, adjList, visitedBool, theGraph);
+                                visitedBool = initVisited(visitedBool);
                             }
                         }
                     }
