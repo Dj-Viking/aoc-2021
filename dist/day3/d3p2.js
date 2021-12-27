@@ -17,8 +17,7 @@ const utils_1 = require("../utils");
                 const splitInput = (0, utils_1.getInput)("../day3/input.txt");
                 console.log("oxy acc", (0, utils_1.recurseOxy)(splitInput));
                 console.log("co2 acc", (0, utils_1.recurseCo2)(splitInput));
-                console.log(parseInt((0, utils_1.recurseOxy)(splitInput), 2) *
-                    parseInt((0, utils_1.recurseCo2)(splitInput), 2));
+                console.log(parseInt((0, utils_1.recurseOxy)(splitInput), 2) * parseInt((0, utils_1.recurseCo2)(splitInput), 2));
                 resolve();
             }
             catch (error) {

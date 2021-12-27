@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.dumpBoard = void 0;
+exports.dumpBooleanGraph = exports.dumpBoard = void 0;
 function dumpBoard(board) {
     console.log("dumping board");
     let x, y;
@@ -14,4 +14,17 @@ function dumpBoard(board) {
     }
 }
 exports.dumpBoard = dumpBoard;
+function dumpBooleanGraph(board) {
+    console.log("dumping board");
+    let x, y;
+    let str = "";
+    for (y = 0; y < board.length; y++) {
+        for (x = 0; x < board.length; x++) {
+            str += board[y][x] === false ? "." + " " : "*" + " ";
+        }
+        console.log(str);
+        str = "";
+    }
+}
+exports.dumpBooleanGraph = dumpBooleanGraph;
 //# sourceMappingURL=dumpBoard.js.map
