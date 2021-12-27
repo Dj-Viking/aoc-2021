@@ -1,28 +1,15 @@
-// research DFS graph traversal
-import { getInput, isEdge, isLowerThanAdj, dumpBooleanGraph } from "../utils";
+import { getInput, isEdge, isLowerThanAdj /*dumpBooleanGraph*/ } from "../utils";
 (async function (): Promise<void> {
   return new Promise((resolve, reject) => {
     try {
-      // let theInput = getInput("../day9/input.txt").map((str) => {
-      //   return str.split("");
-      // });
-      let theInput = getInput("../day9/sample.txt").map((str) => {
+      let theInput = getInput("../day9/input.txt").map((str) => {
         return str.split("");
       });
+      // let theInput = getInput("../day9/sample.txt").map((str) => {
+      //   return str.split("");
+      // });
 
-      console.log("the input", theInput);
-      // dump the graph to see the numbers squared off without the space between the [] and the next number
-      // looks neater
-      function dumpGraph(graph: string[][]): void {
-        for (let i = 0; i < graph.length; i++) {
-          console.log(
-            `${graph[i]}`
-              .replace(/,/g, " ")
-              .replace(/\s(?=\[)/g, "") //remove the space only if it was preceded by a [ character
-              .replace(/(?<=\])\s/g, "") // remove the space only if it was followed by a ] character
-          );
-        }
-      }
+      // console.log("the input", theInput);
 
       const basins = new Map<number, Array<number>>();
       let adjList = new Map<string, Array<[number, number]>>();
@@ -73,38 +60,35 @@ import { getInput, isEdge, isLowerThanAdj, dumpBooleanGraph } from "../utils";
         visitedBool: boolean[][],
         graph: string[][]
       ): void {
-        console.log("what is r c", startR, startC);
-        dumpBooleanGraph(visitedBool);
+        // console.log("what is r c", startR, startC);
+        // dumpBooleanGraph(visitedBool);
         // implement BFS here!!!
         let theAdjList = adjList;
         const queue = [[startR, startC]];
-        console.log("what is queue here", queue);
+        // console.log("what is queue here", queue);
         while (queue.length > 0) {
           const [r, c] = queue.shift() as [number, number];
           theAdjList = getAdjToPoint(r, c, graph);
-          console.log("adjecency list of current coord we are on looping queue", theAdjList);
-          console.log("basins now", basins);
-
+          //visited first coordinate in the queue
+          // was added to basin before entering bfs
           visitedBool[r][c] = true;
-          dumpBooleanGraph(visitedBool);
+          // dumpBooleanGraph(visitedBool);
           for (const [row, col] of theAdjList.get(graph[r][c]) as Array<[number, number]>) {
-            console.log("current adj coord", row, col, "for value", graph[row][col]);
-            console.log("adjecency list of current coord we are on in the for of loop", theAdjList);
             if (parseInt(graph[row][col]) === 9) {
               continue;
             }
             if (visitedBool[row][col] === false) {
+              //havent visited the coordinate yet if on next iteration of this loop
+              // of all the adjacencies of the current coordinate in the queue
               visitedBool[row][col] = true;
-              dumpBooleanGraph(visitedBool);
+              // dumpBooleanGraph(visitedBool);
               basins.set(currentBasin, [
                 ...(basins.get(currentBasin) as number[]),
                 parseInt(graph[row][col]),
               ]);
-              console.log("basins now", basins);
+              // console.log("basins now", basins);
               queue.push([row, col]);
-              console.log("what is queue now", queue);
-              // if (!basins.get(currentBasin)?.includes(parseInt(graph[row][col]))) {
-              // }
+              // console.log("what is queue now", queue);
             }
           }
         }
@@ -151,11 +135,48 @@ import { getInput, isEdge, isLowerThanAdj, dumpBooleanGraph } from "../utils";
         return theGraph;
       }
 
+      function calcBasins(basins: Map<number, number[]>): number {
+        let result = 0;
+        let basinCollection = [] as number[][]; //sizes of basins
+        // find 3 biggest basins and multiply their sizes
+        const valIterator = basins.values();
+
+        // console.log("map size", basins.size);
+        // console.log("iterator of the basins map keys", valIterator);
+        for (let i = 0; i < basins.size; i++) {
+          basinCollection.push(valIterator.next().value);
+        }
+        // console.log("largest basins before filtering", basinCollection);
+        let sizes = [] as number[];
+        for (let j = 0; j < basinCollection.length; j++) {
+          sizes.push(basinCollection[j].length);
+        }
+        // console.log("sizes now", sizes);
+        sizes = sizes.sort((a, b) => a - b);
+        // console.log("sizes now", sizes, "sizes length", sizes.length);
+        // for (let r = 0; r < sizes.length; r++) {
+        //   console.log(sizes[r]);
+        //   if (r % 10 === 0) {
+        //     console.log("\n");
+        //   }
+        // }
+        // console.log("sizes length - 3", sizes.length - 3);
+        // console.log("sizes now", sizes);
+        result = sizes
+          .sort((a, b) => a - b)
+          .slice(sizes.length - 3, sizes.length)
+          .reduce((curr, next) => (curr *= next));
+        return result;
+      }
+
       theInput = findLowPoints(theInput);
-      dumpGraph(theInput);
-      console.log("\n");
+      // dumpGraph(theInput);
+      // console.log("\n");
       findBasins(theInput);
-      console.log("\n");
+      // console.log("\n");
+      // console.log("basins now after finding basins", basins);
+      const answer = calcBasins(basins);
+      console.log("answer", answer);
 
       resolve();
     } catch (error) {

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.dumpBooleanGraph = exports.isEdge = exports.isLowerThanAdj = exports.decimalToBinary = exports.getPermutations = exports.getSegmentInput = exports.getCrabInput = exports.getLanternInput = exports.dumpBoard = exports.recurseOxy = exports.recurseCo2 = exports.getInput = exports.getY2 = exports.getY1 = exports.getX2 = exports.getX1 = void 0;
+exports.dumpLowPointGraph = exports.dumpBooleanGraph = exports.isEdge = exports.isLowerThanAdj = exports.decimalToBinary = exports.getPermutations = exports.getSegmentInput = exports.getCrabInput = exports.getLanternInput = exports.dumpBoard = exports.recurseOxy = exports.recurseCo2 = exports.getInput = exports.getY2 = exports.getY1 = exports.getX2 = exports.getX1 = void 0;
 const getInput_1 = require("./getInput");
 Object.defineProperty(exports, "getInput", { enumerable: true, get: function () { return getInput_1.getInput; } });
 const recurseCo2_1 = require("./recurseCo2");
@@ -24,6 +24,8 @@ const isLowerThanAdj_1 = require("./isLowerThanAdj");
 Object.defineProperty(exports, "isLowerThanAdj", { enumerable: true, get: function () { return isLowerThanAdj_1.isLowerThanAdj; } });
 const isEdge_1 = require("./isEdge");
 Object.defineProperty(exports, "isEdge", { enumerable: true, get: function () { return isEdge_1.isEdge; } });
+const dumpLowPointGraph_1 = require("./dumpLowPointGraph");
+Object.defineProperty(exports, "dumpLowPointGraph", { enumerable: true, get: function () { return dumpLowPointGraph_1.dumpLowPointGraph; } });
 function getX1(coords, iter) {
     return parseInt(coords[iter].split(/\s->\s/g)[0].split(",")[0]);
 }

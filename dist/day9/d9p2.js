@@ -14,18 +14,9 @@ const utils_1 = require("../utils");
     return __awaiter(this, void 0, void 0, function* () {
         return new Promise((resolve, reject) => {
             try {
-                let theInput = (0, utils_1.getInput)("../day9/sample.txt").map((str) => {
+                let theInput = (0, utils_1.getInput)("../day9/input.txt").map((str) => {
                     return str.split("");
                 });
-                console.log("the input", theInput);
-                function dumpGraph(graph) {
-                    for (let i = 0; i < graph.length; i++) {
-                        console.log(`${graph[i]}`
-                            .replace(/,/g, " ")
-                            .replace(/\s(?=\[)/g, "")
-                            .replace(/(?<=\])\s/g, ""));
-                    }
-                }
                 const basins = new Map();
                 let adjList = new Map();
                 let basinLowPoint = { startR: 0, startC: 0 };
@@ -59,34 +50,23 @@ const utils_1 = require("../utils");
                     return theList;
                 }
                 function basinBFS(startR, startC, adjList, visitedBool, graph) {
-                    console.log("what is r c", startR, startC);
-                    (0, utils_1.dumpBooleanGraph)(visitedBool);
                     let theAdjList = adjList;
                     const queue = [[startR, startC]];
-                    console.log("what is queue here", queue);
                     while (queue.length > 0) {
                         const [r, c] = queue.shift();
                         theAdjList = getAdjToPoint(r, c, graph);
-                        console.log("adjecency list of current coord we are on looping queue", theAdjList);
-                        console.log("basins now", basins);
                         visitedBool[r][c] = true;
-                        (0, utils_1.dumpBooleanGraph)(visitedBool);
                         for (const [row, col] of theAdjList.get(graph[r][c])) {
-                            console.log("current adj coord", row, col, "for value", graph[row][col]);
-                            console.log("adjecency list of current coord we are on in the for of loop", theAdjList);
                             if (parseInt(graph[row][col]) === 9) {
                                 continue;
                             }
                             if (visitedBool[row][col] === false) {
                                 visitedBool[row][col] = true;
-                                (0, utils_1.dumpBooleanGraph)(visitedBool);
                                 basins.set(currentBasin, [
                                     ...basins.get(currentBasin),
                                     parseInt(graph[row][col]),
                                 ]);
-                                console.log("basins now", basins);
                                 queue.push([row, col]);
-                                console.log("what is queue now", queue);
                             }
                         }
                     }
@@ -132,11 +112,28 @@ const utils_1 = require("../utils");
                     }
                     return theGraph;
                 }
+                function calcBasins(basins) {
+                    let result = 0;
+                    let basinCollection = [];
+                    const valIterator = basins.values();
+                    for (let i = 0; i < basins.size; i++) {
+                        basinCollection.push(valIterator.next().value);
+                    }
+                    let sizes = [];
+                    for (let j = 0; j < basinCollection.length; j++) {
+                        sizes.push(basinCollection[j].length);
+                    }
+                    sizes = sizes.sort((a, b) => a - b);
+                    result = sizes
+                        .sort((a, b) => a - b)
+                        .slice(sizes.length - 3, sizes.length)
+                        .reduce((curr, next) => (curr *= next));
+                    return result;
+                }
                 theInput = findLowPoints(theInput);
-                dumpGraph(theInput);
-                console.log("\n");
                 findBasins(theInput);
-                console.log("\n");
+                const answer = calcBasins(basins);
+                console.log("answer", answer);
                 resolve();
             }
             catch (error) {
