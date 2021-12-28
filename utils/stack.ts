@@ -7,7 +7,7 @@ interface IStack<T> {
 
 export class Stack<T> implements IStack<T> {
   private storage: Array<T> = [];
-  constructor(private capacity: number = 1000) {}
+  constructor(private capacity: number = 1000000) {}
 
   /**
    *
@@ -45,19 +45,20 @@ export class Stack<T> implements IStack<T> {
   }
 }
 
-let example = "{([(<{}[<>[]}>{[]{[(<()>";
+// let example = "{([(<{}[<>[]}>{[]{[(<()>";
 
 const stack = new Stack<string>();
 const matching = { "(": ")", "[": "]", "{": "}", "<": ">" } as Record<string, string>;
 
 export interface ICheckChunkResult {
   corrupt?: boolean;
+  illegalChar: string;
   incomplete?: boolean;
 }
 
 export function checkChunk(chunk: string): ICheckChunkResult {
-  let result = { corrupt: void 0, incomplete: void 0 } as ICheckChunkResult;
-  for (let i = 0; i < chunk.length; i++) {
+  let result = { corrupt: void 0, incomplete: void 0, illegalChar: "" } as ICheckChunkResult;
+  chunk: for (let i = 0; i < chunk.length; i++) {
     if (chunk[i] === "(" || chunk[i] === "[" || chunk[i] === "{" || chunk[i] === "<") {
       stack.push(chunk[i]);
       // console.log("pushing opening char", stack.peek());
@@ -71,14 +72,16 @@ export function checkChunk(chunk: string): ICheckChunkResult {
       } else {
         // console.log("top of stack did not match a closing char, is corrupt");
         result.corrupt = true;
+        result.illegalChar = chunk[i];
+        break chunk;
       }
     }
   }
   return result;
 }
-const result = checkChunk(example);
+// const result = checkChunk(example);
 
-console.log("result", result);
+// console.log("result", result);
 
 // console.log("stack size", stack.size());
 // let currentSize = stack.size();

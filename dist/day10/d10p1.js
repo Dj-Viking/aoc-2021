@@ -14,22 +14,39 @@ const utils_1 = require("../utils");
     return __awaiter(this, void 0, void 0, function* () {
         return new Promise((resolve, reject) => {
             try {
-                let theInput = (0, utils_1.getInput)("../day10/sample.txt");
-                console.log("input", theInput);
-                const stack = new utils_1.Stack();
+                let theInput = (0, utils_1.getInput)("../day10/input.txt");
                 const corruptChunks = [];
-                const illegalTokenScore = {
+                const illegalCharsFound = [];
+                const charScore = [];
+                const tokenScore = {
                     ")": 3,
                     "]": 57,
                     "}": 1197,
                     ">": 25137,
                 };
+                function calcChars(chars) {
+                    let result = 0;
+                    for (let i = 0; i < chars.length; i++) {
+                        let charVal = 0;
+                        Object.keys(tokenScore).forEach((key) => {
+                            if (chars[i] === key) {
+                                charVal = tokenScore[key];
+                            }
+                        });
+                        charScore.push(charVal);
+                    }
+                    result = charScore.reduce((curr, next) => curr + next, 0);
+                    return result;
+                }
                 for (let i = 0; i < theInput.length; i++) {
-                    if ((0, utils_1.checkChunk)(theInput[i]).corrupt) {
+                    const result = (0, utils_1.checkChunk)(theInput[i]);
+                    if (result.corrupt) {
                         corruptChunks.push(theInput[i]);
+                        illegalCharsFound.push(result.illegalChar);
                     }
                 }
-                console.log("corrupt chunks", corruptChunks);
+                const result = calcChars(illegalCharsFound);
+                console.log("answer", result);
                 resolve();
             }
             catch (error) {
