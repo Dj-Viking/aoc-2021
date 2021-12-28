@@ -33,7 +33,6 @@ function checkChunk(chunk) {
             stack.push(chunk[i]);
         }
         if (chunk[i] === ")" || chunk[i] === "]" || chunk[i] === "}" || chunk[i] === ">") {
-            console.log("closing chunk char", chunk[i]);
             if (matching[stack.peek()] === chunk[i]) {
                 stack.pop();
             }

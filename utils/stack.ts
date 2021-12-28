@@ -63,7 +63,7 @@ export function checkChunk(chunk: string): ICheckChunkResult {
       // console.log("pushing opening char", stack.peek());
     }
     if (chunk[i] === ")" || chunk[i] === "]" || chunk[i] === "}" || chunk[i] === ">") {
-      console.log("closing chunk char", chunk[i]);
+      // console.log("closing chunk char", chunk[i]);
       //check if current top of stack is matching this closing character
       if (matching[stack.peek() as string] === chunk[i]) {
         // console.log("top of stack matched a closing char, pop");
