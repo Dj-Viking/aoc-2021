@@ -6,7 +6,7 @@ interface IStack<T> {
 }
 
 export class Stack<T> implements IStack<T> {
-  private storage: Array<T> = [];
+  public storage: Array<T> = [];
   constructor(private capacity: number = 1000000) {}
 
   /**
@@ -56,7 +56,7 @@ export interface ICheckChunkResult {
   incomplete?: boolean;
 }
 
-export function checkChunk(chunk: string): ICheckChunkResult {
+export function checkCorrupt(chunk: string): ICheckChunkResult {
   let result = { corrupt: void 0, incomplete: void 0, illegalChar: "" } as ICheckChunkResult;
   chunk: for (let i = 0; i < chunk.length; i++) {
     if (chunk[i] === "(" || chunk[i] === "[" || chunk[i] === "{" || chunk[i] === "<") {

@@ -1,4 +1,4 @@
-import { getInput, checkChunk } from "../utils";
+import { getInput, checkCorrupt } from "../utils";
 (async function (): Promise<void> {
   return new Promise((resolve, reject) => {
     try {
@@ -34,7 +34,7 @@ import { getInput, checkChunk } from "../utils";
 
       //get corrupt chunks from input
       for (let i = 0; i < theInput.length; i++) {
-        const result = checkChunk(theInput[i]);
+        const result = checkCorrupt(theInput[i]);
         if (result.corrupt) {
           corruptChunks.push(theInput[i]);
           illegalCharsFound.push(result.illegalChar);

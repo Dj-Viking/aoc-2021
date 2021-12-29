@@ -10,7 +10,7 @@ import { decimalToBinary } from "./decimalToBinary";
 import { isLowerThanAdj, EdgeType } from "./isLowerThanAdj";
 import { isEdge } from "./isEdge";
 import { dumpLowPointGraph } from "./dumpLowPointGraph";
-import { Stack, checkChunk, ICheckChunkResult } from "./stack";
+import { Stack, checkCorrupt, ICheckChunkResult } from "./stack";
 export function getX1(coords: string[], iter: number): number {
   return parseInt(coords[iter].split(/\s->\s/g)[0].split(",")[0]);
 }
@@ -40,6 +40,6 @@ export {
   dumpBooleanGraph,
   dumpLowPointGraph,
   Stack,
-  checkChunk,
+  checkCorrupt,
   ICheckChunkResult,
 };

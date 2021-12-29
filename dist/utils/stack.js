@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.checkChunk = exports.Stack = void 0;
+exports.checkCorrupt = exports.Stack = void 0;
 class Stack {
     constructor(capacity = 1000000) {
         this.capacity = capacity;
@@ -25,7 +25,7 @@ class Stack {
 exports.Stack = Stack;
 const stack = new Stack();
 const matching = { "(": ")", "[": "]", "{": "}", "<": ">" };
-function checkChunk(chunk) {
+function checkCorrupt(chunk) {
     let result = { corrupt: void 0, incomplete: void 0, illegalChar: "" };
     chunk: for (let i = 0; i < chunk.length; i++) {
         if (chunk[i] === "(" || chunk[i] === "[" || chunk[i] === "{" || chunk[i] === "<") {
@@ -44,5 +44,5 @@ function checkChunk(chunk) {
     }
     return result;
 }
-exports.checkChunk = checkChunk;
+exports.checkCorrupt = checkCorrupt;
 //# sourceMappingURL=stack.js.map

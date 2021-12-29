@@ -39,7 +39,7 @@ const utils_1 = require("../utils");
                     return result;
                 }
                 for (let i = 0; i < theInput.length; i++) {
-                    const result = (0, utils_1.checkChunk)(theInput[i]);
+                    const result = (0, utils_1.checkCorrupt)(theInput[i]);
                     if (result.corrupt) {
                         corruptChunks.push(theInput[i]);
                         illegalCharsFound.push(result.illegalChar);
