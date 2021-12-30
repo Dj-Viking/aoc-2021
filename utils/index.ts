@@ -1,7 +1,7 @@
 import { getInput } from "./getInput";
 import { recurseCo2 } from "./recurseCo2";
 import { recurseOxy } from "./recurseOxy";
-import { dumpBoard, dumpBooleanGraph } from "./dumpBoard";
+import { dumpBoard, dumpBooleanGraph, dumpFlashGraph } from "./dumpBoard";
 import { getLanternInput } from "./getLanternInput";
 import { getCrabInput } from "./getCrabInput";
 import { getSegmentInput } from "./getSegmentInput";
@@ -11,6 +11,7 @@ import { isLowerThanAdj, EdgeType } from "./isLowerThanAdj";
 import { isEdge } from "./isEdge";
 import { dumpLowPointGraph } from "./dumpLowPointGraph";
 import { Stack, checkCorrupt, ICheckChunkResult } from "./stack";
+import { getAdjOctos } from "./getAdjOctos";
 export function getX1(coords: string[], iter: number): number {
   return parseInt(coords[iter].split(/\s->\s/g)[0].split(",")[0]);
 }
@@ -42,4 +43,6 @@ export {
   Stack,
   checkCorrupt,
   ICheckChunkResult,
+  dumpFlashGraph,
+  getAdjOctos,
 };

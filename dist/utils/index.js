@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.checkCorrupt = exports.Stack = exports.dumpLowPointGraph = exports.dumpBooleanGraph = exports.isEdge = exports.isLowerThanAdj = exports.decimalToBinary = exports.getPermutations = exports.getSegmentInput = exports.getCrabInput = exports.getLanternInput = exports.dumpBoard = exports.recurseOxy = exports.recurseCo2 = exports.getInput = exports.getY2 = exports.getY1 = exports.getX2 = exports.getX1 = void 0;
+exports.getAdjOctos = exports.dumpFlashGraph = exports.checkCorrupt = exports.Stack = exports.dumpLowPointGraph = exports.dumpBooleanGraph = exports.isEdge = exports.isLowerThanAdj = exports.decimalToBinary = exports.getPermutations = exports.getSegmentInput = exports.getCrabInput = exports.getLanternInput = exports.dumpBoard = exports.recurseOxy = exports.recurseCo2 = exports.getInput = exports.getY2 = exports.getY1 = exports.getX2 = exports.getX1 = void 0;
 const getInput_1 = require("./getInput");
 Object.defineProperty(exports, "getInput", { enumerable: true, get: function () { return getInput_1.getInput; } });
 const recurseCo2_1 = require("./recurseCo2");
@@ -10,6 +10,7 @@ Object.defineProperty(exports, "recurseOxy", { enumerable: true, get: function (
 const dumpBoard_1 = require("./dumpBoard");
 Object.defineProperty(exports, "dumpBoard", { enumerable: true, get: function () { return dumpBoard_1.dumpBoard; } });
 Object.defineProperty(exports, "dumpBooleanGraph", { enumerable: true, get: function () { return dumpBoard_1.dumpBooleanGraph; } });
+Object.defineProperty(exports, "dumpFlashGraph", { enumerable: true, get: function () { return dumpBoard_1.dumpFlashGraph; } });
 const getLanternInput_1 = require("./getLanternInput");
 Object.defineProperty(exports, "getLanternInput", { enumerable: true, get: function () { return getLanternInput_1.getLanternInput; } });
 const getCrabInput_1 = require("./getCrabInput");
@@ -29,6 +30,8 @@ Object.defineProperty(exports, "dumpLowPointGraph", { enumerable: true, get: fun
 const stack_1 = require("./stack");
 Object.defineProperty(exports, "Stack", { enumerable: true, get: function () { return stack_1.Stack; } });
 Object.defineProperty(exports, "checkCorrupt", { enumerable: true, get: function () { return stack_1.checkCorrupt; } });
+const getAdjOctos_1 = require("./getAdjOctos");
+Object.defineProperty(exports, "getAdjOctos", { enumerable: true, get: function () { return getAdjOctos_1.getAdjOctos; } });
 function getX1(coords, iter) {
     return parseInt(coords[iter].split(/\s->\s/g)[0].split(",")[0]);
 }

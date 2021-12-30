@@ -14,8 +14,20 @@ export function dumpBoard(board: any[][]): void {
     str = "";
   }
 }
+export function dumpFlashGraph(graph: number[][]): void {
+  console.log("dumping graph\n");
+  let str = "";
+  for (let r = 0; r < graph.length; r++) {
+    for (let c = 0; c < graph[r].length; c++) {
+      str += graph[r][c].toString() + " ";
+    }
+    console.log(str);
+    str = "";
+  }
+}
+
 export function dumpBooleanGraph(board: any[][]): void {
-  console.log("dumping board");
+  console.log("dumping boolean graph\n");
   let x, y;
   let str = "";
   for (y = 0; y < board.length; y++) {
