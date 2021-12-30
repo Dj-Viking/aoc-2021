@@ -19,7 +19,6 @@ const utils_1 = require("../utils");
                 });
                 const basins = new Map();
                 let adjList = new Map();
-                let basinLowPoint = { startR: 0, startC: 0 };
                 let visitedBool = [];
                 visitedBool = initVisited(visitedBool);
                 let currentBasin = 0;
@@ -78,8 +77,6 @@ const utils_1 = require("../utils");
                             if (/\[/g.test(theGraph[r][c])) {
                                 currentBasin++;
                                 theGraph[r][c] = theGraph[r][c].replace(/\[|\]/g, "");
-                                basinLowPoint.startR = r;
-                                basinLowPoint.startC = c;
                                 basins.set(currentBasin, []);
                                 basins.set(currentBasin, [
                                     ...basins.get(currentBasin),

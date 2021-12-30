@@ -13,7 +13,6 @@ import { getInput, isEdge, isLowerThanAdj /*dumpBooleanGraph*/ } from "../utils"
 
       const basins = new Map<number, Array<number>>();
       let adjList = new Map<string, Array<[number, number]>>();
-      let basinLowPoint = { startR: 0, startC: 0 };
       let visitedBool = [] as boolean[][];
       visitedBool = initVisited(visitedBool);
       let currentBasin = 0;
@@ -101,8 +100,6 @@ import { getInput, isEdge, isLowerThanAdj /*dumpBooleanGraph*/ } from "../utils"
             if (/\[/g.test(theGraph[r][c])) {
               currentBasin++;
               theGraph[r][c] = theGraph[r][c].replace(/\[|\]/g, "");
-              basinLowPoint.startR = r;
-              basinLowPoint.startC = c;
               basins.set(currentBasin, []);
               basins.set(currentBasin, [
                 ...(basins.get(currentBasin) as number[]),
