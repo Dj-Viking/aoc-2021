@@ -31,37 +31,6 @@ import { getInput } from "../utils";
 
       console.log("cave adj list", caveAdjList);
 
-      function isSmall(cave: string): boolean {
-        if (!/start/g.test(cave) || !/end/g.test(cave)) {
-          if (/^[a-z]+$/g.test(cave)) {
-            return true;
-          }
-        }
-        return false;
-      }
-
-      function findPath(start: "start", end: "end", visited = [] as string[], next?: string): void {
-        if (visited.includes(end)) {
-          paths.set(path, visited);
-          path++;
-          console.log("paths now", paths);
-          visited = [];
-        }
-        if (!visited.includes(start)) visited.push(start);
-        const current = next || start;
-        const adjList = caveAdjList.get(current) as string[];
-        console.log(
-          "current cave",
-          `[${current}]`,
-          "connections to current cave",
-          adjList,
-          "visited so far",
-          visited
-        );
-      }
-
-      findPath("start", "end");
-
       resolve();
     } catch (error) {
       console.error(error);

@@ -9,7 +9,7 @@
     "start": "sh dev.sh",
     "new:day": "sh newDay.sh",
     "solve": "sh solve.sh",
-    "util:test": "sh testUtil.sh"
+    "test:util": "sh testUtil.sh"
   },
   "keywords": [],
   "author": "DJ Viking <anders.swedishviking@gmail.com>",

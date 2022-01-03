@@ -1,22 +1,26 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CaveSystem = void 0;
+const getInput_1 = require("./getInput");
 class CaveSystem {
     constructor() {
-        this.vertices = [];
+        this.caves = [];
         this.adjacent = {};
         this.edges = 0;
     }
-    addVertex(vert) {
-        this.vertices.push(vert);
-        this.adjacent[vert] = [];
+    addCave(cave) {
+        this.caves.push(cave);
+        this.adjacent[cave] = [];
     }
-    addEdge(vert, dest) {
-        this.adjacent[vert].push(dest);
-        this.adjacent[dest].push(vert);
+    addRoute(cave, dest) {
+        this.adjacent[cave].push(dest);
+        this.adjacent[dest].push(cave);
         this.edges++;
     }
-    dfs(goal, start = this.vertices[0], visited = {}) {
+    isSmall(cave) {
+        return /^[a-z]+$/g.test(cave);
+    }
+    dfs(goal, start = this.caves[0], visited = {}) {
         const adj = this.adjacent;
         visited[start] = true;
         for (let i = 0; i < adj[start].length; i++) {
@@ -28,7 +32,7 @@ class CaveSystem {
         return visited[goal] || false;
     }
     bfs(goal, start) {
-        !!start ? (start = start) : (start = this.vertices[0]);
+        !!start ? (start = start) : (start = this.caves[0]);
         const adj = this.adjacent;
         if (goal === start)
             throw new Error("can't begin bfs search from start when our goal is start");
@@ -36,62 +40,59 @@ class CaveSystem {
         queue.push(start);
         const visited = {};
         visited[start] = true;
-        const edges = {};
-        edges[start] = 0;
-        const predecessors = {};
-        predecessors[start] = null;
-        const buildPath = (goal, start, predecessors) => {
-            const stack = [];
-            stack.push(goal);
-            let u = predecessors[goal];
-            while (u !== start) {
-                stack.push(u);
-                u = predecessors[u];
-            }
-            stack.push(start);
-            let path = stack.reverse().join("-");
-            return path;
-        };
+        const routes = {};
+        routes[start] = 0;
+        const parents = {};
+        parents[start] = null;
         while (queue.length) {
-            const vert = queue.shift();
-            if (vert === goal) {
+            const cave = queue.shift();
+            if (cave === goal) {
                 return {
-                    distance: edges[goal],
-                    path: buildPath(goal, start, predecessors),
+                    distance: routes[goal],
+                    path: this.buildPath(goal, start, parents),
                 };
             }
-            for (let i = 0; i < adj[vert].length; i++) {
-                if (!visited[adj[vert][i]]) {
-                    visited[adj[vert][i]] = true;
-                    queue.push(adj[vert][i]);
-                    edges[adj[vert][i]] = edges[vert] + 1;
-                    predecessors[adj[vert][i]] = vert;
+            for (let dest = 0; dest < adj[cave].length; dest++) {
+                if (!visited[adj[cave][dest]]) {
+                    visited[adj[cave][dest]] = true;
+                    queue.push(adj[cave][dest]);
+                    routes[adj[cave][dest]] = routes[cave] + 1;
+                    parents[adj[cave][dest]] = cave;
                 }
             }
         }
         return false;
     }
+    buildPath(goal, start, parents) {
+        const stack = [];
+        stack.push(goal);
+        let parent = parents[goal];
+        while (parent !== start) {
+            stack.push(parent);
+            parent = parents[parent];
+        }
+        stack.push(start);
+        let path = stack.reverse();
+        return path;
+    }
 }
 exports.CaveSystem = CaveSystem;
-const graph = new CaveSystem();
-graph.addVertex("start");
-graph.addVertex("B");
-graph.addVertex("C");
-graph.addVertex("D");
-graph.addVertex("E");
-graph.addVertex("F");
-graph.addVertex("end");
-graph.addEdge("start", "B");
-graph.addEdge("start", "C");
-graph.addEdge("start", "D");
-graph.addEdge("B", "C");
-graph.addEdge("B", "D");
-graph.addEdge("C", "D");
-graph.addEdge("C", "E");
-graph.addEdge("D", "F");
-graph.addEdge("F", "end");
-console.log("DFS goal is end", graph.dfs("end"));
-console.log("DFS goal is start", graph.dfs("start"));
-console.log("BFS goal is end", graph.bfs("end"));
-console.log("BFS goal is start", graph.bfs("start"));
+let theInput = (0, getInput_1.getInput)("../day12/input.txt");
+console.log("the input", theInput);
+const cavesSet = new Set();
+const cs = new CaveSystem();
+const routes = theInput.map((str) => {
+    return str.split("-");
+});
+for (let i = 0; i < routes.flat().length; i++)
+    cavesSet.add(routes.flat()[i]);
+const caves = Array.from(cavesSet);
+for (let c = 0; c < caves.length; c++)
+    cs.addCave(caves[c]);
+for (let r = 0; r < routes.length; r++)
+    cs.addRoute(...routes[r]);
+console.log("cave system", cs);
+console.log("DFS goal is end did we find it", cs.dfs("end"));
+console.log("DFS goal is start did we find it", cs.dfs("start"));
+console.log("BFS goal is end", cs.bfs("end"));
 //# sourceMappingURL=CaveSystem.js.map

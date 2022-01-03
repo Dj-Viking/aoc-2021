@@ -37,28 +37,6 @@ const utils_1 = require("../utils");
                         (_b = caveAdjList.get(dest)) === null || _b === void 0 ? void 0 : _b.push(origin);
                     })(...routes[r]);
                 console.log("cave adj list", caveAdjList);
-                function isSmall(cave) {
-                    if (!/start/g.test(cave) || !/end/g.test(cave)) {
-                        if (/^[a-z]+$/g.test(cave)) {
-                            return true;
-                        }
-                    }
-                    return false;
-                }
-                function findPath(start, end, visited = [], next) {
-                    if (visited.includes(end)) {
-                        paths.set(path, visited);
-                        path++;
-                        console.log("paths now", paths);
-                        visited = [];
-                    }
-                    if (!visited.includes(start))
-                        visited.push(start);
-                    const current = next || start;
-                    const adjList = caveAdjList.get(current);
-                    console.log("current cave", `[${current}]`, "connections to current cave", adjList, "visited so far", visited);
-                }
-                findPath("start", "end");
                 resolve();
             }
             catch (error) {
