@@ -129,6 +129,8 @@ export class CaveSystem implements ICaveSystem {
     }
     stack.push(start);
     let path = stack.reverse();
+    //unshift 'start' to the beginning of the path
+    path.unshift("start");
     return path;
   }
 }

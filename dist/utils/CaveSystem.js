@@ -73,6 +73,7 @@ class CaveSystem {
         }
         stack.push(start);
         let path = stack.reverse();
+        path.unshift("start");
         return path;
     }
 }
