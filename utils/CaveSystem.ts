@@ -81,7 +81,7 @@ export class CaveSystem implements ICaveSystem {
       goal: string,
       start: string,
       predecessors: Record<string, string | null>
-    ) => {
+    ): string => {
       const stack = [] as string[];
       stack.push(goal);
 
