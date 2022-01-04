@@ -3,8 +3,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.CaveSystem = void 0;
 const getInput_1 = require("./getInput");
 class CaveSystem {
-    constructor() {
+    constructor(pathNum = 0) {
+        this.pathNum = pathNum;
         this.caves = [];
+        this.finalPaths = [];
         this.paths = {};
         this.adjacent = {};
     }
@@ -15,6 +17,26 @@ class CaveSystem {
     addRoute(cave, dest) {
         this.adjacent[cave].push(dest);
         this.adjacent[dest].push(cave);
+    }
+    removeDupePaths() {
+        const allPaths = Object.keys(this.paths).map((path) => {
+            return this.paths[path];
+        });
+        let slicer = 0;
+        let firstPath = [];
+        paths: for (let i = 0; i < allPaths.length; i++) {
+            if (i === 0) {
+                firstPath = allPaths[i];
+                continue;
+            }
+            if (i !== 0) {
+                if (allPaths[i].join("") === firstPath.join("")) {
+                    slicer = i;
+                    break paths;
+                }
+            }
+        }
+        this.finalPaths = allPaths.slice(0, slicer);
     }
     isSmall(cave) {
         if (!/start/g.test(cave) || !/end/g.test(cave)) {
@@ -66,6 +88,7 @@ class CaveSystem {
     buildPaths(goal, start) {
         const isVisited = {};
         for (let i = 0; i < this.caves.length; i++) {
+            this.pathNum++;
             isVisited[this.caves[i]] = false;
             const pathList = [];
             pathList.push(start);
@@ -74,14 +97,16 @@ class CaveSystem {
     }
     createAllPaths(start, goal, visited, localPathList, path = 0) {
         if (start === goal) {
-            this.paths[path] = [];
-            this.paths[path].push(...localPathList);
+            this.paths = Object.assign(Object.assign({}, this.paths), { [Buffer.from(((Math.random() + 1) * 10).toString(), "utf-8").toString()]: [
+                    ...localPathList,
+                ] });
             return localPathList;
         }
-        visited[start] = true;
+        if (this.isSmall(start))
+            visited[start] = true;
         for (let i = 0; i < this.adjacent[start].length; i++) {
             if (!visited[this.adjacent[start][i]]) {
-                path++;
+                path = this.pathNum;
                 localPathList.push(this.adjacent[start][i]);
                 this.createAllPaths(this.adjacent[start][i], goal, visited, localPathList, path);
                 localPathList.splice(localPathList.indexOf(this.adjacent[start][i]), 1);
@@ -92,7 +117,6 @@ class CaveSystem {
 }
 exports.CaveSystem = CaveSystem;
 let theInput = (0, getInput_1.getInput)("../day12/input.txt");
-console.log("the input", theInput);
 const cavesSet = new Set();
 const cs = new CaveSystem();
 const routes = theInput.map((str) => {
@@ -105,9 +129,4 @@ for (let c = 0; c < caves.length; c++)
     cs.addCave(caves[c]);
 for (let r = 0; r < routes.length; r++)
     cs.addRoute(...routes[r]);
-console.log("cave system", cs);
-console.log("DFS goal is end did we find it", cs.dfs("end"));
-console.log("DFS goal is start did we find it", cs.dfs("start"));
-console.log("BFS goal is end", cs.bfs("end", "start"));
-console.log("cave system after bfs", cs.paths);
 //# sourceMappingURL=CaveSystem.js.map

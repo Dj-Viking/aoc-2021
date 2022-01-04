@@ -3,8 +3,11 @@ import { getInput, CaveSystem } from "../utils";
 (async function (): Promise<void> {
   return new Promise((resolve, reject) => {
     try {
-      let theInput = getInput("../day12/input.txt");
-      console.log("the input", theInput);
+      // let theInput = getInput("../day12/input.txt");
+      // let theInput = getInput("../day12/sample.txt");
+      // let theInput = getInput("../day12/sample2.txt");
+      let theInput = getInput("../day12/sample3.txt");
+      // console.log("the input", theInput);
       const cavesSet = new Set<string>();
       const cs = new CaveSystem();
 
@@ -29,11 +32,42 @@ import { getInput, CaveSystem } from "../utils";
         cs.addRoute(...(routes[r] as [string, string]));
       }
 
-      //path find through the cave and then
+      //find all paths in the created cave system
+      cs.bfs("end", "start");
+      // console.log("paths generated", cs.paths);
+      console.log("path length", Object.keys(cs.paths).length);
+
+      //remove dupe paths
+      cs.removeDupePaths();
+      console.log("cs paths now", cs.finalPaths.length);
+
+      // console.log("cave system after bfs", cs.paths);
       // parse which paths have only one small cave
       // visited between start and end
-      cs.bfs("end", "start");
-      console.log("cave system after bfs", cs.paths);
+      // let onlyOneSmallCavePaths = [] as string[][];
+
+      // function hasOnlyOneSmallInPath(pathList: string[]): boolean {
+      //   let count = 0;
+      //   let list = pathList;
+      //   list = list.filter((cave) => !/start|end/g.test(cave));
+      //   for (let i = 0; i < list.length; i++) {
+      //     // console.log("cave", list[i]);
+      //     if (cs.isSmall(list[i])) count++;
+      //   }
+      //   // console.log("count", count);
+
+      //   if (count === 1) return true;
+      //   return false;
+      // }
+
+      // Object.keys(cs.paths).forEach((path) => {
+      //   // console.log("cs path", _path, cs.paths[path]);
+      //   onlyOneSmallCavePaths = [
+      //     ...onlyOneSmallCavePaths,
+      //     hasOnlyOneSmallInPath(cs.paths[path]) ? cs.paths[path] : void 0,
+      //   ].filter((item) => item !== void 0) as string[][];
+      // });
+      // console.log("small cave paths", onlyOneSmallCavePaths);
 
       resolve();
     } catch (error) {

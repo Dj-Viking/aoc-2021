@@ -8,20 +8,24 @@ interface IBFSResult {
 interface ICaveSystem {
   caves: Array<string>;
   adjacent: Record<string, Array<string>>;
-  paths: Record<number, string[]>;
+  paths: Record<string, string[]>;
+  finalPaths: Array<Array<string>>;
   addCave(cave: string): void;
   addRoute(cave: string, dest: string): void;
   dfs(goal: string, vert: string, visited: Record<string, boolean>): boolean;
   bfs(goal: string, start: string): boolean | IBFSResult | void;
   isSmall(cave: string): boolean;
+  removeDupePaths(): void;
 }
 
 export class CaveSystem implements ICaveSystem {
   public caves: Array<string>;
   public adjacent: Record<string, Array<string>>;
-  public paths: Record<number, string[]>;
-  constructor() {
+  public paths: Record<string, string[]>;
+  public finalPaths: Array<Array<string>>;
+  constructor(private pathNum: number = 0) {
     this.caves = [];
+    this.finalPaths = [];
     this.paths = {};
     this.adjacent = {};
   }
@@ -41,6 +45,32 @@ export class CaveSystem implements ICaveSystem {
   public addRoute(cave: string, dest: string): void {
     this.adjacent[cave].push(dest);
     this.adjacent[dest].push(cave);
+  }
+  /**
+   *
+   * @param paths this.paths
+   */
+  public removeDupePaths(): void {
+    const allPaths = Object.keys(this.paths).map((path) => {
+      return this.paths[path];
+    }) as string[][];
+    let slicer = 0;
+    let firstPath = [] as string[];
+    paths: for (let i = 0; i < allPaths.length; i++) {
+      if (i === 0) {
+        firstPath = allPaths[i];
+        continue;
+      }
+      if (i !== 0) {
+        //checking equality of the contents of an array
+        // because [] === [] is false
+        if (allPaths[i].join("") === firstPath.join("")) {
+          slicer = i;
+          break paths;
+        }
+      }
+    }
+    this.finalPaths = allPaths.slice(0, slicer);
   }
   /**
    * "start" and "end" can be considered small because we only are leaving start after
@@ -118,7 +148,7 @@ export class CaveSystem implements ICaveSystem {
     return false;
   }
   /**
-   * starts the recursion of creating all the paths
+   * starts the recursion of creating all the possible paths through all the caves in the cave system
    *
    * taken to reach the end
    * @param goal end cave to reach "end"
@@ -127,6 +157,7 @@ export class CaveSystem implements ICaveSystem {
   private buildPaths(goal: string, start: string): void {
     const isVisited = {} as Record<string, boolean>;
     for (let i = 0; i < this.caves.length; i++) {
+      this.pathNum++;
       isVisited[this.caves[i]] = false;
       const pathList = [] as string[];
       pathList.push(start);
@@ -150,16 +181,25 @@ export class CaveSystem implements ICaveSystem {
     path = 0
   ): string[] | void {
     if (start === goal) {
-      this.paths[path] = [];
-      this.paths[path].push(...localPathList);
-      // console.log("path", path, "this.paths", this.paths, "local path list", localPathList);
-      //this actually doesn't return this as a value for some reason...
+      //creating unique keys need to remove duplicate paths later
+      this.paths = {
+        ...this.paths,
+        [Buffer.from(((Math.random() + 1) * 10).toString(), "utf-8").toString()]: [
+          ...localPathList,
+        ],
+      };
+      // console.log("local path list", localPathList, "path", path, "this.paths", this.paths);
+      // console.log("local path list", localPathList);
+      // console.log("this.paths", this.paths);
+      //this actually doesn't return localPathList as a value from this function for some reason...
       return localPathList;
     }
-    visited[start] = true;
+    //set visited true only if it was small
+    // since we can visit big caves more than once
+    if (this.isSmall(start)) visited[start] = true;
     for (let i = 0; i < this.adjacent[start].length; i++) {
       if (!visited[this.adjacent[start][i]]) {
-        path++;
+        path = this.pathNum;
         localPathList.push(this.adjacent[start][i]);
         //recurse with the recently modified pathList
         this.createAllPaths(this.adjacent[start][i], goal, visited, localPathList, path);
@@ -174,7 +214,7 @@ export class CaveSystem implements ICaveSystem {
 
 // testing the class with day 12 input
 let theInput = getInput("../day12/input.txt");
-console.log("the input", theInput);
+// console.log("the input", theInput);
 const cavesSet = new Set<string>();
 const cs = new CaveSystem();
 const routes = theInput.map((str) => {
@@ -186,8 +226,8 @@ const caves = Array.from(cavesSet) as string[];
 for (let c = 0; c < caves.length; c++) cs.addCave(caves[c]);
 for (let r = 0; r < routes.length; r++) cs.addRoute(...(routes[r] as [string, string]));
 
-console.log("cave system", cs);
-console.log("DFS goal is end did we find it", cs.dfs("end"));
-console.log("DFS goal is start did we find it", cs.dfs("start"));
-console.log("BFS goal is end", cs.bfs("end", "start"));
-console.log("cave system after bfs", cs.paths);
+// console.log("cave system", cs);
+// console.log("DFS goal is end did we find it", cs.dfs("end"));
+// console.log("DFS goal is start did we find it", cs.dfs("start"));
+// console.log("BFS goal is end", cs.bfs("end", "start"));
+// console.log("cave system after bfs", cs.paths);
