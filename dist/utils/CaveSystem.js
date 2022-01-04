@@ -5,6 +5,7 @@ const getInput_1 = require("./getInput");
 class CaveSystem {
     constructor() {
         this.caves = [];
+        this.paths = {};
         this.adjacent = {};
         this.edges = 0;
     }
@@ -18,7 +19,10 @@ class CaveSystem {
         this.edges++;
     }
     isSmall(cave) {
-        return /^[a-z]+$/g.test(cave);
+        if (!/start/g.test(cave) || !/end/g.test(cave)) {
+            return /^[a-z]+$/g.test(cave);
+        }
+        return false;
     }
     dfs(goal, start = this.caves[0], visited = {}) {
         const adj = this.adjacent;
@@ -32,7 +36,7 @@ class CaveSystem {
         return visited[goal] || false;
     }
     bfs(goal, start) {
-        !!start ? (start = start) : (start = this.caves[0]);
+        !!start ? (start = start) : (start = "start");
         const adj = this.adjacent;
         if (goal === start)
             throw new Error("can't begin bfs search from start when our goal is start");
@@ -44,13 +48,12 @@ class CaveSystem {
         routes[start] = 0;
         const parents = {};
         parents[start] = null;
-        while (queue.length) {
+        while (queue.length > 0) {
             const cave = queue.shift();
             if (cave === goal) {
-                return {
-                    distance: routes[goal],
-                    path: this.buildPath(goal, start, parents),
-                };
+                this.buildPaths(goal, start);
+                console.log("this.paths", this.paths);
+                return;
             }
             for (let dest = 0; dest < adj[cave].length; dest++) {
                 if (!visited[adj[cave][dest]]) {
@@ -63,18 +66,31 @@ class CaveSystem {
         }
         return false;
     }
-    buildPath(goal, start, parents) {
-        const stack = [];
-        stack.push(goal);
-        let parent = parents[goal];
-        while (parent !== start) {
-            stack.push(parent);
-            parent = parents[parent];
+    buildPaths(goal, start) {
+        const isVisited = {};
+        for (let i = 0; i < this.caves.length; i++) {
+            isVisited[this.caves[i]] = false;
+            const pathList = [];
+            pathList.push(start);
+            this.createAllPaths(start, goal, isVisited, pathList);
         }
-        stack.push(start);
-        let path = stack.reverse();
-        path.unshift("start");
-        return path;
+    }
+    createAllPaths(start, goal, visited, localPathList, path = 0) {
+        if (start === goal) {
+            this.paths[path] = [];
+            this.paths[path].push(...localPathList);
+            return localPathList;
+        }
+        visited[start] = true;
+        for (let i = 0; i < this.adjacent[start].length; i++) {
+            if (!visited[this.adjacent[start][i]]) {
+                path++;
+                localPathList.push(this.adjacent[start][i]);
+                this.createAllPaths(this.adjacent[start][i], goal, visited, localPathList, path);
+                localPathList.splice(localPathList.indexOf(this.adjacent[start][i]), 1);
+            }
+        }
+        visited[start] = false;
     }
 }
 exports.CaveSystem = CaveSystem;
@@ -95,5 +111,6 @@ for (let r = 0; r < routes.length; r++)
 console.log("cave system", cs);
 console.log("DFS goal is end did we find it", cs.dfs("end"));
 console.log("DFS goal is start did we find it", cs.dfs("start"));
-console.log("BFS goal is end", cs.bfs("end"));
+console.log("BFS goal is end", cs.bfs("end", "start"));
+console.log("cave system after bfs", cs.paths);
 //# sourceMappingURL=CaveSystem.js.map

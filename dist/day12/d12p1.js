@@ -17,26 +17,19 @@ const utils_1 = require("../utils");
                 let theInput = (0, utils_1.getInput)("../day12/input.txt");
                 console.log("the input", theInput);
                 const cavesSet = new Set();
-                const paths = new Map();
-                let path = 1;
+                const cs = new utils_1.CaveSystem();
                 const routes = theInput.map((str) => {
                     return str.split("-");
                 });
                 for (let i = 0; i < routes.flat().length; i++)
                     cavesSet.add(routes.flat()[i]);
                 const caves = Array.from(cavesSet);
-                const caveAdjList = new Map();
                 for (let c = 0; c < caves.length; c++)
-                    ((cave) => {
-                        caveAdjList.set(cave, []);
-                    })(caves[c]);
+                    cs.addCave(caves[c]);
                 for (let r = 0; r < routes.length; r++)
-                    ((origin, dest) => {
-                        var _a, _b;
-                        (_a = caveAdjList.get(origin)) === null || _a === void 0 ? void 0 : _a.push(dest);
-                        (_b = caveAdjList.get(dest)) === null || _b === void 0 ? void 0 : _b.push(origin);
-                    })(...routes[r]);
-                console.log("cave adj list", caveAdjList);
+                    cs.addRoute(...routes[r]);
+                cs.bfs("end", "start");
+                console.log("cave system after bfs", cs.paths);
                 resolve();
             }
             catch (error) {

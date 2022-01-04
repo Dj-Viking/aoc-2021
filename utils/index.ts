@@ -12,6 +12,7 @@ import { isEdge } from "./isEdge";
 import { dumpLowPointGraph } from "./dumpLowPointGraph";
 import { Stack, checkCorrupt, ICheckChunkResult } from "./stack";
 import { getAdjOctos } from "./getAdjOctos";
+import { CaveSystem } from "./CaveSystem";
 export function getX1(coords: string[], iter: number): number {
   return parseInt(coords[iter].split(/\s->\s/g)[0].split(",")[0]);
 }
@@ -45,4 +46,5 @@ export {
   ICheckChunkResult,
   dumpFlashGraph,
   getAdjOctos,
+  CaveSystem,
 };

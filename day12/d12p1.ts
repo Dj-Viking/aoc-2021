@@ -1,13 +1,13 @@
 // how many paths through the cave visit small caves at most once
-import { getInput } from "../utils";
+import { getInput, CaveSystem } from "../utils";
 (async function (): Promise<void> {
   return new Promise((resolve, reject) => {
     try {
       let theInput = getInput("../day12/input.txt");
       console.log("the input", theInput);
       const cavesSet = new Set<string>();
-      const paths = new Map<number, string[]>();
-      let path = 1;
+      const cs = new CaveSystem();
+
       const routes = theInput.map((str) => {
         return str.split("-");
       }) as Array<[string, string]>;
@@ -16,20 +16,16 @@ import { getInput } from "../utils";
         cavesSet.add(routes.flat<string[][], 1>()[i]);
 
       const caves = Array.from(cavesSet) as string[];
-      const caveAdjList = new Map<string, Array<string>>();
 
-      for (let c = 0; c < caves.length; c++)
-        ((cave) => {
-          caveAdjList.set(cave, [] as string[]);
-        })(caves[c]);
+      for (let c = 0; c < caves.length; c++) cs.addCave(caves[c]);
 
-      for (let r = 0; r < routes.length; r++)
-        ((origin: string, dest: string) => {
-          caveAdjList.get(origin)?.push(dest);
-          caveAdjList.get(dest)?.push(origin);
-        })(...(routes[r] as [string, string]));
+      for (let r = 0; r < routes.length; r++) cs.addRoute(...(routes[r] as [string, string]));
 
-      console.log("cave adj list", caveAdjList);
+      //path find through the cave and then
+      // parse which paths have only one small cave
+      // visited between start and end
+      cs.bfs("end", "start");
+      console.log("cave system after bfs", cs.paths);
 
       resolve();
     } catch (error) {

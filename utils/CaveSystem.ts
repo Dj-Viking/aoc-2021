@@ -2,26 +2,29 @@ import { getInput } from "./getInput";
 
 interface IBFSResult {
   distance: number;
-  path: string[];
+  path: string[][];
 }
 
 interface ICaveSystem {
   caves: Array<string>;
   adjacent: Record<string, Array<string>>;
+  paths: Record<number, string[]>;
   edges: number;
   addCave(cave: string): void;
   addRoute(cave: string, dest: string): void;
   dfs(goal: string, vert: string, visited: Record<string, boolean>): boolean;
-  bfs(goal: string, start: string): boolean | IBFSResult;
+  bfs(goal: string, start: string): boolean | IBFSResult | void;
   isSmall(cave: string): boolean;
 }
 
 export class CaveSystem implements ICaveSystem {
   public caves: Array<string>;
   public adjacent: Record<string, Array<string>>;
+  public paths: Record<number, string[]>;
   public edges: number;
   constructor() {
     this.caves = [];
+    this.paths = {};
     this.adjacent = {};
     this.edges = 0;
   }
@@ -51,7 +54,10 @@ export class CaveSystem implements ICaveSystem {
    * @returns boolean if the cave name is lowercase signifying a small cave
    */
   public isSmall(cave: string): boolean {
-    return /^[a-z]+$/g.test(cave);
+    if (!/start/g.test(cave) || !/end/g.test(cave)) {
+      return /^[a-z]+$/g.test(cave);
+    }
+    return false;
   }
 
   /**
@@ -82,8 +88,8 @@ export class CaveSystem implements ICaveSystem {
    * @param start node to start at
    * @returns boolean false if the node doesn't exist, and IBFSResult if the node was found which describes how many steps it took to get to goal and the path that was taken
    */
-  public bfs(goal: string, start?: string): boolean | IBFSResult {
-    !!start ? (start = start) : (start = this.caves[0]);
+  public bfs(goal: string, start?: string): boolean | IBFSResult | void {
+    !!start ? (start = start) : (start = "start");
     const adj = this.adjacent;
     if (goal === start) throw new Error("can't begin bfs search from start when our goal is start");
 
@@ -96,14 +102,13 @@ export class CaveSystem implements ICaveSystem {
     const parents = {} as Record<string, string | null>;
     parents[start] = null;
 
-    while (queue.length) {
+    while (queue.length > 0) {
       const cave = queue.shift() as string;
 
       if (cave === goal) {
-        return {
-          distance: routes[goal],
-          path: this.buildPath(goal, start, parents),
-        };
+        this.buildPaths(goal, start);
+        console.log("this.paths", this.paths);
+        return;
       }
 
       for (let dest = 0; dest < adj[cave].length; dest++) {
@@ -117,21 +122,42 @@ export class CaveSystem implements ICaveSystem {
     }
     return false;
   }
-  private buildPath(goal: string, start: string, parents: Record<string, string | null>): string[] {
-    const stack = [] as string[];
-    stack.push(goal);
-
-    let parent = parents[goal];
-
-    while (parent !== start) {
-      stack.push(parent as string);
-      parent = parents[parent as string];
+  private buildPaths(goal: string, start: string): void {
+    const isVisited = {} as Record<string, boolean>;
+    for (let i = 0; i < this.caves.length; i++) {
+      isVisited[this.caves[i]] = false;
+      const pathList = [] as string[];
+      pathList.push(start);
+      this.createAllPaths(start, goal, isVisited, pathList);
     }
-    stack.push(start);
-    let path = stack.reverse();
-    //unshift 'start' to the beginning of the path
-    path.unshift("start");
-    return path;
+  }
+  private createAllPaths(
+    start: string,
+    goal: string,
+    visited: Record<string, boolean>,
+    localPathList: Array<string>,
+    path = 0
+  ): string[] | void {
+    if (start === goal) {
+      this.paths[path] = [];
+      this.paths[path].push(...localPathList);
+      // console.log("path", path, "this.paths", this.paths, "local path list", localPathList);
+      //this actually doesn't return this as a value for some reason...
+      return localPathList;
+    }
+    visited[start] = true;
+    for (let i = 0; i < this.adjacent[start].length; i++) {
+      if (!visited[this.adjacent[start][i]]) {
+        path++;
+        localPathList.push(this.adjacent[start][i]);
+        //recurse with the recently modified pathList
+        this.createAllPaths(this.adjacent[start][i], goal, visited, localPathList, path);
+        //clean up the previous node in local pathlist
+        localPathList.splice(localPathList.indexOf(this.adjacent[start][i]), 1);
+      }
+    }
+    //clean up visited node
+    visited[start] = false;
   }
 }
 
@@ -159,4 +185,5 @@ console.log("cave system", cs);
 console.log("DFS goal is end did we find it", cs.dfs("end"));
 console.log("DFS goal is start did we find it", cs.dfs("start"));
 
-console.log("BFS goal is end", cs.bfs("end"));
+console.log("BFS goal is end", cs.bfs("end", "start"));
+console.log("cave system after bfs", cs.paths);
