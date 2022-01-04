@@ -87,7 +87,12 @@ class CaveSystem {
     }
     buildPaths(goal, start) {
         const isVisited = {};
-        for (let i = 0; i < this.caves.length; i++) {
+        let loopCount = 0;
+        paths: for (let i = 0; i < this.caves.length; i++) {
+            loopCount++;
+            console.log("getting paths.. standby...", loopCount);
+            if (loopCount === 2)
+                break paths;
             this.pathNum++;
             isVisited[this.caves[i]] = false;
             const pathList = [];
@@ -97,7 +102,7 @@ class CaveSystem {
     }
     createAllPaths(start, goal, visited, localPathList, path = 0) {
         if (start === goal) {
-            this.paths = Object.assign(Object.assign({}, this.paths), { [Buffer.from(((Math.random() + 1) * 10).toString(), "utf-8").toString()]: [
+            this.paths = Object.assign(Object.assign({}, this.paths), { [Buffer.from(((Math.random() + 1) * 10000).toString(), "utf-8").toString()]: [
                     ...localPathList,
                 ] });
             return localPathList;

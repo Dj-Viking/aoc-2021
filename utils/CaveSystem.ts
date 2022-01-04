@@ -47,7 +47,7 @@ export class CaveSystem implements ICaveSystem {
     this.adjacent[dest].push(cave);
   }
   /**
-   *
+   * probably dont need this since I solved this another way
    * @param paths this.paths
    */
   public removeDupePaths(): void {
@@ -156,7 +156,13 @@ export class CaveSystem implements ICaveSystem {
    */
   private buildPaths(goal: string, start: string): void {
     const isVisited = {} as Record<string, boolean>;
-    for (let i = 0; i < this.caves.length; i++) {
+    let loopCount = 0;
+    paths: for (let i = 0; i < this.caves.length; i++) {
+      loopCount++;
+      console.log("getting paths.. standby...", loopCount);
+      //break this loop since we will find all paths after one
+      // recursion cycle of this.createAllPaths()
+      if (loopCount === 2) break paths;
       this.pathNum++;
       isVisited[this.caves[i]] = false;
       const pathList = [] as string[];
@@ -184,7 +190,7 @@ export class CaveSystem implements ICaveSystem {
       //creating unique keys need to remove duplicate paths later
       this.paths = {
         ...this.paths,
-        [Buffer.from(((Math.random() + 1) * 10).toString(), "utf-8").toString()]: [
+        [Buffer.from(((Math.random() + 1) * 10000).toString(), "utf-8").toString()]: [
           ...localPathList,
         ],
       };
