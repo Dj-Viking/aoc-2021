@@ -18,7 +18,7 @@ interface ICaveSystem {
   removeDupePaths(): void;
 }
 
-export class CaveSystem implements ICaveSystem {
+export class CaveSystemOne implements ICaveSystem {
   public caves: Array<string>;
   public adjacent: Record<string, Array<string>>;
   public paths: Record<string, string[]>;
@@ -220,7 +220,7 @@ export class CaveSystem implements ICaveSystem {
 let theInput = getInput("../day12/input.txt");
 // console.log("the input", theInput);
 const cavesSet = new Set<string>();
-const cs = new CaveSystem();
+const cs = new CaveSystemOne();
 const routes = theInput.map((str) => {
   return str.split("-");
 }) as Array<[string, string]>;

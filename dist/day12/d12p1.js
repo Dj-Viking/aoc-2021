@@ -16,7 +16,7 @@ const utils_1 = require("../utils");
             try {
                 let theInput = (0, utils_1.getInput)("../day12/sample.txt");
                 const cavesSet = new Set();
-                const cs = new utils_1.CaveSystem();
+                const cs = new utils_1.CaveSystemOne();
                 const routes = theInput.map((str) => {
                     return str.split("-");
                 });

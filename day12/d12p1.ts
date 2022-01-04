@@ -1,5 +1,5 @@
 // how many paths through the cave visit small caves at most once
-import { getInput, CaveSystem } from "../utils";
+import { getInput, CaveSystemOne } from "../utils";
 (async function (): Promise<void> {
   return new Promise((resolve, reject) => {
     try {
@@ -9,7 +9,7 @@ import { getInput, CaveSystem } from "../utils";
       // let theInput = getInput("../day12/sample3.txt");
       // console.log("the input", theInput);
       const cavesSet = new Set<string>();
-      const cs = new CaveSystem();
+      const cs = new CaveSystemOne();
 
       //start the parsing of the routes from the input
       const routes = theInput.map((str) => {
