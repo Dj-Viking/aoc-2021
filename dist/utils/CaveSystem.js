@@ -7,7 +7,6 @@ class CaveSystem {
         this.caves = [];
         this.paths = {};
         this.adjacent = {};
-        this.edges = 0;
     }
     addCave(cave) {
         this.caves.push(cave);
@@ -16,7 +15,6 @@ class CaveSystem {
     addRoute(cave, dest) {
         this.adjacent[cave].push(dest);
         this.adjacent[dest].push(cave);
-        this.edges++;
     }
     isSmall(cave) {
         if (!/start/g.test(cave) || !/end/g.test(cave)) {
@@ -52,7 +50,6 @@ class CaveSystem {
             const cave = queue.shift();
             if (cave === goal) {
                 this.buildPaths(goal, start);
-                console.log("this.paths", this.paths);
                 return;
             }
             for (let dest = 0; dest < adj[cave].length; dest++) {

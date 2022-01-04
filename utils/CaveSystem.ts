@@ -9,7 +9,6 @@ interface ICaveSystem {
   caves: Array<string>;
   adjacent: Record<string, Array<string>>;
   paths: Record<number, string[]>;
-  edges: number;
   addCave(cave: string): void;
   addRoute(cave: string, dest: string): void;
   dfs(goal: string, vert: string, visited: Record<string, boolean>): boolean;
@@ -21,16 +20,14 @@ export class CaveSystem implements ICaveSystem {
   public caves: Array<string>;
   public adjacent: Record<string, Array<string>>;
   public paths: Record<number, string[]>;
-  public edges: number;
   constructor() {
     this.caves = [];
     this.paths = {};
     this.adjacent = {};
-    this.edges = 0;
   }
   /**
    * add a vertex to the graph cave system
-   * @param vert vertex to add to the cave system
+   * @param cave vertex to add to the cave system
    */
   public addCave(cave: string): void {
     this.caves.push(cave);
@@ -44,7 +41,6 @@ export class CaveSystem implements ICaveSystem {
   public addRoute(cave: string, dest: string): void {
     this.adjacent[cave].push(dest);
     this.adjacent[dest].push(cave);
-    this.edges++;
   }
   /**
    * "start" and "end" can be considered small because we only are leaving start after
@@ -107,7 +103,6 @@ export class CaveSystem implements ICaveSystem {
 
       if (cave === goal) {
         this.buildPaths(goal, start);
-        console.log("this.paths", this.paths);
         return;
       }
 
@@ -122,6 +117,13 @@ export class CaveSystem implements ICaveSystem {
     }
     return false;
   }
+  /**
+   * starts the recursion of creating all the paths
+   *
+   * taken to reach the end
+   * @param goal end cave to reach "end"
+   * @param start start cave "start"
+   */
   private buildPaths(goal: string, start: string): void {
     const isVisited = {} as Record<string, boolean>;
     for (let i = 0; i < this.caves.length; i++) {
@@ -131,6 +133,15 @@ export class CaveSystem implements ICaveSystem {
       this.createAllPaths(start, goal, isVisited, pathList);
     }
   }
+  /**
+   *
+   * @param start starts as "start" and changes to a new cave during the recursion
+   * @param goal "end"
+   * @param visited visited record of booleans passed into the function initially from this.buildPaths gets cleaned up when exhausting the adjacency recursion
+   * @param localPathList list of caves taken to reach from start to end changes as each possible path gets created
+   * @param path number initially zero used to create the this.paths value to generate a record of all possible paths taken through the cave system from "start" to "end"
+   * @returns nothing even though the if (start === goal) condition returns localPathList, this isn't the case for some reason, I still dont quite understand it lol
+   */
   private createAllPaths(
     start: string,
     goal: string,
@@ -161,29 +172,22 @@ export class CaveSystem implements ICaveSystem {
   }
 }
 
+// testing the class with day 12 input
 let theInput = getInput("../day12/input.txt");
 console.log("the input", theInput);
 const cavesSet = new Set<string>();
 const cs = new CaveSystem();
-// const paths = new Map<number, string[]>();
-// let path = 1;
 const routes = theInput.map((str) => {
   return str.split("-");
 }) as Array<[string, string]>;
-
 for (let i = 0; i < routes.flat<string[][], 1>().length; i++)
   cavesSet.add(routes.flat<string[][], 1>()[i]);
-
 const caves = Array.from(cavesSet) as string[];
-
 for (let c = 0; c < caves.length; c++) cs.addCave(caves[c]);
-
 for (let r = 0; r < routes.length; r++) cs.addRoute(...(routes[r] as [string, string]));
 
 console.log("cave system", cs);
-
 console.log("DFS goal is end did we find it", cs.dfs("end"));
 console.log("DFS goal is start did we find it", cs.dfs("start"));
-
 console.log("BFS goal is end", cs.bfs("end", "start"));
 console.log("cave system after bfs", cs.paths);

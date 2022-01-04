@@ -24,10 +24,12 @@ const utils_1 = require("../utils");
                 for (let i = 0; i < routes.flat().length; i++)
                     cavesSet.add(routes.flat()[i]);
                 const caves = Array.from(cavesSet);
-                for (let c = 0; c < caves.length; c++)
+                for (let c = 0; c < caves.length; c++) {
                     cs.addCave(caves[c]);
-                for (let r = 0; r < routes.length; r++)
+                }
+                for (let r = 0; r < routes.length; r++) {
                     cs.addRoute(...routes[r]);
+                }
                 cs.bfs("end", "start");
                 console.log("cave system after bfs", cs.paths);
                 resolve();
