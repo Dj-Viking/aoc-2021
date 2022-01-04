@@ -3,8 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.CaveSystem = void 0;
 const getInput_1 = require("./getInput");
 class CaveSystem {
-    constructor(pathNum = 0) {
-        this.pathNum = pathNum;
+    constructor() {
         this.caves = [];
         this.finalPaths = [];
         this.paths = {};
@@ -93,14 +92,13 @@ class CaveSystem {
             console.log("getting paths.. standby...", loopCount);
             if (loopCount === 2)
                 break paths;
-            this.pathNum++;
             isVisited[this.caves[i]] = false;
             const pathList = [];
             pathList.push(start);
             this.createAllPaths(start, goal, isVisited, pathList);
         }
     }
-    createAllPaths(start, goal, visited, localPathList, path = 0) {
+    createAllPaths(start, goal, visited, localPathList) {
         if (start === goal) {
             this.paths = Object.assign(Object.assign({}, this.paths), { [Buffer.from(((Math.random() + 1) * 10000).toString(), "utf-8").toString()]: [
                     ...localPathList,
@@ -111,9 +109,8 @@ class CaveSystem {
             visited[start] = true;
         for (let i = 0; i < this.adjacent[start].length; i++) {
             if (!visited[this.adjacent[start][i]]) {
-                path = this.pathNum;
                 localPathList.push(this.adjacent[start][i]);
-                this.createAllPaths(this.adjacent[start][i], goal, visited, localPathList, path);
+                this.createAllPaths(this.adjacent[start][i], goal, visited, localPathList);
                 localPathList.splice(localPathList.indexOf(this.adjacent[start][i]), 1);
             }
         }

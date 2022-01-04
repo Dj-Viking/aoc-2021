@@ -23,7 +23,7 @@ export class CaveSystem implements ICaveSystem {
   public adjacent: Record<string, Array<string>>;
   public paths: Record<string, string[]>;
   public finalPaths: Array<Array<string>>;
-  constructor(private pathNum: number = 0) {
+  constructor() {
     this.caves = [];
     this.finalPaths = [];
     this.paths = {};
@@ -163,7 +163,6 @@ export class CaveSystem implements ICaveSystem {
       //break this loop since we will find all paths after one
       // recursion cycle of this.createAllPaths()
       if (loopCount === 2) break paths;
-      this.pathNum++;
       isVisited[this.caves[i]] = false;
       const pathList = [] as string[];
       pathList.push(start);
@@ -183,11 +182,10 @@ export class CaveSystem implements ICaveSystem {
     start: string,
     goal: string,
     visited: Record<string, boolean>,
-    localPathList: Array<string>,
-    path = 0
+    localPathList: Array<string>
   ): string[] | void {
     if (start === goal) {
-      //creating unique keys need to remove duplicate paths later
+      //creating unique keys, having trouble just incrementing a counter for a key name
       this.paths = {
         ...this.paths,
         [Buffer.from(((Math.random() + 1) * 10000).toString(), "utf-8").toString()]: [
@@ -202,13 +200,13 @@ export class CaveSystem implements ICaveSystem {
     }
     //set visited true only if it was small
     // since we can visit big caves more than once
+    // part 2 need to allow visiting small caves twice
     if (this.isSmall(start)) visited[start] = true;
     for (let i = 0; i < this.adjacent[start].length; i++) {
       if (!visited[this.adjacent[start][i]]) {
-        path = this.pathNum;
         localPathList.push(this.adjacent[start][i]);
         //recurse with the recently modified pathList
-        this.createAllPaths(this.adjacent[start][i], goal, visited, localPathList, path);
+        this.createAllPaths(this.adjacent[start][i], goal, visited, localPathList);
         //clean up the previous node in local pathlist
         localPathList.splice(localPathList.indexOf(this.adjacent[start][i]), 1);
       }
