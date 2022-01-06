@@ -73,10 +73,7 @@ export class CaveSystemTwo implements ICaveSystem {
     }
     for (const cave of adj[start]) {
       if (this.isSmall(cave) && cave in currentPath) {
-        if (
-          ["start", "end"].includes(cave) ||
-          currentPath["small-visited-twice"]
-        ) {
+        if (["start", "end"].includes(cave) || currentPath["small-visited-twice"]) {
           continue;
         }
       }
