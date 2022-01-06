@@ -1,0 +1,31 @@
+graph {
+  hq -- xt;
+  OU -- xt;
+  br -- HP;
+  WD -- xt;
+  end -- br;
+  start -- OU;
+  hq -- br;
+  MH -- hq;
+  MH -- start;
+  xt -- br;
+  end -- WD;
+  hq -- start;
+  MH -- br;
+  qw -- OU;
+  hm -- WD;
+  br -- WD;
+  OU -- hq;
+  xt -- MH;
+  qw -- MH;
+  WD -- qw;
+  end -- qw;
+  qw -- xt;
+}
+
+# to generate the png of the graph with graphviz
+
+# run this command below while the 
+# terminal's current working directory has this .dot file
+# this will output to the same working directory the .dot file is in
+# dot input.dot -Tpng > graph.png
