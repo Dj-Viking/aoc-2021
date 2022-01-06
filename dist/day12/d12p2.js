@@ -14,9 +14,9 @@ const utils_1 = require("../utils");
     return __awaiter(this, void 0, void 0, function* () {
         return new Promise((resolve, reject) => {
             try {
-                let theInput = (0, utils_1.getInput)("../day12/sample.txt");
+                let theInput = (0, utils_1.getInput)("../day12/input.txt");
                 const cavesSet = new Set();
-                const cs = new utils_1.CaveSystemOne();
+                const cs = new utils_1.CaveSystemTwo();
                 const routes = theInput.map((str) => {
                     return str.split("-");
                 });
@@ -29,8 +29,8 @@ const utils_1 = require("../utils");
                 for (let r = 0; r < routes.length; r++) {
                     cs.addRoute(...routes[r]);
                 }
-                cs.bfs("end", "start");
-                console.log("answer", Object.keys(cs.paths).length);
+                cs.findPaths(cs.adjacent, "start", "end");
+                console.log("answer", cs.paths.length);
                 resolve();
             }
             catch (error) {

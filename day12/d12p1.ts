@@ -3,8 +3,8 @@ import { getInput, CaveSystemOne } from "../utils";
 (async function (): Promise<void> {
   return new Promise((resolve, reject) => {
     try {
-      // let theInput = getInput("../day12/input.txt");
-      let theInput = getInput("../day12/sample.txt");
+      let theInput = getInput("../day12/input.txt");
+      // let theInput = getInput("../day12/sample.txt");
       // let theInput = getInput("../day12/sample2.txt");
       // let theInput = getInput("../day12/sample3.txt");
       // console.log("the input", theInput);
