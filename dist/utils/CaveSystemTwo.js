@@ -30,9 +30,6 @@ class CaveSystemTwo {
             paths.push(currentPath);
             return;
         }
-        if (!adj[start]) {
-            return;
-        }
         for (const cave of adj[start]) {
             if (this.isSmall(cave) && cave in currentPath) {
                 if (["start", "end"].includes(cave) || currentPath["small-visited-twice"]) {
