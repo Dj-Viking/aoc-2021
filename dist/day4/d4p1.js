@@ -40,8 +40,12 @@ const utils_1 = require("../utils");
                         if (Object.keys(boardMap).length > 1 && hitBoundary > 2)
                             boardNum = hitBoundary;
                         boardMap = Object.assign(Object.assign({}, boardMap), { [`board-${boardNum}`]: {
-                                rows: !!boardMap[`board-${boardNum}`] && !!boardMap[`board-${boardNum}`].rows
-                                    ? [...boardMap[`board-${boardNum}`].rows, splitInput[i]]
+                                rows: !!boardMap[`board-${boardNum}`] &&
+                                    !!boardMap[`board-${boardNum}`].rows
+                                    ? [
+                                        ...boardMap[`board-${boardNum}`].rows,
+                                        splitInput[i],
+                                    ]
                                     : [splitInput[i]],
                             } });
                     }
@@ -52,7 +56,9 @@ const utils_1 = require("../utils");
                     boardMap = Object.assign(Object.assign({}, boardMap), { [`board-${b + 1}`]: {
                             rows: (_b = boardMap[`board-${b + 1}`].rows
                                 .join(" ")
-                                .match(/\d{1,2}/g)) === null || _b === void 0 ? void 0 : _b.map((str) => parseInt(str)).map((_, i, arr) => i % 5 === 1 ? [arr[i - 1], arr[i], arr[i + 1], arr[i + 2], arr[i + 3]] : void 0).filter((item) => item !== void 0),
+                                .match(/\d{1,2}/g)) === null || _b === void 0 ? void 0 : _b.map((str) => parseInt(str)).map((_, i, arr) => i % 5 === 1
+                                ? [arr[i - 1], arr[i], arr[i + 1], arr[i + 2], arr[i + 3]]
+                                : void 0).filter((item) => item !== void 0),
                         } });
                 }
                 console.log("new board map", boardMap);
