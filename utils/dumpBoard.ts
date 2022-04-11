@@ -31,7 +31,9 @@ export function dumpBooleanGraph(board: any[][]): void {
   let x, y;
   let str = "";
   for (y = 0; y < board.length; y++) {
+    //row
     for (x = 0; x < board.length; x++) {
+      //column
       str += board[y][x] === false ? "." + " " : "*" + " ";
     }
     console.log(str);
