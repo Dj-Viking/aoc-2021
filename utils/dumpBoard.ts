@@ -6,11 +6,34 @@ export function dumpBoard(board: any[][]): void {
   console.log("dumping board");
   let x, y;
   let str = "";
+
+  //display x axis on top of the board
+  console.log(
+    "   ",
+    [...new Array(board.length).fill(null).map((_slot: void, index: number) => index)]
+      .toString()
+      .split(/,/g)
+      .map((num) => {
+        let int = Number(num);
+        if (int >= 10) {
+          return `${int}`;
+        } else {
+          return `${int} `;
+        }
+      })
+      .join("")
+  );
+
   for (y = 0; y < board.length; y++) {
     for (x = 0; x < board.length; x++) {
       str += board[y][x] === 0 ? "." + " " : board[y][x].toString() + " ";
     }
-    console.log(str);
+    // display y axis on left side of the board
+    if (y >= 10) {
+      console.log("y" + y + " " + str);
+    } else {
+      console.log("y " + y + " " + str);
+    }
     str = "";
   }
 }

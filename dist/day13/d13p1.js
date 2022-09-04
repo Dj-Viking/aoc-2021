@@ -28,19 +28,27 @@ const utils_1 = require("../utils");
                     .filter((item) => !!item);
                 console.log("dots", dots);
                 console.log("folds", folds);
+                const foldY = Number(folds[0].split("=")[1]);
+                const foldX = Number(folds[1].split("=")[1]);
                 const init_graph = Array.from(dots, (coord) => coord.split(","));
                 const flat_graph = init_graph.flat(1).map((str) => Number(str));
                 const MAX_GRAPH_SIZE = Math.max(...flat_graph);
                 const debug_graph = [...new Array(MAX_GRAPH_SIZE + 1)].map(() => {
                     return new Array(MAX_GRAPH_SIZE + 1).fill(".");
                 });
-                (() => {
-                    for (let r = 0; r < init_graph.length; r++) {
-                        const [x, y] = init_graph[r];
-                        debug_graph[Number(y)][Number(x)] = "#";
-                    }
-                    (0, utils_1.dumpBoard)(debug_graph);
-                })();
+                for (let r = 0; r < init_graph.length; r++) {
+                    const [x, y] = init_graph[r];
+                    debug_graph[Number(y)][Number(x)] = "#";
+                }
+                (0, utils_1.dumpBoard)(debug_graph);
+                function foldOnY(foldNum) {
+                    console.log("what is the fold", foldNum);
+                }
+                foldOnY(foldY);
+                function foldOnX(foldNum) {
+                    console.log("what is the fold", foldNum);
+                }
+                foldOnX(foldX);
                 resolve();
             }
             catch (error) {

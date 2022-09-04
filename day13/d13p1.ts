@@ -21,6 +21,9 @@ import { dumpBoard, getInput } from "../utils";
       console.log("dots", dots);
       console.log("folds", folds);
 
+      const foldY = Number(folds[0].split("=")[1]);
+      const foldX = Number(folds[1].split("=")[1]);
+
       const init_graph = Array.from(dots, (coord) => coord.split(","));
 
       const flat_graph = init_graph.flat<string[][], 1>(1).map((str) => Number(str));
@@ -32,13 +35,24 @@ import { dumpBoard, getInput } from "../utils";
       }) as unknown[][];
 
       //dump points on graph
-      (() => {
-        for (let r = 0; r < init_graph.length; r++) {
-          const [x, y] = init_graph[r];
-          debug_graph[Number(y)][Number(x)] = "#";
-        }
-        dumpBoard(debug_graph);
-      })();
+      for (let r = 0; r < init_graph.length; r++) {
+        const [x, y] = init_graph[r];
+        debug_graph[Number(y)][Number(x)] = "#";
+      }
+      dumpBoard(debug_graph);
+
+      // fold along y first
+      function foldOnY(foldNum: number): void {
+        console.log("what is the fold", foldNum);
+      }
+
+      foldOnY(foldY);
+
+      // fold along x next
+      function foldOnX(foldNum: number): void {
+        console.log("what is the fold", foldNum);
+      }
+      foldOnX(foldX);
 
       resolve();
     } catch (error) {
