@@ -14,7 +14,8 @@ sh build.sh
 # run
 ```sh
 # to solve a particular day and part, place the numbers as arguments to the shell script
-# solve day4 part1
+# usage: sh solve.sh 1 sample
+#        sh solve.sh 1 input
 sh solve.sh
 ```
 
