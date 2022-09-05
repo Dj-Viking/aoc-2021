@@ -1,10 +1,12 @@
+set -e
+
 if [ -z "$1" ]
   then
     echo "Please provide a solution directory day number as first argument"
     echo ""
     echo "for example:  (npm run solve (1) 2)"
     echo ""
-    exit
+    exit 1
 fi
 
 if [ -z "$2" ]
@@ -13,7 +15,7 @@ if [ -z "$2" ]
     echo ""
     echo "for example: (npm run solve 4 (1)) or (npm run solve 4 (2))"
     echo ""
-    exit
+    exit 1
 fi
 
 DAYDIR="day$1"

@@ -1,8 +1,10 @@
+set -e
+
 if [ -z "$1" ]
   then
     echo "✨ Please provide a number as the first argument of this script ✨"
     echo "e.g. (npm run new:day 5)"
-    exit
+    exit 1
 fi
 
 DAY="$1"

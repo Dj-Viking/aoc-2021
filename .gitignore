@@ -1,2 +1,7 @@
+# TS ignores
 node_modules
 .env
+
+#CS ignores
+obj/
+bin/
