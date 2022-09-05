@@ -9,7 +9,7 @@ cd aoc-2021/CSharp; \
 ```sh
 # build C# dll files of a particular day
 # usage: sh build.sh <day number>
-sh build.sh
+sh build.sh 1
 ```
 
 # run
