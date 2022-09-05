@@ -28,8 +28,6 @@ const utils_1 = require("../utils");
                     .filter((item) => !!item);
                 console.log("dots", dots);
                 console.log("folds", folds);
-                const foldY = Number(folds[0].split("=")[1]);
-                const foldX = Number(folds[1].split("=")[1]);
                 const init_graph = Array.from(dots, (coord) => coord.split(","));
                 const flat_graph = init_graph.flat(1).map((str) => Number(str));
                 const MAX_GRAPH_SIZE = Math.max(...flat_graph);
@@ -40,17 +38,45 @@ const utils_1 = require("../utils");
                     const [x, y] = init_graph[r];
                     debug_graph[Number(y)][Number(x)] = "#";
                 }
-                function foldOnY(foldNum) {
-                    for (let r = 0; r < init_graph.length; r++) {
-                        const [xstr, ystr] = init_graph[r];
+                function foldOnY(foldY, inputGraph, debugGraph) {
+                    for (let r = 0; r < inputGraph.length; r++) {
+                        const [xstr, ystr] = inputGraph[r];
                         const x = Number(xstr);
                         const y = Number(ystr);
-                        if (y > foldNum) {
-                            debug_graph[y][x] = ".";
-                            const newYCoord = foldNum * 2 - y;
-                            init_graph[r] = [xstr, newYCoord.toString()];
-                            debug_graph[newYCoord][x] = "#";
+                        if (y > foldY) {
+                            debugGraph[y][x] = ".";
+                            const newYCoord = foldY * 2 - y;
+                            inputGraph[r] = [xstr, newYCoord.toString()];
+                            debugGraph[newYCoord][x] = "#";
                         }
+                    }
+                    let new_debug = [...debugGraph];
+                    return new_debug;
+                }
+                function foldOnX(foldX, inputGraph, debugGraph) {
+                    for (let r = 0; r < inputGraph.length; r++) {
+                        const [xstr, ystr] = inputGraph[r];
+                        const x = Number(xstr);
+                        const y = Number(ystr);
+                        if (x > foldX) {
+                            debugGraph[y][x] = ".";
+                            const newXCoord = foldX * 2 - x;
+                            inputGraph[r] = [newXCoord.toString(), ystr];
+                            debugGraph[y][newXCoord] = "#";
+                        }
+                    }
+                    const new_debug = [...debugGraph];
+                    return new_debug;
+                }
+                let answerArray = [];
+                for (let i = 0; i < 1; i++) {
+                    if (/y/g.test(folds[i])) {
+                        const yFold = Number(folds[i].split("=")[1]);
+                        answerArray = foldOnY(yFold, init_graph, debug_graph);
+                    }
+                    if (/x/g.test(folds[i])) {
+                        const xFold = Number(folds[i].split("=")[1]);
+                        answerArray = foldOnX(xFold, init_graph, debug_graph);
                     }
                 }
                 function dotsVisibleAfterFirstFold(graph) {
@@ -63,29 +89,8 @@ const utils_1 = require("../utils");
                     }
                     return result;
                 }
-                foldOnY(foldY);
-                const answer = dotsVisibleAfterFirstFold(debug_graph);
+                const answer = dotsVisibleAfterFirstFold(answerArray);
                 console.log("answer", answer);
-                console.log("\nafter y fold");
-                function foldOnX(foldNum) {
-                    for (let r = 0; r < init_graph.length; r++) {
-                        const [xstr, ystr] = init_graph[r];
-                        const x = Number(xstr);
-                        const y = Number(ystr);
-                        if (x > foldNum && y < foldY) {
-                            debug_graph[y][x] = ".";
-                            const newXCoord = foldNum * 2 - x;
-                            debug_graph[y][newXCoord] = "#";
-                        }
-                    }
-                }
-                foldOnX(foldX);
-                console.log("\n after x fold");
-                const new_debug = debug_graph.slice(0, 7);
-                console.log("\n sliced debug");
-                for (let r = 0; r < new_debug.length; r++) {
-                    new_debug[r] = new_debug[r].slice(0, 5);
-                }
                 resolve();
             }
             catch (error) {

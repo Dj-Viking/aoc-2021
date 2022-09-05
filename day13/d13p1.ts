@@ -21,12 +21,8 @@ import { /*dumpBoard,*/ getInput } from "../utils";
       console.log("dots", dots);
       console.log("folds", folds);
 
-      const foldY = Number(folds[0].split("=")[1]);
-      const foldX = Number(folds[1].split("=")[1]);
-
+      // initialize graphs for the work
       const init_graph = Array.from(dots, (coord) => coord.split(","));
-
-      // console.log("init graph", init_graph);
 
       const flat_graph = init_graph.flat<string[][], 1>(1).map((str) => Number(str));
 
@@ -34,34 +30,74 @@ import { /*dumpBoard,*/ getInput } from "../utils";
 
       const debug_graph = [...new Array(MAX_GRAPH_SIZE + 1)].map(() => {
         return new Array(MAX_GRAPH_SIZE + 1).fill(".");
-      }) as unknown[][];
+      }) as string[][];
 
+      // populate debug with current plotted coordinates from input
       for (let r = 0; r < init_graph.length; r++) {
         const [x, y] = init_graph[r];
         debug_graph[Number(y)][Number(x)] = "#";
       }
-      // dumpBoard(debug_graph);
 
-      // fold along y first
-      function foldOnY(foldNum: number): void {
-        for (let r = 0; r < init_graph.length; r++) {
-          const [xstr, ystr] = init_graph[r];
+      function foldOnY(foldY: number, inputGraph: string[][], debugGraph: string[][]): string[][] {
+        for (let r = 0; r < inputGraph.length; r++) {
+          const [xstr, ystr] = inputGraph[r];
           const x = Number(xstr);
           const y = Number(ystr);
 
           // fold bottom half UP
-          if (y > foldNum) {
+          if (y > foldY) {
             // swap debug graph points
-            debug_graph[y][x] = ".";
-            const newYCoord = foldNum * 2 - y;
+            debugGraph[y][x] = ".";
+            const newYCoord = foldY * 2 - y;
             // need to change our coordinate reference to use the new coordinates after the fold over X
-            init_graph[r] = [xstr, newYCoord.toString()];
-            debug_graph[newYCoord][x] = "#";
+            inputGraph[r] = [xstr, newYCoord.toString()];
+            debugGraph[newYCoord][x] = "#";
           }
+        }
+        let new_debug = [...debugGraph];
+        // dumpBoard(new_debug);
+        // new_debug = [...new_debug].slice(0, foldY);
+        return new_debug;
+      }
+
+      function foldOnX(foldX: number, inputGraph: string[][], debugGraph: string[][]): string[][] {
+        //
+        for (let r = 0; r < inputGraph.length; r++) {
+          const [xstr, ystr] = inputGraph[r];
+          const x = Number(xstr);
+          const y = Number(ystr);
+
+          //fold right side over to the left
+          if (x > foldX) {
+            debugGraph[y][x] = ".";
+            const newXCoord = foldX * 2 - x;
+            inputGraph[r] = [newXCoord.toString(), ystr];
+            debugGraph[y][newXCoord] = "#";
+          }
+        }
+        const new_debug = [...debugGraph];
+        // slice the x coordinates past x === foldNum
+        // for (let r = 0; r < new_debug.length; r++) {
+        //   new_debug[r] = debugGraph[r].slice(0, foldX);
+        // }
+        return new_debug;
+      }
+
+      let answerArray: string[][] = [];
+
+      // only one fold for part 1
+      for (let i = 0; i < 1; i++) {
+        if (/y/g.test(folds[i])) {
+          const yFold = Number(folds[i].split("=")[1]);
+          answerArray = foldOnY(yFold, init_graph, debug_graph);
+        }
+        if (/x/g.test(folds[i])) {
+          const xFold = Number(folds[i].split("=")[1]);
+          answerArray = foldOnX(xFold, init_graph, debug_graph);
         }
       }
 
-      function dotsVisibleAfterFirstFold(graph: any[][]): number {
+      function dotsVisibleAfterFirstFold(graph: string[][]): number {
         let result = 0;
 
         for (let r = 0; r < graph.length; r++) {
@@ -73,44 +109,10 @@ import { /*dumpBoard,*/ getInput } from "../utils";
         return result;
       }
 
-      foldOnY(foldY);
+      // console.log("answer array", answerArray);
 
-      const answer = dotsVisibleAfterFirstFold(debug_graph);
+      const answer = dotsVisibleAfterFirstFold(answerArray);
       console.log("answer", answer);
-
-      console.log("\nafter y fold");
-      // dumpBoard(debug_graph);
-
-      // fold along x next
-      function foldOnX(foldNum: number): void {
-        //
-        for (let r = 0; r < init_graph.length; r++) {
-          const [xstr, ystr] = init_graph[r];
-          const x = Number(xstr);
-          const y = Number(ystr);
-
-          //fold right side over to the left
-          if (x > foldNum && y < foldY) {
-            debug_graph[y][x] = ".";
-            const newXCoord = foldNum * 2 - x;
-            debug_graph[y][newXCoord] = "#";
-          }
-        }
-      }
-
-      foldOnX(foldX);
-
-      console.log("\n after x fold");
-      // dumpBoard(debug_graph);
-
-      const new_debug = debug_graph.slice(0, 7);
-      console.log("\n sliced debug");
-      // dumpBoard(new_debug);
-      // slice the x coordinates past x === 5
-      for (let r = 0; r < new_debug.length; r++) {
-        new_debug[r] = new_debug[r].slice(0, 5);
-      }
-      // console.log("new debug", new_debug);
 
       resolve();
     } catch (error) {
