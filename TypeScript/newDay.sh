@@ -12,17 +12,20 @@ FOLDER="day$DAY"
 FILE="d$DAY"
 PART1="p1"
 PART2="p2"
-EXT=".ts"
 
 echo "creating folder for day $DAY..."
-mkdir "$FOLDER";
+mkdir "$FOLDER"
 echo ""
 echo "creating solution files..."
-touch "$FOLDER/$FILE$PART1$EXT"
-touch "$FOLDER/$FILE$PART2$EXT"
+
+cd "$FOLDER"
+sh ../boilerPlate.sh "$FILE$PART1.ts"
+sh ../boilerPlate.sh "$FILE$PART2.ts"
+
 echo ""
 echo "creating input text files..."
-touch "$FOLDER/sample.txt"
-touch "$FOLDER/input.txt"
+touch "sample.txt"
+touch "input.txt"
 echo ""
+
 echo "done"
