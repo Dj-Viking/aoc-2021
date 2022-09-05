@@ -1,4 +1,3 @@
-using System.IO;
 namespace Day1
 {
     class MainClass
