@@ -37,7 +37,7 @@ export function dumpBoard(board: any[][]): void {
     str = "";
   }
 }
-export function dumpFlashGraph(graph: number[][]): void {
+export function dumpFlashGraph(graph: any[][]): void {
   console.log("dumping graph\n");
   let str = "";
   for (let r = 0; r < graph.length; r++) {
