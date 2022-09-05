@@ -19,7 +19,7 @@ if [ -z "$2" ]
     exit 1
 fi
 
-DAYDIR="day$1"
+DAYDIR="Day$1"
 
 FILE="$2.txt"
 
