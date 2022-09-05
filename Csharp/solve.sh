@@ -13,7 +13,8 @@ if [ -z "$2" ]
   then
     echo "Please provide an input file name to solve"
     echo ""
-    echo "for example:  sh solve.sh 1 (input)"
+    echo "for example:  sh solve.sh 1 input"
+    echo "for example:  sh solve.sh 1 sample"
     echo ""
     exit 1
 fi
