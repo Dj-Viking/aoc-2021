@@ -60,19 +60,23 @@ export class CaveSystemTwo implements ICaveSystem {
     paths: Record<string, any>[] = [],
     currentPath: Record<string, any> = {}
   ): void {
+    //tally how many times we visited a cave in the cave system
     currentPath[start] = currentPath[start] + 1 || 1;
+    //check if the current cave in this recursion is small
+    // and if we visited it twice already, shove a
+    // property that indicates a cave in the path is small and has been visited twice
     if (this.isSmall(start) && currentPath[start] === 2) {
       currentPath["small-visited-twice"] = true;
     }
+    // if we reached the end, push the path into our pathlist
     if (start === end) {
       paths.push(currentPath);
       return;
     }
+    //check adjacencies of current cave in the path we are visiting
     for (const cave of adj[start]) {
       if (this.isSmall(cave) && cave in currentPath) {
-        if (["start", "end"].includes(cave) || currentPath["small-visited-twice"]) {
-          continue;
-        }
+        if (["start", "end"].includes(cave) || currentPath["small-visited-twice"]) continue;
       }
       this.findPaths(adj, cave, end, paths, { ...currentPath });
     }
