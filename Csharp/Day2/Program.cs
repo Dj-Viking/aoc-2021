@@ -20,15 +20,11 @@ namespace Day2
         }
         private static string GetWord(int index, string[] array)
         {
-            string str = "";
-            str = array[index].Split(" ")[0];
-            return str;
+            return array[index].Split(" ")[0];
         }
         private static int GetNumber(int index, string[] array)
         {
-            int num = 0;
-            num = int.Parse(array[index].Split(" ")[1]);
-            return num;
+            return int.Parse(array[index].Split(" ")[1]);
         }
         public void GetInput(string fileName)
         {
