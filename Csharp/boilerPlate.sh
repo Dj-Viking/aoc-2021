@@ -11,9 +11,18 @@ namespace $1
         }   
         public void Run(string[] args)
         {
+            this.Init();
             this.GetInput(args[0]);
             this.PartOne();
+
+            this.Init();
+            this.GetInput(args[0]);
             this.PartTwo();
+        }
+        public void Init()
+        {
+            this.input = "";
+            this._lines = new string[] { "" };
         }
         public void GetInput(string fileName)
         {
