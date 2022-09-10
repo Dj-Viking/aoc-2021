@@ -6,6 +6,13 @@ cd aoc-2021/CSharp; \
 ```
 
 # development
+To start a new day workspace run:
+```sh
+# usage: sh newDay.sh 2
+sh newDay.sh <day number>
+```
+
+
 ```sh
 # build C# dll files of a particular day
 # usage: sh build.sh <day number>
