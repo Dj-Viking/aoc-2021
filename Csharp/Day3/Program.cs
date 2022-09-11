@@ -32,7 +32,7 @@ namespace Day3
             this.input = File.ReadAllText(fileName);
             this._lines = input.Split("\n");
         }
-        public int CalculateProduct(List<string> mostCommon, List<string> leastCommon)
+        private int CalculateProduct(List<string> mostCommon, List<string> leastCommon)
         {
             int mostBinToInt = Convert.ToInt32(string.Join("", mostCommon), 2);
             int leastBinToInt = Convert.ToInt32(string.Join("", leastCommon), 2);
@@ -48,7 +48,7 @@ namespace Day3
 
             for (int c = 0; c < ROW_SIZE; c++)
             {
-                tempDigits = new List<string>();
+                tempDigits.Clear();
                 oneCount = 0;
                 zeroCount = 0;
 
@@ -79,9 +79,78 @@ namespace Day3
 
             Console.WriteLine("Part 1: {0}", this.CalculateProduct(this.mostCommonBits, this.leastCommonBits));
         }
+        public string CalcOxyRating(List<string> list, int col = 0)
+        {
+            int count = 0;
+            List<string> tempList = new List<string>();
+            int countFlag = 1;
+
+            for (int i = 0; i < list.Count(); i++)
+            {
+                if (int.Parse(list[i][col].ToString()) == 1)
+                {
+                    count++;
+                }
+            }
+
+            if (count < Math.Floor((double)list.Count()) / 2) countFlag = 0;
+
+            for (int j = 0; j < list.Count(); j++)
+            {
+                if (int.Parse(list[j][col].ToString()) == countFlag)
+                {
+                    tempList.Add(list[j]);
+                }
+            }
+
+            if (tempList.Count() > 1 && col < tempList[0].Length)
+                return this.CalcOxyRating(tempList, col + 1);
+            else
+                return tempList[0];
+
+        }
+        public string CalcCo2Rating(List<string> list, int col = 0)
+        {
+            int zeroCount = 0;
+            int oneCount = 0;
+            List<string> tempList = new List<string>();
+
+            for (int i = 0; i < list.Count(); i++)
+            {
+                if (list[i][col].ToString() == "1") oneCount++;
+                else zeroCount++;
+            }
+
+
+            for (int j = 0; j < list.Count(); j++)
+            {
+                if (zeroCount < oneCount && list[j][col].ToString() == "0")
+                    tempList.Add(list[j]);
+                else if (oneCount < zeroCount && list[j][col].ToString() == "1")
+                    tempList.Add(list[j]);
+                else if (oneCount == zeroCount && list[j][col].ToString() == "0")
+                    tempList.Add(list[j]);
+            }
+
+            if (tempList.Count() > 1 && col < tempList[0].Length)
+                return this.CalcCo2Rating(tempList, col + 1);
+            else
+                return tempList[0];
+        }
         public void PartTwo()
         {
-            Console.WriteLine("Part 2: ");
+            string[] linesCopy1 = new string[this._lines.Length];
+            Array.Copy(this._lines, linesCopy1, this._lines.Length);
+
+            string oxyRating = this.CalcOxyRating(linesCopy1.ToList());
+
+            string[] linesCopy2 = new string[this._lines.Length];
+            Array.Copy(this._lines, linesCopy2, this._lines.Length);
+
+            string co2Rating = this.CalcCo2Rating(linesCopy2.ToList());
+
+            int answer = Convert.ToInt32(oxyRating, 2) * Convert.ToInt32(co2Rating, 2);
+            Console.WriteLine("Part 2: {0}", answer);
         }
     }
 }
