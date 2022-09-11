@@ -121,7 +121,6 @@ namespace Day3
                 else zeroCount++;
             }
 
-
             for (int j = 0; j < list.Count(); j++)
             {
                 if (zeroCount < oneCount && list[j][col].ToString() == "0")
