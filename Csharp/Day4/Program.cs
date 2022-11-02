@@ -219,21 +219,20 @@ namespace Day4
         }
         private int GetScore(bool part1)
         {
-            int sum = 0;
             List<int> nums = new();
-            for (int r = 0; r < this._boards.GetValueOrDefault(part1 ? this._finishResult1._whoWon : this._finishResult2._whosLast)!.Count; r++)
+            int boardNum = part1 ? this._finishResult1._whoWon : this._finishResult2._whosLast;
+            for (int r = 0; r < this._boards.GetValueOrDefault(boardNum)!.Count; r++)
             {
-                for (int c = 0; c < this._boards.GetValueOrDefault(part1 ? this._finishResult1._whoWon : this._finishResult2._whosLast)![r].Count; c++)
+                for (int c = 0; c < this._boards.GetValueOrDefault(boardNum)![r].Count; c++)
                 {
                     int parsed = 0;
-                    if (int.TryParse(this._boards.GetValueOrDefault(part1 ? this._finishResult1._whoWon : this._finishResult2._whosLast)![r][c], out parsed))
+                    if (int.TryParse(this._boards.GetValueOrDefault(boardNum)![r][c], out parsed))
                     {
                         nums.Add(parsed);
                     }
                 }
             }
-            sum = nums.Sum();
-            return sum * int.Parse(part1 ? this._finishResult1._lastDraw : this._finishResult2._lastDraw);
+            return nums.Sum() * int.Parse(part1 ? this._finishResult1._lastDraw : this._finishResult2._lastDraw);
         }
         private void DumpBoardRows(List<List<string>> boardRows)
         {
