@@ -137,24 +137,12 @@ namespace Day4
         private void AllocateDrawnNums(string input)
         {
             string[] lines = input.Split(Environment.NewLine);
+            string[] inputDrawnNums = lines[0].Split(",");
 
-            for (int i = 0; i < lines.Length; i++)
+            for (int j = 0; j < inputDrawnNums.Length; j++)
             {
-                if (i == 0)
-                {
-                    string[] inputDrawnNums = lines[i].Split(",");
-
-                    for (int j = 0; j < inputDrawnNums.Length; j++)
-                    {
-                        this._drawnNums.Add(inputDrawnNums[j]);
-                    }
-
-                    goto exit;
-                }
+                this._drawnNums.Add(inputDrawnNums[j]);
             }
-
-        exit:
-            return;
         }
         public void PartOne()
         {
