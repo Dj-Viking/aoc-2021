@@ -6,15 +6,27 @@ namespace Day4
         public List<string> _drawnNums = new();
         public List<List<string>> _boardRows = new();
         public Dictionary<int, List<List<string>>> _boards = new();
-        public FinishResult _finishResult = new FinishResult("", 0);
-        public class FinishResult
+        public Dictionary<int, int> _winningBoards = new();
+        public FinishResult1 _finishResult1 = new FinishResult1("", 0);
+        public FinishResult2 _finishResult2 = new FinishResult2("", 0);
+        public class FinishResult1
         {
             public string _lastDraw = "";
             public int _whoWon = 0;
-            public FinishResult(string lastDraw, int whoWon)
+            public FinishResult1(string lastDraw, int whoWon)
             {
                 this._lastDraw = lastDraw;
                 this._whoWon = whoWon;
+            }
+        }
+        public class FinishResult2
+        {
+            public string _lastDraw = "";
+            public int _whosLast = 0;
+            public FinishResult2(string lastDraw, int whosLast)
+            {
+                this._lastDraw = lastDraw;
+                this._whosLast = whosLast;
             }
         }
         public static void Main(string[] args)
@@ -37,6 +49,7 @@ namespace Day4
             this._drawnNums = new List<string>();
             this._boardRows = new List<List<string>>();
             this._boards = new Dictionary<int, List<List<string>>>();
+            this._winningBoards = new Dictionary<int, int>();
         }
         public void GetInput(string fileName)
         {
@@ -95,7 +108,6 @@ namespace Day4
 
                 if (boundaryCursor >= 1 && boundaryCursor <= 5)
                 {
-                    Console.WriteLine("tempBoardNum {0} - boundaryCursor {1}", tempBoardNum, boundaryCursor);
                     tempList = this._boardRows[i];
                     bool hasValue = this._boards.TryGetValue(tempBoardNum, out tempListOfLists!);
                     if (hasValue)
@@ -118,7 +130,7 @@ namespace Day4
 
             }
         }
-        private void MarkBoards()
+        private void MarkBoardsPart1()
         {
             for (int n = 0; n < this._drawnNums.Count; n++) //for each drawn number
             {
@@ -136,7 +148,7 @@ namespace Day4
 
                                 if (rowExes.Count == 5)
                                 {
-                                    this._finishResult = new FinishResult(this._drawnNums[n], b);
+                                    this._finishResult1 = new FinishResult1(this._drawnNums[n], b);
                                     return;
                                 }
                             }
@@ -145,23 +157,79 @@ namespace Day4
                 }
             }
         }
-        private int GetScore()
+        private List<string> GetEntireColumn(List<List<string>> matrix, int col)
+        {
+            List<string> column = new();
+            for (int i = 0; i < matrix.Count; i++)
+            {
+                column.Add(matrix[i][col]);
+            }
+            return column;
+        }
+        private int GetColumnNumber(List<List<string>> matrix, string drawnNum)
+        {
+            int colNum = 0;
+            for (int r = 0; r < matrix.Count; r++)
+            {
+                for (int c = 0; c < matrix[r].Count; c++)
+                {
+                    if (matrix[r][c] == drawnNum)
+                    {
+                        colNum = c;
+                        goto ret;
+                    }
+                }
+            }
+        ret:
+            return colNum;
+        }
+        private void MarkBoardsPart2()
+        {
+            for (int n = 0; n < this._drawnNums.Count; n++) //for each drawn number
+            {
+                for (int b = 0; b < this._boards.Keys.Count; b++) //for each board
+                {
+                    for (int r = 0; r < this._boards.GetValueOrDefault(b)!.Count; r++) //for each row of the board
+                    {
+                        for (int c = 0; c < this._boards.GetValueOrDefault(b)![r].Count; c++) //for each column of each row
+                        {
+                            if (this._boards.GetValueOrDefault(b)![r][c] == this._drawnNums[n])
+                            {
+                                int colNum = this.GetColumnNumber(this._boards.GetValueOrDefault(b)!, this._drawnNums[n]);
+                                this._boards.GetValueOrDefault(b)![r][c] = "x";
+                                // check how many x's are in a particular row
+                                List<string> rowExes = this._boards.GetValueOrDefault(b)![r].FindAll(slot => slot == "x");
+
+                                List<string> colExes = this.GetEntireColumn(this._boards.GetValueOrDefault(b)!, colNum).FindAll(slot => slot == "x");
+
+                                if (rowExes.Count == 5 || colExes.Count == 5)
+                                {
+                                    this._finishResult2 = new FinishResult2(this._drawnNums[n], b);
+                                    return;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        private int GetScore1()
         {
             int sum = 0;
             List<int> nums = new();
-            for (int r = 0; r < this._boards.GetValueOrDefault(this._finishResult._whoWon)!.Count; r++)
+            for (int r = 0; r < this._boards.GetValueOrDefault(this._finishResult1._whoWon)!.Count; r++)
             {
-                for (int c = 0; c < this._boards.GetValueOrDefault(this._finishResult._whoWon)![r].Count; c++)
+                for (int c = 0; c < this._boards.GetValueOrDefault(this._finishResult1._whoWon)![r].Count; c++)
                 {
                     int parsed = 0;
-                    if (int.TryParse(this._boards.GetValueOrDefault(this._finishResult._whoWon)![r][c], out parsed))
+                    if (int.TryParse(this._boards.GetValueOrDefault(this._finishResult1._whoWon)![r][c], out parsed))
                     {
                         nums.Add(parsed);
                     }
                 }
             }
             sum = nums.Sum();
-            return sum * int.Parse(this._finishResult._lastDraw);
+            return sum * int.Parse(this._finishResult1._lastDraw);
         }
         private void DumpBoardRows(List<List<string>> boardRows)
         {
@@ -197,14 +265,16 @@ namespace Day4
         {
             this.AllocateDrawnNums(this.input);
             this.AllocateBoards(this.input);
-            this.DumpBoardRows(this._boardRows);
             this.CreateBoardsFromParsedRows();
-            this.DumpBoardDict();
-            this.MarkBoards();
-            Console.WriteLine("Part 1: {0}", this.GetScore());
+            this.MarkBoardsPart1();
+            Console.WriteLine("Part 1: {0}", this.GetScore1());
         }
         public void PartTwo()
         {
+            this.AllocateDrawnNums(this.input);
+            this.AllocateBoards(this.input);
+            this.CreateBoardsFromParsedRows();
+            this.MarkBoardsPart2();
             Console.WriteLine("Part 2: ");
         }
     }
