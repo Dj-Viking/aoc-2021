@@ -6,8 +6,17 @@ namespace Day4
         public List<string> _drawnNums = new();
         public List<List<string>> _boardRows = new();
         public Dictionary<int, List<List<string>>> _boards = new();
-        public int lastDrawn = 0;
-        public int boardWon = 0;
+        public FinishResult _finishResult = new FinishResult("", 0);
+        public class FinishResult
+        {
+            public string _lastDraw = "";
+            public int _whoWon = 0;
+            public FinishResult(string lastDraw, int whoWon)
+            {
+                this._lastDraw = lastDraw;
+                this._whoWon = whoWon;
+            }
+        }
         public static void Main(string[] args)
         {
             new MainClass().Run(args);
@@ -27,8 +36,6 @@ namespace Day4
             this.input = "";
             this._drawnNums = new List<string>();
             this._boardRows = new List<List<string>>();
-            this.lastDrawn = 0;
-            this.boardWon = 0;
             this._boards = new Dictionary<int, List<List<string>>>();
         }
         public void GetInput(string fileName)
@@ -113,6 +120,48 @@ namespace Day4
         }
         private void MarkBoards()
         {
+            for (int n = 0; n < this._drawnNums.Count; n++) //for each drawn number
+            {
+                for (int b = 0; b < this._boards.Keys.Count; b++) //for each board
+                {
+                    for (int r = 0; r < this._boards.GetValueOrDefault(b)!.Count; r++) //for each row of the board
+                    {
+                        for (int c = 0; c < this._boards.GetValueOrDefault(b)![r].Count; c++) //for each column of each row
+                        {
+                            if (this._boards.GetValueOrDefault(b)![r][c] == this._drawnNums[n])
+                            {   //mark board with "x" where drawn number matches the board number slot
+                                this._boards.GetValueOrDefault(b)![r][c] = "x";
+                                // check how many x's are in a particular row
+                                List<string> rowExes = this._boards.GetValueOrDefault(b)![r].FindAll(slot => slot == "x");
+
+                                if (rowExes.Count == 5)
+                                {
+                                    this._finishResult = new FinishResult(this._drawnNums[n], b);
+                                    return;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        private int GetScore()
+        {
+            int sum = 0;
+            List<int> nums = new();
+            for (int r = 0; r < this._boards.GetValueOrDefault(this._finishResult._whoWon)!.Count; r++)
+            {
+                for (int c = 0; c < this._boards.GetValueOrDefault(this._finishResult._whoWon)![r].Count; c++)
+                {
+                    int parsed = 0;
+                    if (int.TryParse(this._boards.GetValueOrDefault(this._finishResult._whoWon)![r][c], out parsed))
+                    {
+                        nums.Add(parsed);
+                    }
+                }
+            }
+            sum = nums.Sum();
+            return sum * int.Parse(this._finishResult._lastDraw);
         }
         private void DumpBoardRows(List<List<string>> boardRows)
         {
@@ -123,14 +172,14 @@ namespace Day4
         }
         private void DumpBoardDict()
         {
-            Console.WriteLine("amount of keys {0}", this._boards.Keys.Count());
+            Console.WriteLine("amount of keys: {0}", this._boards.Keys.Count());
             foreach (int key in this._boards.Keys)
             {
-                Console.WriteLine("value {0}", this._boards[key]);
+                Console.WriteLine("value of List<List<string>>: {0}", this._boards[key]);
                 foreach (List<string> val in this._boards[key])
                 {
 
-                    Console.WriteLine("value of keyval {0}", string.Join(",", val));
+                    Console.WriteLine("value of keyval List<string> row: {0}", string.Join(",", val));
                 }
             }
         }
@@ -151,8 +200,8 @@ namespace Day4
             this.DumpBoardRows(this._boardRows);
             this.CreateBoardsFromParsedRows();
             this.DumpBoardDict();
-            // this.MarkBoards();
-            Console.WriteLine("Part 1: ");
+            this.MarkBoards();
+            Console.WriteLine("Part 1: {0}", this.GetScore());
         }
         public void PartTwo()
         {
