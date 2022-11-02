@@ -176,7 +176,7 @@ namespace Day4
                     if (matrix[r][c] == drawnNum)
                     {
                         colNum = c;
-                        goto ret;
+                        goto ret; //get out of both for loops
                     }
                 }
             }
@@ -204,6 +204,10 @@ namespace Day4
 
                                 if (rowExes.Count == 5 || colExes.Count == 5)
                                 {
+                                    this._winningBoards.TryAdd(b, b);
+                                }
+                                if (this._winningBoards.Keys.Count == this._boards.Keys.Count)
+                                {
                                     this._finishResult2 = new FinishResult2(this._drawnNums[n], b);
                                     return;
                                 }
@@ -213,23 +217,23 @@ namespace Day4
                 }
             }
         }
-        private int GetScore1()
+        private int GetScore(bool part1)
         {
             int sum = 0;
             List<int> nums = new();
-            for (int r = 0; r < this._boards.GetValueOrDefault(this._finishResult1._whoWon)!.Count; r++)
+            for (int r = 0; r < this._boards.GetValueOrDefault(part1 ? this._finishResult1._whoWon : this._finishResult2._whosLast)!.Count; r++)
             {
-                for (int c = 0; c < this._boards.GetValueOrDefault(this._finishResult1._whoWon)![r].Count; c++)
+                for (int c = 0; c < this._boards.GetValueOrDefault(part1 ? this._finishResult1._whoWon : this._finishResult2._whosLast)![r].Count; c++)
                 {
                     int parsed = 0;
-                    if (int.TryParse(this._boards.GetValueOrDefault(this._finishResult1._whoWon)![r][c], out parsed))
+                    if (int.TryParse(this._boards.GetValueOrDefault(part1 ? this._finishResult1._whoWon : this._finishResult2._whosLast)![r][c], out parsed))
                     {
                         nums.Add(parsed);
                     }
                 }
             }
             sum = nums.Sum();
-            return sum * int.Parse(this._finishResult1._lastDraw);
+            return sum * int.Parse(part1 ? this._finishResult1._lastDraw : this._finishResult2._lastDraw);
         }
         private void DumpBoardRows(List<List<string>> boardRows)
         {
@@ -267,7 +271,7 @@ namespace Day4
             this.AllocateBoards(this.input);
             this.CreateBoardsFromParsedRows();
             this.MarkBoardsPart1();
-            Console.WriteLine("Part 1: {0}", this.GetScore1());
+            Console.WriteLine("Part 1: {0}", this.GetScore(true));
         }
         public void PartTwo()
         {
@@ -275,7 +279,7 @@ namespace Day4
             this.AllocateBoards(this.input);
             this.CreateBoardsFromParsedRows();
             this.MarkBoardsPart2();
-            Console.WriteLine("Part 2: ");
+            Console.WriteLine("Part 2: {0}", this.GetScore(false));
         }
     }
 }
