@@ -4,8 +4,8 @@ namespace Day5
     {
         public string input = "";
         public string[] _lines = new string[] { "" };
-        List<List<int>> _points = new();
-        int[][] _graph = new int[][] { new int[] { 0 } };
+        public List<List<int>> _points = new();
+        public int[][] _graph = new int[][] { new int[] { 0 } };
         public static void Main(string[] args)
         {
             new MainClass().Run(args);
@@ -59,12 +59,12 @@ namespace Day5
 
             }
         }
-        private void DumpGraph(List<List<int>> graph)
+        private void DumpGraph(int[][] graph)
         {
             string str = "";
-            for (int y = 0; y < graph.Count; y++)
+            for (int y = 0; y < graph.Length; y++)
             {
-                for (int x = 0; x < graph[y].Count; x++)
+                for (int x = 0; x < graph[y].Length; x++)
                 {
                     str += graph[y][x] == 0 ? ("." + " ") : graph[y][x].ToString();
                 }
@@ -74,11 +74,21 @@ namespace Day5
         }
         private void BuildGraph()
         {
-            int MaxHeight = this._points.Count * 2;
+            int MaxHeight = this._points.Count;
 
-            Array.Resize(ref this._graph, MaxHeight);
+            List<List<int>> lists = new List<List<int>>();
 
-            Console.WriteLine("resized length? {0}", this._graph.Length);
+            for (int i = 0; i < MaxHeight; i++)
+            {
+                List<int> tempList = new List<int>();
+                for (int j = 0; j < MaxHeight; j++)
+                {
+                    tempList.Add(0);
+                }
+                lists.Add(tempList);
+            }
+
+            this._graph = lists.Select(a => a.ToArray()).ToArray();
 
         }
         public void PartOne()
