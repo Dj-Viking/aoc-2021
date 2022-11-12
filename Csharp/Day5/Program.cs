@@ -112,7 +112,19 @@ namespace Day5
                 this._graph[y][x]++;
             }
         }
-        private int GetPart1Answer()
+        private void DrawLine(int x1, int x2, int y1, int y2)
+        {
+            int x, y, i;
+
+            int n = Math.Max(Math.Abs(x2 - x1) + 1, Math.Abs(y2 - y1) + 1);
+            for (i = 0; i < n; i++)
+            {
+                x = x1 + Math.Sign(x2 - x1) * i;
+                y = y1 + Math.Sign(y2 - y1) * i;
+                this._graph[y][x]++;
+            }
+        }
+        private int GetAnswer()
         {
             int answer = 0;
             for (int y = 0; y < this._graph.Length; y++)
@@ -128,7 +140,7 @@ namespace Day5
             return answer;
         }
 
-        private void PlotPoints()
+        private void PlotPoints(bool part1)
         {
             for (int y = 0; y < this._points.Count; y++)
             {
@@ -137,26 +149,38 @@ namespace Day5
                 int x2 = this._points[y][2];
                 int y2 = this._points[y][3];
 
-                if (x1 == x2)
+                if (part1)
                 {
-                    this.DrawVerticalLine(x1, y1, y2);
+
+                    if (x1 == x2)
+                    {
+                        this.DrawVerticalLine(x1, y1, y2);
+                    }
+                    if (y1 == y2)
+                    {
+                        this.DrawHorizontalLine(y1, x1, x2);
+                    }
                 }
-                if (y1 == y2)
+                else
                 {
-                    this.DrawHorizontalLine(y1, x1, x2);
+                    this.DrawLine(x1, x2, y1, y2);
                 }
+
             }
         }
         public void PartOne()
         {
             this.ParseCoordinates();
             this.BuildGraph();
-            this.PlotPoints();
-            Console.WriteLine("Part 1: {0} ", this.GetPart1Answer());
+            this.PlotPoints(true);
+            Console.WriteLine("Part 1: {0} ", this.GetAnswer());
         }
         public void PartTwo()
         {
-            Console.WriteLine("Part 2: ");
+            this.ParseCoordinates();
+            this.BuildGraph();
+            this.PlotPoints(false);
+            Console.WriteLine("Part 2: {0} ", this.GetAnswer());
         }
     }
 }
