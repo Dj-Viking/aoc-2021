@@ -41,22 +41,21 @@ namespace Day5
             for (int i = 0; i < this._lines.Length; i++)
             {
                 coordinates = this._lines[i].Split(" -> ");
+                List<int> temp1 = new();
 
                 int x1 = int.Parse(coordinates[0].Split(",")[0]);
                 int y1 = int.Parse(coordinates[0].Split(",")[1]);
-                List<int> temp1 = new();
+
                 temp1.Add(x1);
                 temp1.Add(y1);
 
                 int x2 = int.Parse(coordinates[1].Split(",")[0]);
                 int y2 = int.Parse(coordinates[1].Split(",")[1]);
-                List<int> temp2 = new();
-                temp2.Add(x2);
-                temp2.Add(y2);
+
+                temp1.Add(x2);
+                temp1.Add(y2);
 
                 this._points.Add(temp1);
-                this._points.Add(temp2);
-
             }
         }
         private void DumpGraph(int[][] graph)
@@ -66,7 +65,7 @@ namespace Day5
             {
                 for (int x = 0; x < graph[y].Length; x++)
                 {
-                    str += graph[y][x] == 0 ? ("." + " ") : graph[y][x].ToString();
+                    str += graph[y][x] == 0 ? ("." + " ") : graph[y][x].ToString() + " ";
                 }
                 Console.WriteLine("{0}", str);
                 str = "";
@@ -74,7 +73,7 @@ namespace Day5
         }
         private void BuildGraph()
         {
-            int MaxHeight = this._points.Count;
+            int MaxHeight = this._points.Count * 2;
 
             List<List<int>> lists = new List<List<int>>();
 
@@ -91,11 +90,69 @@ namespace Day5
             this._graph = lists.Select(a => a.ToArray()).ToArray();
 
         }
+        private void DrawVerticalLine(int x, int y1, int y2)
+        {
+            int y;
+            int[] ys = new int[] { y1, y2 };
+            Array.Sort(ys);
+
+            for (y = ys[0]; y <= ys[1]; y++)
+            {
+                this._graph[y][x]++;
+            }
+        }
+        private void DrawHorizontalLine(int y, int x1, int x2)
+        {
+            int x;
+            int[] xs = new int[] { x1, x2 };
+            Array.Sort(xs);
+
+            for (x = xs[0]; x <= xs[1]; x++)
+            {
+                this._graph[y][x]++;
+            }
+        }
+        private int GetPart1Answer()
+        {
+            int answer = 0;
+            for (int y = 0; y < this._graph.Length; y++)
+            {
+                for (int x = 0; x < this._graph.Length; x++)
+                {
+                    if (this._graph[y][x] > 1)
+                    {
+                        answer++;
+                    }
+                }
+            }
+            return answer;
+        }
+
+        private void PlotPoints()
+        {
+            for (int y = 0; y < this._points.Count; y++)
+            {
+                int x1 = this._points[y][0];
+                int y1 = this._points[y][1];
+                int x2 = this._points[y][2];
+                int y2 = this._points[y][3];
+
+                if (x1 == x2)
+                {
+                    this.DrawVerticalLine(x1, y1, y2);
+                }
+                if (y1 == y2)
+                {
+                    this.DrawHorizontalLine(y1, x1, x2);
+                }
+            }
+        }
         public void PartOne()
         {
             this.ParseCoordinates();
             this.BuildGraph();
-            Console.WriteLine("Part 1: ");
+            this.PlotPoints();
+            Console.WriteLine("Part 1: {0} ", this.GetPart1Answer());
         }
         public void PartTwo()
         {
