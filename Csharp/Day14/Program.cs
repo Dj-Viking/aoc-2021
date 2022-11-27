@@ -7,7 +7,7 @@ namespace Day14
         public string _template = "";
         public int[][] _observedPairs = new int[][] { new int[] { 0 } };
         public int[][] _backTable = new int[][] { new int[] { 0 } };
-        public int[] _freq = new int[] { 0 };
+        public Dictionary<char, int> _freq = new();
         public int _steps = 10;
         public int TABLE_CAP = ('Z' - 'A') + 1;
         public List<Substitution> _subsList = new();
@@ -43,6 +43,13 @@ namespace Day14
             this._lines = new string[] { "" };
             this._template = "";
             this._observedPairs = new int[][] { new int[] { 0 } };
+            this._subsList = new List<Substitution>();
+
+            for (int i = 0; i < this.TABLE_CAP; i++)
+            {
+                this._freq[(char)(i + 'A')] = 0;
+            }
+
         }
         public void GetInput(string fileName)
         {
@@ -53,18 +60,7 @@ namespace Day14
         {
             this._template = this._lines[0];
         }
-        private void ParseInsertionRulesOnStep()
-        {
-            for (int i = 2; i < this._lines.Length; i++)
-            {
-                string rule = this._lines[i].Split(" -> ")[0];
-                string insertion = this._lines[i].Split(" -> ")[1];
-                Substitution sub = new Substitution(rule[0], rule[1], insertion.ToCharArray()[0]);
-                Console.WriteLine("sub added {0}{1} -> {2}", sub._first, sub._second, sub._insertion);
-                this._subsList.Add(sub);
-            }
-            Console.WriteLine("subs count {0}", this._subsList.Count());
-        }
+
         private void DumpGraph(int[][] graph)
         {
             int i, j = 0;
@@ -89,20 +85,30 @@ namespace Day14
                 Console.Write(Environment.NewLine);
             }
         }
-        private void ParseCurrentPairsOnStep()
+        private void InitializePairs()
         {
             this._observedPairs = this.InitializeGraph();
 
+            //increment the location on the graph where the coordinate equals 
+            // the ascii equivalent calculation based on the size of the 2D graph
             for (int i = 1; i < this._template.Length; i++)
             {
                 char first = this._template[i - 1];
                 char second = this._template[i];
-                Console.WriteLine("first {0} second {1}", (int)first - 'A', (int)second - 'A');
-                //increment the location on the graph where the coordinate equals 
-                // the ascii equivalent calculation based on the size of the 2D graph
                 this._observedPairs[first - 'A'][second - 'A']++;
             }
 
+        }
+        private void InitializeRules()
+        {
+            this._subsList.Clear();
+            for (int i = 2; i < this._lines.Length; i++)
+            {
+                string rule = this._lines[i].Split(" -> ")[0];
+                string insertion = this._lines[i].Split(" -> ")[1];
+                Substitution sub = new Substitution(rule[0], rule[1], insertion.ToCharArray()[0]);
+                this._subsList.Add(sub);
+            }
         }
         private void PairInsertion()
         {
@@ -134,21 +140,53 @@ namespace Day14
 
             return lists.Select(a => a.ToArray()).ToArray();
         }
+        public void IncrementCharacterFrequencies()
+        {
+            // count how many occurances of the characters in the pairs table 
+            for (int i = 0; i < this.TABLE_CAP; i++)
+            {
+                for (int j = 0; j < this.TABLE_CAP; j++)
+                {
+                    char charKey = (char)(i + 'A');
+                    this._freq[charKey] += this._observedPairs[i][j];
+                }
+            }
+
+            // increment the last character of the original template because nothing is ever inserted after the last character
+
+            this._freq[this._template[this._template.Length - 1]]++;
+
+            foreach (char key in this._freq.Keys)
+            {
+                Console.WriteLine("key {1} value {0}", key, this._freq[key]);
+            }
+        }
+        public int CalculateAnswer()
+        {
+            List<int> temp = new();
+            foreach (char key in this._freq.Keys)
+            {
+                if (this._freq[key] > 0)
+                {
+                    temp.Add(this._freq[key]);
+                }
+            }
+            return temp.Max() - temp.Min();
+        }
         public void PartOne()
         {
             this.ParsePolymerTemplate();
-            this.ParseCurrentPairsOnStep();
-            this.ParseInsertionRulesOnStep();
-
-            this.DumpGraph(this._observedPairs);
+            this.InitializePairs();
+            this.InitializeRules();
 
             for (int i = 0; i < this._steps; i++)
             {
                 this.PairInsertion();
-                this.DumpGraph(this._observedPairs);
             }
 
-            Console.WriteLine("Part 1: {0}");
+            this.IncrementCharacterFrequencies();
+
+            Console.WriteLine("Part 1: {0}", this.CalculateAnswer());
         }
         public void PartTwo()
         {
