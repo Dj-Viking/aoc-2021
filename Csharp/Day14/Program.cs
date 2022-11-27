@@ -5,10 +5,9 @@ namespace Day14
         public string input = "";
         public string[] _lines = new string[] { "" };
         public string _template = "";
-        public int[][] _observedPairs = new int[][] { new int[] { 0 } };
-        public int[][] _backTable = new int[][] { new int[] { 0 } };
-        public Dictionary<char, int> _freq = new();
-        public int _steps = 10;
+        public double[][] _observedPairs = new double[][] { new double[] { 0 } };
+        public double[][] _backTable = new double[][] { new double[] { 0 } };
+        public Dictionary<char, double> _freq = new();
         public int TABLE_CAP = ('Z' - 'A') + 1;
         public List<Substitution> _subsList = new();
         public class Substitution
@@ -42,7 +41,7 @@ namespace Day14
             this.input = "";
             this._lines = new string[] { "" };
             this._template = "";
-            this._observedPairs = new int[][] { new int[] { 0 } };
+            this._observedPairs = new double[][] { new double[] { 0 } };
             this._subsList = new List<Substitution>();
 
             for (int i = 0; i < this.TABLE_CAP; i++)
@@ -113,24 +112,25 @@ namespace Day14
         private void PairInsertion()
         {
             // iterate through all subs
-            int i, numOfPairs;
+            int i = 0;
+            double letterAmount = 0;
             this._backTable = InitializeGraph();
             for (i = 0; i < this._subsList.Count(); i++)
             {
-                numOfPairs = this._observedPairs![this._subsList[i]._first - 'A'][this._subsList[i]._second - 'A'];
+                letterAmount = this._observedPairs![this._subsList[i]._first - 'A'][this._subsList[i]._second - 'A'];
 
-                this._backTable[this._subsList[i]._first - 'A'][this._subsList[i]._insertion - 'A'] += numOfPairs;
-                this._backTable[this._subsList[i]._insertion - 'A'][this._subsList[i]._second - 'A'] += numOfPairs;
+                this._backTable[this._subsList[i]._first - 'A'][this._subsList[i]._insertion - 'A'] += letterAmount;
+                this._backTable[this._subsList[i]._insertion - 'A'][this._subsList[i]._second - 'A'] += letterAmount;
             }
             this._observedPairs = this._backTable.Select(x => x.ToArray()).ToArray();
         }
-        public int[][] InitializeGraph()
+        public double[][] InitializeGraph()
         {
-            List<List<int>> lists = new List<List<int>>();
+            List<List<double>> lists = new List<List<double>>();
 
             for (int i = 0; i < this.TABLE_CAP; i++)
             {
-                List<int> tempList = new List<int>();
+                List<double> tempList = new List<double>();
                 for (int j = 0; j < this.TABLE_CAP; j++)
                 {
                     tempList.Add(0);
@@ -161,9 +161,9 @@ namespace Day14
                 Console.WriteLine("key {1} value {0}", key, this._freq[key]);
             }
         }
-        public int CalculateAnswer()
+        public double CalculateAnswer()
         {
-            List<int> temp = new();
+            List<double> temp = new();
             foreach (char key in this._freq.Keys)
             {
                 if (this._freq[key] > 0)
@@ -179,7 +179,7 @@ namespace Day14
             this.InitializePairs();
             this.InitializeRules();
 
-            for (int i = 0; i < this._steps; i++)
+            for (int i = 0; i < 10; i++)
             {
                 this.PairInsertion();
             }
@@ -190,7 +190,18 @@ namespace Day14
         }
         public void PartTwo()
         {
-            Console.WriteLine("Part 2: {0}");
+            this.ParsePolymerTemplate();
+            this.InitializePairs();
+            this.InitializeRules();
+
+            for (int i = 0; i < 40; i++)
+            {
+                this.PairInsertion();
+            }
+
+            this.IncrementCharacterFrequencies();
+
+            Console.WriteLine("Part 2: {0}", this.CalculateAnswer());
         }
     }
 }
