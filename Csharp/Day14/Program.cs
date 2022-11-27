@@ -6,6 +6,9 @@ namespace Day14
         public string[] _lines = new string[] { "" };
         public string _template = "";
         public int[][] _observedPairs = new int[][] { new int[] { 0 } };
+        public int[][] _backTable = new int[][] { new int[] { 0 } };
+        public int[] _freq = new int[] { 0 };
+        public int _steps = 10;
         public int TABLE_CAP = ('Z' - 'A') + 1;
         public List<Substitution> _subsList = new();
         public class Substitution
@@ -20,8 +23,6 @@ namespace Day14
                 this._insertion = insertion;
             }
         }
-        // int _steps = 3;
-
         public static void Main(string[] args)
         {
             new MainClass().Run(args);
@@ -42,7 +43,6 @@ namespace Day14
             this._lines = new string[] { "" };
             this._template = "";
             this._observedPairs = new int[][] { new int[] { 0 } };
-
         }
         public void GetInput(string fileName)
         {
@@ -91,8 +91,35 @@ namespace Day14
         }
         private void ParseCurrentPairsOnStep()
         {
-            this._observedPairs = new int[][] { new int[] { 0 } };
+            this._observedPairs = this.InitializeGraph();
 
+            for (int i = 1; i < this._template.Length; i++)
+            {
+                char first = this._template[i - 1];
+                char second = this._template[i];
+                Console.WriteLine("first {0} second {1}", (int)first - 'A', (int)second - 'A');
+                //increment the location on the graph where the coordinate equals 
+                // the ascii equivalent calculation based on the size of the 2D graph
+                this._observedPairs[first - 'A'][second - 'A']++;
+            }
+
+        }
+        private void PairInsertion()
+        {
+            // iterate through all subs
+            int i, numOfPairs;
+            this._backTable = InitializeGraph();
+            for (i = 0; i < this._subsList.Count(); i++)
+            {
+                numOfPairs = this._observedPairs![this._subsList[i]._first - 'A'][this._subsList[i]._second - 'A'];
+
+                this._backTable[this._subsList[i]._first - 'A'][this._subsList[i]._insertion - 'A'] += numOfPairs;
+                this._backTable[this._subsList[i]._insertion - 'A'][this._subsList[i]._second - 'A'] += numOfPairs;
+            }
+            this._observedPairs = this._backTable.Select(x => x.ToArray()).ToArray();
+        }
+        public int[][] InitializeGraph()
+        {
             List<List<int>> lists = new List<List<int>>();
 
             for (int i = 0; i < this.TABLE_CAP; i++)
@@ -105,24 +132,7 @@ namespace Day14
                 lists.Add(tempList);
             }
 
-            this._observedPairs = lists.Select(a => a.ToArray()).ToArray();
-
-            for (int i = 1; i < this._template.Length; i++)
-            {
-                char first = this._template[i - 1];
-                char second = this._template[i];
-                Console.WriteLine("first {0} second {1}", (int)first - 'A', (int)second - 'A');
-                //increment the location on the graph where the coordinate equals 
-                // the ascii equivalent calculation based on the size of the 2D graph
-                this._observedPairs[first - 'A'][second - 'A']++;
-            }
-
-            DumpGraph(this._observedPairs);
-
-        }
-        private void PairInsertion()
-        {
-
+            return lists.Select(a => a.ToArray()).ToArray();
         }
         public void PartOne()
         {
@@ -130,14 +140,13 @@ namespace Day14
             this.ParseCurrentPairsOnStep();
             this.ParseInsertionRulesOnStep();
 
-            // for (int i = 0; i < this._steps; i++)
-            // {
-            //     Console.WriteLine("-----------------------");
-            //     Console.WriteLine("step number {0}", i + 1);
-            //     Console.WriteLine("-----------------------");
-            //     this.ParseCurrentPairsOnStep();
+            this.DumpGraph(this._observedPairs);
 
-            // }
+            for (int i = 0; i < this._steps; i++)
+            {
+                this.PairInsertion();
+                this.DumpGraph(this._observedPairs);
+            }
 
             Console.WriteLine("Part 1: {0}");
         }
