@@ -7,13 +7,14 @@ namespace Day14
         public string _template = "";
         public int[][] _observedPairs = new int[][] { new int[] { 0 } };
         public int TABLE_CAP = ('Z' - 'A') + 1;
-        public Substitutions _subs = new Substitutions(' ', ' ', ' ');
-        public class Substitutions
+        public List<Substitution> _subsList = new();
+        public class Substitution
         {
             public char _first = ' ';
             public char _second = ' ';
             public char _insertion = ' ';
-            public Substitutions(char first, char second, char insertion)
+            public int subsCount = 0;
+            public Substitution(char first, char second, char insertion)
             {
                 this._first = first;
                 this._second = second;
@@ -59,9 +60,11 @@ namespace Day14
             {
                 string rule = this._lines[i].Split(" -> ")[0];
                 string insertion = this._lines[i].Split(" -> ")[1];
-                this._subs = new Substitutions(rule[0], rule[1], insertion.ToCharArray()[0]);
-                Console.WriteLine("subs a {0} subs b {1} subs c {2}", this._subs._first, this._subs._second, this._subs._insertion);
+                Substitution sub = new Substitution(rule[0], rule[1], insertion.ToCharArray()[0]);
+                Console.WriteLine("sub added {0}{1} -> {2}", sub._first, sub._second, sub._insertion);
+                this._subsList.Add(sub);
             }
+            Console.WriteLine("subs count {0}", this._subsList.Count());
         }
         private void DumpGraph(int[][] graph)
         {
@@ -116,6 +119,10 @@ namespace Day14
             }
 
             DumpGraph(this._observedPairs);
+
+        }
+        private void PairInsertion()
+        {
 
         }
         public void PartOne()
