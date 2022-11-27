@@ -156,10 +156,6 @@ namespace Day14
 
             this._freq[this._template[this._template.Length - 1]]++;
 
-            foreach (char key in this._freq.Keys)
-            {
-                Console.WriteLine("key {1} value {0}", key, this._freq[key]);
-            }
         }
         public double CalculateAnswer()
         {
