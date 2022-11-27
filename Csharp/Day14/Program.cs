@@ -100,7 +100,9 @@ namespace Day14
                 char first = this._template[i - 1];
                 char second = this._template[i];
                 Console.WriteLine("first {0} second {1}", (int)first - 'A', (int)second - 'A');
-                this._observedPairs[(int)first - 'A'][(int)second - 'A']++;
+                //increment the location on the graph where the index number equals 
+                // the ascii equivalent calculation based on the size of the table
+                this._observedPairs[first - 'A'][second - 'A']++;
             }
 
             DumpGraph(this._observedPairs);
