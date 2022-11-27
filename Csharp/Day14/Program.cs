@@ -5,11 +5,21 @@ namespace Day14
         public string input = "";
         public string[] _lines = new string[] { "" };
         public string _template = "";
-        public string _tempTemplate = "";
         public int[][] _observedPairs = new int[][] { new int[] { 0 } };
         int TABLE_CAP = ('Z' - 'A') + 1;
-        public Dictionary<string, string> _insertionRules = new();
-        public Dictionary<string, string> _wasInserted = new();
+        Substitutions _subs = new Substitutions(' ', ' ', ' ');
+        public class Substitutions
+        {
+            public char _first = ' ';
+            public char _second = ' ';
+            public char _insertion = ' ';
+            public Substitutions(char first, char second, char insertion)
+            {
+                this._first = first;
+                this._second = second;
+                this._insertion = insertion;
+            }
+        }
         // int _steps = 3;
 
         public static void Main(string[] args)
@@ -32,8 +42,7 @@ namespace Day14
             this._lines = new string[] { "" };
             this._template = "";
             this._observedPairs = new int[][] { new int[] { 0 } };
-            this._insertionRules = new Dictionary<string, string>();
-            this._wasInserted = new Dictionary<string, string>();
+
         }
         public void GetInput(string fileName)
         {
@@ -44,13 +53,14 @@ namespace Day14
         {
             this._template = this._lines[0];
         }
-        private void ParseInsertionRules()
+        private void ParseInsertionRulesOnStep()
         {
             for (int i = 2; i < this._lines.Length; i++)
             {
                 string rule = this._lines[i].Split(" -> ")[0];
                 string insertion = this._lines[i].Split(" -> ")[1];
-                this._insertionRules.TryAdd(rule, insertion);
+                this._subs = new Substitutions(rule[0], rule[1], insertion.ToCharArray()[0]);
+                Console.WriteLine("subs a {0} subs b {1} subs c {2}", this._subs._first, this._subs._second, this._subs._insertion);
             }
         }
         private void DumpGraph(int[][] graph)
@@ -69,8 +79,8 @@ namespace Day14
                 Console.Write("{0} ", (char)(i + 'A'));
                 for (j = 0; j < this.TABLE_CAP; j++)
                 {
-                    if (this._observedPairs[i][j] != 0)
-                        Console.Write("{0} ", this._observedPairs[i][j]);
+                    if (graph[i][j] != 0)
+                        Console.Write("{0} ", graph[i][j]);
                     else
                         Console.Write(". ");
                 }
@@ -100,8 +110,8 @@ namespace Day14
                 char first = this._template[i - 1];
                 char second = this._template[i];
                 Console.WriteLine("first {0} second {1}", (int)first - 'A', (int)second - 'A');
-                //increment the location on the graph where the index number equals 
-                // the ascii equivalent calculation based on the size of the table
+                //increment the location on the graph where the coordinate equals 
+                // the ascii equivalent calculation based on the size of the 2D graph
                 this._observedPairs[first - 'A'][second - 'A']++;
             }
 
@@ -111,8 +121,8 @@ namespace Day14
         public void PartOne()
         {
             this.ParsePolymerTemplate();
-            this.ParseInsertionRules();
             this.ParseCurrentPairsOnStep();
+            this.ParseInsertionRulesOnStep();
 
             // for (int i = 0; i < this._steps; i++)
             // {
