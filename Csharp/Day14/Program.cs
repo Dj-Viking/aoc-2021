@@ -6,10 +6,11 @@ namespace Day14
         public string[] _lines = new string[] { "" };
         public string _template = "";
         public string _tempTemplate = "";
-        public List<string> _observedPairs = new();
+        public int[][] _observedPairs = new int[][] { new int[] { 0 } };
+        int TABLE_CAP = ('Z' - 'A') + 1;
         public Dictionary<string, string> _insertionRules = new();
         public Dictionary<string, string> _wasInserted = new();
-        int _steps = 3;
+        // int _steps = 3;
 
         public static void Main(string[] args)
         {
@@ -30,7 +31,7 @@ namespace Day14
             this.input = "";
             this._lines = new string[] { "" };
             this._template = "";
-            this._observedPairs = new List<string>();
+            this._observedPairs = new int[][] { new int[] { 0 } };
             this._insertionRules = new Dictionary<string, string>();
             this._wasInserted = new Dictionary<string, string>();
         }
@@ -52,92 +53,73 @@ namespace Day14
                 this._insertionRules.TryAdd(rule, insertion);
             }
         }
+        private void DumpGraph(int[][] graph)
+        {
+            int i, j = 0;
+
+            List<string> alphabetLine = new();
+            for (i = 0; i < this.TABLE_CAP; i++)
+            {
+                alphabetLine.Add(((char)(i + 'A')).ToString());
+            }
+            Console.Write("  ");
+            Console.WriteLine("{0} ", string.Join(" ", alphabetLine));
+            for (i = 0; i < this.TABLE_CAP; i++)
+            {
+                Console.Write("{0} ", (char)(i + 'A'));
+                for (j = 0; j < this.TABLE_CAP; j++)
+                {
+                    if (this._observedPairs[i][j] != 0)
+                        Console.Write("{0} ", this._observedPairs[i][j]);
+                    else
+                        Console.Write(". ");
+                }
+                Console.Write(Environment.NewLine);
+            }
+        }
         private void ParseCurrentPairsOnStep()
         {
-            this._observedPairs = new List<string>();
+            this._observedPairs = new int[][] { new int[] { 0 } };
+
+            List<List<int>> lists = new List<List<int>>();
+
+            for (int i = 0; i < this.TABLE_CAP; i++)
+            {
+                List<int> tempList = new List<int>();
+                for (int j = 0; j < this.TABLE_CAP; j++)
+                {
+                    tempList.Add(0);
+                }
+                lists.Add(tempList);
+            }
+
+            this._observedPairs = lists.Select(a => a.ToArray()).ToArray();
+
             for (int i = 1; i < this._template.Length; i++)
             {
-                this._observedPairs.Add(string.Concat(this._template[i - 1], this._template[i]));
+                char first = this._template[i - 1];
+                char second = this._template[i];
+                Console.WriteLine("first {0} second {1}", (int)first - 'A', (int)second - 'A');
+                this._observedPairs[(int)first - 'A'][(int)second - 'A']++;
             }
-        }
-        // check if the rule matches one of the pairs in the template
-        private bool ShouldInsert(string rule, string pair)
-        {
-            return rule == pair;
-        }
-        // when an insertion rule suggests that two characters are immediately adjacent
-        // in the template, to insert the letter after -> between the adjacent letters in the rule
-        private void ApplyInsertion()
-        {
-            foreach (string pair in this._observedPairs)
-            {
-                foreach (string rule in this._insertionRules.Keys)
-                {
-                    string str = "";
-                    if (this.ShouldInsert(rule, pair) && !this._wasInserted.TryGetValue(rule, out str!))
-                    {
-                        this._wasInserted.TryAdd(rule, rule);
 
-                        Console.WriteLine("******** start insertion");
-                        Console.WriteLine("current template before {0}", this._template);
-                        Console.WriteLine("-- current pairs observed -- {0}", string.Join(", ", this._observedPairs));
+            DumpGraph(this._observedPairs);
 
-                        this.RemakeTemplate(rule, this._insertionRules[rule]);
-
-                        Console.WriteLine("current template after {0}", this._template);
-                        Console.WriteLine("******** end insertion");
-                    }
-                }
-            }
-            this._wasInserted.Clear();
-        }
-        private void RemakeTemplate(string currentPairRule, string letterToInsert)
-        {
-            int fromFirstLetter = 0;
-            int fromSecondLetter = 0;
-            List<string> begOfTemplate = new();
-            List<string> endOfTemplate = new();
-
-            // splitting work around since c sharp string.Split() method doesn't have an overload like this .Split("");
-            List<string> splitTemplate = this._template.Select(x => x.ToString()).ToList();
-
-            for (int i = 1; i < splitTemplate.Count(); i++)
-            {
-                fromFirstLetter = i - 1;
-                fromSecondLetter = i;
-
-                string pair = string.Concat(splitTemplate[fromFirstLetter], splitTemplate[fromSecondLetter]);
-                Console.WriteLine(" ---- current pair {0} \n ---- current rule {1} \n----- current letter to insert {2}", pair, currentPairRule, letterToInsert);
-
-                if (pair == currentPairRule)
-                {
-                    begOfTemplate = splitTemplate.Take(fromSecondLetter).ToList();
-                    endOfTemplate = splitTemplate.Skip(fromSecondLetter).ToList();
-                    begOfTemplate.Add(letterToInsert);
-
-                    Console.WriteLine(" ---- beg of template {0} \n----- end of tempalte {1}", string.Join(", ", begOfTemplate), string.Join(", ", endOfTemplate));
-
-                    List<string> wholeTemplate = begOfTemplate.Concat(endOfTemplate).ToList();
-
-                    Console.WriteLine("whole template {0}", string.Join(", ", wholeTemplate));
-
-                    this._template = string.Join("", wholeTemplate);
-                }
-            }
         }
         public void PartOne()
         {
             this.ParsePolymerTemplate();
             this.ParseInsertionRules();
+            this.ParseCurrentPairsOnStep();
 
-            for (int i = 0; i < this._steps; i++)
-            {
-                Console.WriteLine("-----------------------");
-                Console.WriteLine("step number {0}", i + 1);
-                Console.WriteLine("-----------------------");
-                this.ParseCurrentPairsOnStep();
-                this.ApplyInsertion();
-            }
+            // for (int i = 0; i < this._steps; i++)
+            // {
+            //     Console.WriteLine("-----------------------");
+            //     Console.WriteLine("step number {0}", i + 1);
+            //     Console.WriteLine("-----------------------");
+            //     this.ParseCurrentPairsOnStep();
+
+            // }
 
             Console.WriteLine("Part 1: {0}");
         }
