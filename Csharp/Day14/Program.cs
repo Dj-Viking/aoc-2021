@@ -7,7 +7,7 @@ namespace Day14
         public string _template = "";
         public int[][] _observedPairs = new int[][] { new int[] { 0 } };
         int TABLE_CAP = ('Z' - 'A') + 1;
-        Substitutions _subs = new Substitutions(' ', ' ', ' ');
+        public Substitutions _subs = new Substitutions(' ', ' ', ' ');
         public class Substitutions
         {
             public char _first = ' ';
