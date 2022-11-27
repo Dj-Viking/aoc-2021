@@ -13,7 +13,6 @@ namespace Day14
             public char _first = ' ';
             public char _second = ' ';
             public char _insertion = ' ';
-            public int subsCount = 0;
             public Substitution(char first, char second, char insertion)
             {
                 this._first = first;
