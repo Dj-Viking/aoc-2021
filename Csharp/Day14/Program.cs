@@ -9,7 +9,7 @@ namespace Day14
         public List<string> _observedPairs = new();
         public Dictionary<string, string> _insertionRules = new();
         public Dictionary<string, string> _wasInserted = new();
-        int _steps = 10;
+        int _steps = 3;
 
         public static void Main(string[] args)
         {
@@ -54,12 +54,12 @@ namespace Day14
         }
         private void ParseCurrentPairsOnStep()
         {
+            this._observedPairs = new List<string>();
             for (int i = 1; i < this._template.Length; i++)
             {
                 this._observedPairs.Add(string.Concat(this._template[i - 1], this._template[i]));
             }
         }
-        // create list of pairs in the current template
         // check if the rule matches one of the pairs in the template
         private bool ShouldInsert(string rule, string pair)
         {
@@ -79,17 +79,14 @@ namespace Day14
                         this._wasInserted.TryAdd(rule, rule);
 
                         Console.WriteLine("******** start insertion");
-
                         Console.WriteLine("current template before {0}", this._template);
+                        Console.WriteLine("-- current pairs observed -- {0}", string.Join(", ", this._observedPairs));
 
                         this.RemakeTemplate(rule, this._insertionRules[rule]);
 
                         Console.WriteLine("current template after {0}", this._template);
-
                         Console.WriteLine("******** end insertion");
                     }
-                    Console.WriteLine(" was inserted {0}", string.Join(", ", this._wasInserted));
-
                 }
             }
             this._wasInserted.Clear();
@@ -110,31 +107,36 @@ namespace Day14
                 fromSecondLetter = i;
 
                 string pair = string.Concat(splitTemplate[fromFirstLetter], splitTemplate[fromSecondLetter]);
-                Console.WriteLine("--- current pair {0} \n ---- current rule {1} \n----- current letter to insert {2}", pair, currentPairRule, letterToInsert);
+                Console.WriteLine(" ---- current pair {0} \n ---- current rule {1} \n----- current letter to insert {2}", pair, currentPairRule, letterToInsert);
 
                 if (pair == currentPairRule)
                 {
                     begOfTemplate = splitTemplate.Take(fromSecondLetter).ToList();
                     endOfTemplate = splitTemplate.Skip(fromSecondLetter).ToList();
                     begOfTemplate.Add(letterToInsert);
-                    Console.WriteLine("---- beg of template {0} \n----- end of tempalte {1}", string.Join(", ", begOfTemplate), string.Join(", ", endOfTemplate));
+
+                    Console.WriteLine(" ---- beg of template {0} \n----- end of tempalte {1}", string.Join(", ", begOfTemplate), string.Join(", ", endOfTemplate));
+
+                    List<string> wholeTemplate = begOfTemplate.Concat(endOfTemplate).ToList();
+
+                    Console.WriteLine("whole template {0}", string.Join(", ", wholeTemplate));
+
+                    this._template = string.Join("", wholeTemplate);
                 }
             }
-            List<string> wholeTemplate = begOfTemplate.Concat(endOfTemplate).ToList();
-            Console.WriteLine("whole template {0}", string.Join(", ", wholeTemplate));
-            this._tempTemplate = string.Join("", wholeTemplate);
-            Console.WriteLine("temp template {0}", this._tempTemplate);
         }
         public void PartOne()
         {
             this.ParsePolymerTemplate();
             this.ParseInsertionRules();
-            this.ParseCurrentPairsOnStep();
-            this.ApplyInsertion();
 
             for (int i = 0; i < this._steps; i++)
             {
-                Console.WriteLine("step number {0}", i);
+                Console.WriteLine("-----------------------");
+                Console.WriteLine("step number {0}", i + 1);
+                Console.WriteLine("-----------------------");
+                this.ParseCurrentPairsOnStep();
+                this.ApplyInsertion();
             }
 
             Console.WriteLine("Part 1: {0}");
